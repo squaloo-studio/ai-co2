@@ -1,0 +1,92 @@
+/* Design tokens. The names and values follow DESIGN.md. */
+:root {
+  --ink: #0b1222;
+  --ink-2: #4a5168;
+  --ink-3: #666b80;
+  --paper: #ffffff;
+  --paper-2: #f3f4f6;
+  --card: #ffffff;
+  --line: #e5e7eb;
+  --line-2: #d1d5db;
+  /* The edge of a control you can act on. 3:1 against the page, which --line-2 is not. */
+  --line-control: #868c9c;
+
+  --accent: #c8f04b;
+  --accent-press: #b6de38;
+  --accent-deep: #5e8200;
+  --on-accent: #0a1020;
+  --accent-soft: color-mix(in srgb, var(--accent) 24%, transparent);
+  --accent-line: color-mix(in srgb, var(--accent) 80%, transparent);
+
+  --navy: #0a1020;
+  --navy-2: #111a2f;
+  --on-navy: #f4f2ea;
+  --on-navy-2: #a9b0c4;
+  --on-navy-3: #8a93aa;
+  --navy-line: rgba(255, 255, 255, 0.09);
+
+  --ok: #16794f;
+  --ok-soft: #e3f1e9;
+  --bad: #b42318;
+  --bad-line: #d4483b;
+  --bad-soft: #fbeae7;
+
+  --shadow-card: 0 1px 2px rgba(11, 18, 34, 0.05), 0 12px 32px -18px rgba(11, 18, 34, 0.22);
+  --shadow-lift: 0 2px 4px rgba(11, 18, 34, 0.06), 0 24px 44px -22px rgba(11, 18, 34, 0.35);
+  --shadow-float: 0 20px 44px -18px rgba(10, 16, 32, 0.6), 0 2px 8px rgba(10, 16, 32, 0.2);
+
+  --r-xs: 6px;
+  --r-sm: 12px;
+  --r-md: 14px;
+  --r-card: 18px;
+  --r-panel: 22px;
+  --r-pill: 999px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* How long the chart takes to settle. It drops while a slider is dragged, so the dots keep up. */
+  --move: 0.75s;
+
+  --font: 'Schibsted Grotesk Variable', 'Schibsted Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* The colour a switch is drawn in, and the colour its knob takes when on. Each surface sets its own. */
+  --c: var(--ink);
+  --knob-on: var(--paper);
+}
+
+/* Data drawn on the navy panel. */
+.on-navy {
+  --pnl-fg: var(--on-navy);
+  --pnl-fg2: var(--on-navy-2);
+  --pnl-fg3: var(--on-navy-3);
+  --pnl-line: var(--navy-line);
+  --pnl-grid: rgba(255, 255, 255, 0.04);
+  /* The axis is a line people read the chart by, so it gets the same 3:1 as its ticks. */
+  --axis: rgba(255, 255, 255, 0.34);
+  --tick: rgba(255, 255, 255, 0.34);
+  --gline: rgba(255, 255, 255, 0.07);
+  --data: var(--accent);
+  --data-soft: var(--accent-soft);
+  --data-line: var(--accent-line);
+  --marker: var(--on-navy);
+  --pin-ring: 0 0 0 3px var(--navy);
+  --ghost: rgba(255, 255, 255, 0.55);
+  --tail: var(--on-navy-3);
+  --trk: rgba(255, 255, 255, 0.08);
+  --c: var(--on-navy);
+  --knob-on: var(--navy);
+}
+
+/* Data drawn on a white card, where lime would be too pale to see. */
+.on-paper {
+  --data: var(--accent-deep);
+  --data-soft: color-mix(in srgb, var(--accent-deep) 18%, transparent);
+  --data-line: var(--accent-deep);
+  --pin-ring: 0 0 0 2px var(--ink);
+  --ghost: rgba(11, 18, 34, 0.5);
+  --trk: rgba(11, 18, 34, 0.07);
+}
+
+.is-dragging {
+  --move: 0.12s;
+}

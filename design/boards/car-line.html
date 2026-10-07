@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ai-co2 · Car line</title>
+<meta name="description" content="The car line under the result, with a panel for switching between ways to show it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Schibsted+Grotesk:wght@400..900&display=swap">
+<style>
+:root{
+  --ink:#0B1222; --ink-2:#4A5168; --ink-3:#666B80;
+  --paper:#FFFFFF; --paper-2:#F3F4F6; --card:#FFFFFF; --line:#E5E7EB; --line-2:#D1D5DB;
+  --accent:#C8F04B; --accent-press:#B6DE38; --on-accent:#0A1020;
+  --accent-soft:color-mix(in srgb,var(--accent) 24%,transparent);
+  --accent-line:color-mix(in srgb,var(--accent) 80%,transparent);
+  --navy:#0A1020; --on-navy:#F4F2EA; --on-navy-2:#A9B0C4; --on-navy-3:#8A93AA; --navy-line:rgba(255,255,255,.09);
+  --shadow-card:0 1px 2px rgba(11,18,34,.05),0 12px 32px -18px rgba(11,18,34,.22);
+  --ease:cubic-bezier(.16,1,.3,1); --move:.75s; --drive:1.6s;
+  --font:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.on-navy{--pnl-fg:var(--on-navy);--pnl-fg2:var(--on-navy-2);--pnl-fg3:var(--on-navy-3);--pnl-line:var(--navy-line);--pnl-grid:rgba(255,255,255,.04);--data:var(--accent);--data-soft:var(--accent-soft);--data-line:var(--accent-line);--trk:rgba(255,255,255,.14);--tick:rgba(255,255,255,.34)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--font);-webkit-font-smoothing:antialiased;padding-bottom:140px}
+p{margin:0}
+b{font-weight:700}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.on-navy :focus-visible{outline-color:var(--accent)}
+.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.wrap{width:min(1200px,100% - 64px);margin-inline:auto}
+.site{display:flex;align-items:baseline;gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}
+.wordmark{font-weight:900;font-size:23px;letter-spacing:-.04em;line-height:1}
+.site span{color:var(--ink-3);font-size:14.5px}
+.board-note{margin:28px 0 20px;max-width:70ch;color:var(--ink-2);font-size:15px}
+.board-note b{color:var(--ink)}
+
+/* ---------- the result panel, as on the page ---------- */
+.result{position:relative;padding:38px 46px 28px;border-radius:22px;background-color:var(--navy);background-image:linear-gradient(var(--pnl-grid) 1px,transparent 1px),linear-gradient(90deg,var(--pnl-grid) 1px,transparent 1px);background-size:44px 44px;background-position:-1px -1px;box-shadow:inset 0 0 0 1px var(--pnl-line),var(--shadow-card);color:var(--pnl-fg)}
+.readout{max-width:640px}
+.range{font-size:88px;font-weight:800;line-height:.86;letter-spacing:-.04em;white-space:nowrap}
+.range .unit{margin-left:.14em;color:var(--pnl-fg2);font-size:.38em;font-weight:700;letter-spacing:-.01em}
+.range-sub{margin-top:14px;color:var(--pnl-fg2);font-size:16px}
+.likely{margin-top:18px;font-size:23px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.hl{display:inline-block;font-variant-numeric:tabular-nums;padding:0 .3em;border-radius:7px;background:var(--accent);color:var(--on-accent);line-height:1.3}
+.chart-hint{margin-top:22px;height:64px;border-radius:12px;border:1px dashed var(--pnl-line);display:grid;place-items:center;color:var(--pnl-fg3);font-size:13px}
+
+/* ---------- the car block: every layout ---------- */
+.car{margin-top:8px;max-width:52ch;color:var(--pnl-fg2);font-size:15.5px}
+.car-block{margin-top:16px;max-width:560px}
+.car-block[hidden]{display:none}
+.car-lead{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 .35em;font-size:19px;font-weight:600;letter-spacing:-.01em;line-height:1.35}
+.car-lead .km{color:var(--data);font-weight:800}
+.car-big{display:flex;align-items:baseline;gap:.14em;font-size:52px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.car-big .unit{color:var(--pnl-fg2);font-size:.42em;font-weight:700;letter-spacing:-.01em}
+.car-big-sub{margin-top:6px;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.car-place{margin-top:6px;color:var(--pnl-fg2);font-size:15.5px;line-height:1.45}
+.car-place b{color:var(--pnl-fg);font-weight:600}
+.car-range{margin-top:4px;color:var(--pnl-fg3);font-size:14.5px}
+.likely .by-car{color:var(--pnl-fg2);font-weight:600}
+.likely .by-car b{color:var(--data);font-weight:800}
+
+/* ---------- the road ---------- */
+.road{position:relative;margin-top:14px;height:58px}
+.road[hidden]{display:none}
+.road-line{position:absolute;left:0;right:0;top:34px;height:2px;border-radius:2px;background:var(--trk)}
+.road-done{position:absolute;left:0;top:34px;height:2px;border-radius:2px;background:var(--data);width:0;transition:width var(--drive) var(--ease)}
+.road-band{position:absolute;top:30px;height:10px;border-radius:999px;background:var(--data-soft);box-shadow:inset 0 0 0 1px var(--data-line);transition:left var(--move) var(--ease),width var(--move) var(--ease)}
+.road-end{position:absolute;top:28px;width:2px;height:14px;margin-left:-1px;border-radius:2px;background:var(--tick)}
+.road-lbl{position:absolute;top:44px;font-size:12.5px;color:var(--pnl-fg3);white-space:nowrap;transform:translateX(-50%)}
+.road-lbl.is-start{transform:none}
+.road-lbl.is-end{transform:translateX(-100%)}
+.road-lbl b{color:var(--pnl-fg2);font-weight:600}
+.road-car{position:absolute;top:8px;left:0;width:34px;height:28px;margin-left:-17px;color:var(--data);transition:left var(--drive) var(--ease)}
+.road-car svg{display:block;width:34px;height:28px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.road-car .body{transform-origin:50% 80%}
+.road-car.is-driving .body{animation:bob .32s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(-.8px)}}
+/* Past the top of the list: the car leaves the road. */
+.road-car .lift{transition:transform 1.1s var(--ease),opacity 1.1s ease-in}
+.road-car.is-off .lift{transform:translate(28px,-46px) rotate(-32deg);opacity:0}
+.no-anim,.no-anim *{transition:none !important;animation:none !important}
+
+/* ---------- the board panel (not part of the page) ---------- */
+.seg{display:inline-flex;padding:3px;border-radius:999px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--line)}
+.seg button{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 9px;border:0;border-radius:999px;background:transparent;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-checked="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(11,18,34,.08),inset 0 0 0 1px var(--line-2)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 13px;border:0;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn--primary{background:var(--accent);color:var(--on-accent)}
+.btn--primary:hover{background:var(--accent-press)}
+.btn--line{background:var(--card);box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink)}
+.btn--line:hover{background:var(--paper-2)}
+.looks{position:fixed;z-index:60;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 16px;padding:10px 20px 12px;background:var(--card);border-top:1.5px dashed var(--ink);box-shadow:0 -12px 32px -20px rgba(11,18,34,.35)}
+.looks-row{display:grid;gap:4px}
+.looks-row>span{font-size:11.5px;font-weight:600;color:var(--ink-2)}
+.looks-row input[type=range]{width:220px;accent-color:var(--ink)}
+.looks-foot{display:flex;gap:8px;margin-left:auto}
+.dbg{flex-basis:100%;font:500 11.5px/1.5 var(--mono);color:var(--ink-2);white-space:pre-wrap}
+.dbg b{color:var(--ink)}
+@media (max-width:900px){
+  .looks{max-height:60vh;overflow:auto}
+  .looks-foot{margin-left:0}
+  body{padding-bottom:62vh}
+}
+@media (max-width:640px){
+  .wrap{width:calc(100% - 32px)}
+  .result{padding:26px 20px 18px;border-radius:18px}
+  .range{font-size:54px}
+  .likely{font-size:20px}
+  .car-big{font-size:42px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="site"><span class="wordmark">ai-co2</span><span>Board: the car line. Not part of the page.</span></header>
+  <p class="board-note"><b>Pick a layout, a road and an example size in the panel below.</b> The page picks the place whose distance is closest to your middle estimate. Press <b>Drive again</b> to replay the motion. Distances were checked on 7 Oct 2026: roads by the fastest route on OpenStreetMap, lengths from their official sources. The link remembers every choice, so you can send it back.</p>
+
+  <section class="result on-navy" aria-label="Your result">
+    <div class="readout">
+      <p class="range"><span id="r-range"></span><span class="unit" id="r-unit"></span></p>
+      <p class="range-sub">Likely CO₂e from Claude Code in the last 30 days (8 Sep – 7 Oct)</p>
+      <p class="likely" id="likely"></p>
+
+      <!-- Now: the sentence on the page today -->
+      <p class="car" id="car-now"></p>
+
+      <!-- Lead: the middle estimate first, then the place, then the range -->
+      <div class="car-block" id="car-lead">
+        <p class="car-lead"><span>Like driving a new petrol car</span> <span class="km" id="lead-km"></span></p>
+        <p class="car-place" id="lead-place"></p>
+        <p class="car-range" id="lead-range"></p>
+      </div>
+
+      <!-- Big: the distance as a second headline -->
+      <div class="car-block" id="car-big">
+        <p class="car-big"><span id="big-km"></span><span class="unit" id="big-unit"></span></p>
+        <p class="car-big-sub">in a new petrol car</p>
+        <p class="car-place" id="big-place"></p>
+        <p class="car-range" id="big-range"></p>
+      </div>
+
+      <!-- Merge: the distance rides on the middle-estimate line -->
+      <div class="car-block" id="car-merge">
+        <p class="car-place" id="merge-place"></p>
+        <p class="car-range" id="merge-range"></p>
+      </div>
+
+      <div class="road" id="road" aria-hidden="true">
+        <div class="road-line"></div>
+        <div class="road-band" id="road-band"></div>
+        <div class="road-done" id="road-done"></div>
+        <div class="road-end" id="road-end-a" style="left:0"></div>
+        <div class="road-end" id="road-end-b"></div>
+        <span class="road-lbl is-start" id="road-a" style="left:0"></span>
+        <span class="road-lbl" id="road-b"></span>
+        <div class="road-car" id="road-car">
+          <svg viewBox="0 0 34 28" aria-hidden="true">
+            <g class="lift"><g class="body">
+              <path d="M3.5 19.5v-3.6c0-1 .7-1.9 1.7-2.1l4.1-.9 3.4-4.4a3 3 0 0 1 2.4-1.2h5.6a3 3 0 0 1 2.3 1.1l3.6 4.4 2.6.6c1 .2 1.8 1.1 1.8 2.2v3.9"/>
+              <path d="M13.7 19.5h6.6"/><path d="M3.5 19.5h2"/><path d="M28.5 19.5h2"/>
+              <path d="M10.6 12.9h16"/><path d="M17.6 7.6v5.3"/>
+            </g>
+            <circle cx="9.6" cy="19.8" r="2.6"/><circle cx="24.4" cy="19.8" r="2.6"/></g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="chart-hint">the dot chart sits here</div>
+    </div>
+  </section>
+</div>
+
+<aside class="looks" id="looks" aria-label="Board controls">
+  <div id="knobs" style="display:contents"></div>
+  <label class="looks-row"><span>Middle estimate (debug) <b id="sl-val"></b></span><input type="range" id="sl" min="0" max="1000" step="1"></label>
+  <div class="looks-foot">
+    <button type="button" class="btn btn--line" data-replay>Drive again</button>
+    <button type="button" class="btn btn--primary" data-copy-link><span>Copy link</span></button>
+    <button type="button" class="btn btn--line" data-reset>Reset</button>
+  </div>
+  <p class="dbg" id="dbg"></p>
+</aside>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- the facts ---------- */
+  const KG_PER_KM = 0.16;          // the page's car figure: new petrol car, real driving (EEA × ICCT)
+  const SPACE_KM = 100;            // the Kármán line, where space is usually said to begin (FAI)
+  const MOON_KM = 384400;          // average distance to the Moon (NASA)
+
+  // Each place: a road distance or a fixed length, its region and its source. Checked 7 Oct 2026.
+  // Road distances: the fastest route on OpenStreetMap (OSRM), between main stations or city centres.
+  // `mix: true` is the mixed list, about one step every ×1.5. The rest fill in when one region is picked.
+  const OSRM = 'OSRM, OpenStreetMap data';
+  const PLACES = [
+    { b: 'Tennis court', say: 'the length of a tennis court', km: 0.02377, region: 'all', mix: true, src: 'ITF Rules of Tennis 2026, Rule 1' },
+    { b: 'Olympic pool', say: 'the length of an Olympic pool', km: 0.05, region: 'all', mix: true, src: 'World Aquatics pool certification, 11 Mar 2026' },
+    { b: 'Football pitch', say: 'the length of a football pitch', km: 0.105, region: 'all', mix: true, src: 'FIFA Football Stadiums Guidelines 5.3' },
+    { b: 'One lap', say: 'a lap of a running track', km: 0.4, region: 'all', mix: true, src: 'World Athletics Technical Rules, Rule 160' },
+    { b: 'Brooklyn Bridge', say: 'the Brooklyn Bridge, end to end', km: 1.83, region: 'na', src: 'NYC DOT, 6,016 ft' },
+    { b: 'Champs-Élysées', say: 'the length of the Champs-Élysées', km: 1.9, region: 'eu', mix: true, src: 'Paris je t’aime' },
+    { b: 'Golden Gate Bridge', say: 'the Golden Gate Bridge, end to end', km: 2.737, region: 'na', mix: true, src: 'Golden Gate Bridge District' },
+    { b: 'Akashi Kaikyō Bridge', say: 'the Akashi Kaikyō Bridge in Japan', km: 3.911, region: 'asia', mix: true, src: 'Honshu-Shikoku Bridge Expressway' },
+    { a: 'Tokyo', b: 'Shibuya', km: 7.56, region: 'asia', src: OSRM },
+    { b: 'Øresund Bridge', say: 'the Øresund Bridge', km: 7.845, region: 'eu', mix: true, src: 'Øresundsbron' },
+    { a: 'Seoul Station', b: 'Gangnam', km: 10.5, region: 'asia', mix: true, src: OSRM },
+    { b: 'Vasco da Gama Bridge', say: 'the Vasco da Gama Bridge in Lisbon', km: 17.2, region: 'eu', mix: true, src: 'Vinci Concessions' },
+    { a: 'New York', b: 'Newark', km: 20.7, region: 'na', src: OSRM },
+    { a: 'Los Angeles', b: 'Santa Monica Pier', km: 27.3, region: 'na', mix: true, src: OSRM },
+    { a: 'Tokyo', b: 'Yokohama', km: 31.3, region: 'asia', src: OSRM },
+    { b: 'Afsluitdijk', say: 'the Afsluitdijk in the Netherlands', km: 32, region: 'eu', src: 'Rijkswaterstaat' },
+    { a: 'Berlin', b: 'Potsdam', km: 32.4, region: 'eu', src: OSRM },
+    { b: 'Périphérique', say: 'a lap of the Périphérique around Paris', km: 35.04, region: 'eu', src: 'Ville de Paris' },
+    { a: 'Seoul', b: 'Incheon', km: 40, region: 'asia', mix: true, src: OSRM },
+    { a: 'Osaka', b: 'Kyoto', km: 47.3, region: 'asia', src: OSRM },
+    { b: 'Hong Kong–Zhuhai–Macau Bridge', say: 'the Hong Kong–Zhuhai–Macau Bridge', km: 55, region: 'asia', src: 'Hong Kong Government' },
+    { a: 'Munich', b: 'Augsburg', km: 66, region: 'eu', mix: true, src: OSRM },
+    { a: 'Amsterdam', b: 'Rotterdam', km: 76.7, region: 'eu', src: OSRM },
+    { a: 'San Francisco', b: 'San Jose', km: 80.3, region: 'na', mix: true, src: OSRM },
+    { a: 'Hamburg', b: 'Bremen', km: 125, region: 'eu', mix: true, src: OSRM },
+    { a: 'Chicago', b: 'Milwaukee', km: 142, region: 'na', src: OSRM },
+    { a: 'Bangkok', b: 'Pattaya', km: 143, region: 'asia', src: OSRM },
+    { a: 'New York', b: 'Philadelphia', km: 157, region: 'na', src: OSRM },
+    { a: 'Frankfurt', b: 'Cologne', km: 190, region: 'eu', src: OSRM },
+    { a: 'Delhi', b: 'Agra', km: 202, region: 'asia', mix: true, src: OSRM },
+    { a: 'Berlin', b: 'Hamburg', km: 281, region: 'eu', mix: true, src: OSRM },
+    { a: 'Seoul', b: 'Busan', km: 397, region: 'asia', mix: true, src: OSRM },
+    { a: 'Los Angeles', b: 'Las Vegas', km: 434, region: 'na', src: OSRM },
+    { a: 'Tokyo', b: 'Osaka', km: 494, region: 'asia', src: OSRM },
+    { a: 'Paris', b: 'Amsterdam', km: 506, region: 'eu', src: OSRM },
+    { a: 'Toronto', b: 'Montréal', km: 548, region: 'na', mix: true, src: OSRM },
+    { a: 'Madrid', b: 'Barcelona', km: 615, region: 'eu', src: OSRM },
+    { a: 'New York', b: 'Toronto', km: 760, region: 'na', src: OSRM },
+    { a: 'Tokyo', b: 'Hiroshima', km: 806, region: 'asia', mix: true, src: OSRM },
+    { a: 'Paris', b: 'Berlin', km: 1050, region: 'eu', src: OSRM },
+    { a: 'New York', b: 'Chicago', km: 1275, region: 'na', mix: true, src: OSRM },
+    { a: 'Delhi', b: 'Mumbai', km: 1340, region: 'asia', src: OSRM },
+    { a: 'Paris', b: 'Rome', km: 1440, region: 'eu', src: OSRM },
+    { a: 'Beijing', b: 'Chengdu', km: 1783, region: 'asia', mix: true, src: OSRM },
+    { a: 'New York', b: 'Miami', km: 2060, region: 'na', src: OSRM },
+    { a: 'Beijing', b: 'Ürümqi', km: 2779, region: 'asia', mix: true, src: OSRM },
+    { a: 'Amsterdam', b: 'Athens', km: 2810, region: 'eu', src: OSRM },
+    { a: 'Lisbon', b: 'Warsaw', km: 3320, region: 'eu', mix: true, src: OSRM },
+    { a: 'New York', b: 'Los Angeles', km: 4498, region: 'na', mix: true, src: OSRM },
+    { a: 'Tarifa', b: 'the North Cape', km: 5674, region: 'eu', mix: true, src: OSRM },
+  ];
+
+  const EXAMPLES = { tiny: 0.0003, chat: 1.8, cc: 9.8, mid: 25, heavy: 160, huge: 2400 };
+  const SPREADS = { one: [1, 1], normal: [54 / 150, 540 / 150], wide: [0.15, 6] };
+
+  const KNOBS = [
+    { key: 'layout', label: 'Layout', opts: [['now', 'Now'], ['lead', 'Lead'], ['big', 'Big'], ['merge', 'Merge']] },
+    { key: 'road', label: 'Road', opts: [['off', 'Off'], ['route', 'Route'], ['range', 'Range']] },
+    { key: 'motion', label: 'Motion', opts: [['drive', 'Drive'], ['still', 'Still']] },
+    { key: 'cap', label: 'Past the longest', opts: [['space', 'Space'], ['spaceN', 'Space ×N'], ['moon', 'Moon']] },
+    { key: 'region', label: 'Places', opts: [['mix', 'Mixed'], ['eu', 'Europe'], ['asia', 'Asia'], ['na', 'N. America']] },
+    { key: 'ex', label: 'Example', opts: [['tiny', '0.3 g'], ['chat', '1.8 kg'], ['cc', '9.8 kg'], ['mid', '25 kg'], ['heavy', '160 kg'], ['huge', '2.4 t']] },
+    { key: 'spread', label: 'Range', opts: [['one', 'One value'], ['normal', 'Normal'], ['wide', 'Wide']] },
+  ];
+  const DEFAULT = { layout: 'lead', road: 'route', motion: 'drive', cap: 'space', region: 'mix', ex: 'mid', spread: 'normal', kg: '' };
+  const look = { ...DEFAULT };
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- numbers, printed the way the page prints them (format.ts) ---------- */
+  function plain(x) {
+    if (x >= 10) return Math.round(x).toLocaleString('en');
+    const s = x.toPrecision(2);
+    return String(Number(s));
+  }
+  const km = x => (x < 10 ? plain(x) : (x < 100 ? Math.round(x) : Math.round(x / 10) * 10).toLocaleString('en'));
+  const unitFor = p95 => (p95 < 1 ? 'm' : 'km');
+  const dist = (x, unit) => km(unit === 'm' ? x * 1000 : x);
+  // One unit for a whole range, picked from its high end, as the readout does.
+  const PER = { mg: 1e6, g: 1000, kg: 1, t: 0.001 };
+  const massUnit = kg => (kg < 0.001 ? 'mg' : kg < 1 ? 'g' : kg >= 1000 ? 't' : 'kg');
+  const mass = (kg, unit = massUnit(kg)) => [plain(kg * PER[unit]), unit];
+
+  /* ---------- the match ---------- */
+  const pool = () => PLACES.filter(p => (look.region === 'mix' ? p.mix : p.region === look.region || p.region === 'all'));
+  // The place closest to the middle estimate, on a log scale: twice as far and half as far count the same.
+  function match(midKm) {
+    const list = pool().slice().sort((x, y) => x.km - y.km);
+    const top = list[list.length - 1];
+    if (midKm > top.km * 1.3) return { cap: true, top, list };
+    if (midKm < list[0].km / 1.5) return { none: true, list };
+    let best = list[0];
+    for (const p of list) if (Math.abs(Math.log(midKm / p.km)) < Math.abs(Math.log(midKm / best.km))) best = p;
+    return { best, top, list };
+  }
+  const placeWords = p => (p.a ? `the drive from ${p.a} to ${p.b}` : p.say);
+
+  function placeLine(m, mid, unit) {
+    if (m.none) return '';
+    if (m.cap) {
+      const far = `Farther than ${placeWords(m.top)}.`;
+      if (look.cap === 'space') return `${far} That’s like driving to outer space.`;
+      if (look.cap === 'spaceN') { const n = Math.round(mid / (2 * SPACE_KM)); return `${far} Like driving to outer space and back ${n.toLocaleString('en')} times.`; }
+      const pct = mid / MOON_KM * 100;
+      return `${far} About ${pct < 1 ? pct.toFixed(1) : Math.round(pct)}% of the way to the Moon.`;
+    }
+    const p = m.best;
+    return `About <b>${placeWords(p)}</b> (${dist(p.km, unit)} ${unit}).`;
+  }
+
+  /* ---------- drawing ---------- */
+  let shownMid = 0, firstDraw = true;
+  function state() {
+    const mid = look.kg ? Number(look.kg) : EXAMPLES[look.ex];
+    const [lo, hi] = SPREADS[look.spread];
+    const kg = { p5: mid * lo, mid, p95: mid * hi };
+    const d = { p5: kg.p5 / KG_PER_KM, mid: kg.mid / KG_PER_KM, p95: kg.p95 / KG_PER_KM };
+    return { kg, d, unit: unitFor(d.p95), one: look.spread === 'one' };
+  }
+
+  function draw(replay) {
+    const s = state(), { kg, d, unit } = s;
+    const m = match(d.mid);
+    const u5 = massUnit(kg.p95);
+    $('#r-range').textContent = s.one ? `about ${mass(kg.mid, u5)[0]}` : `${mass(kg.p5, u5)[0]}–${mass(kg.p95, u5)[0]}`;
+    $('#r-unit').textContent = u5;
+    const [mm, mu] = mass(kg.mid, u5);
+
+    const rangeTxt = s.one ? '' : `Likely ${dist(d.p5, unit)}–${dist(d.p95, unit)} ${unit}.`;
+    const place = placeLine(m, d.mid, unit);
+    const midTxt = `${dist(d.mid, unit)} ${unit}`;
+
+    $('#likely').innerHTML = look.layout === 'merge'
+      ? `Middle estimate: <span class="hl">${mm} ${mu}</span> <span class="by-car">· like <b>${midTxt}</b> in a petrol car</span>`
+      : `Middle estimate: <span class="hl">${mm} ${mu}</span>`;
+
+    $('#car-now').hidden = look.layout !== 'now';
+    $('#car-now').textContent = s.one
+      ? `As much as driving a new petrol car about ${midTxt}.`
+      : `About as much as driving a new petrol car ${dist(d.p5, unit)}–${dist(d.p95, unit)} ${unit}. The middle estimate is about ${midTxt}.`;
+
+    $('#car-lead').hidden = look.layout !== 'lead';
+    $('#lead-km').textContent = midTxt;
+    $('#lead-place').innerHTML = place;
+    $('#lead-range').textContent = rangeTxt;
+
+    $('#car-big').hidden = look.layout !== 'big';
+    $('#big-km').textContent = dist(d.mid, unit);
+    $('#big-unit').textContent = unit;
+    $('#big-place').innerHTML = place;
+    $('#big-range').textContent = rangeTxt;
+
+    $('#car-merge').hidden = look.layout !== 'merge';
+    $('#merge-place').innerHTML = place;
+    $('#merge-range').textContent = rangeTxt;
+
+    drawRoad(s, m, replay);
+    countUp(d.mid, unit, replay);
+    debug(s, m);
+  }
+
+  function drawRoad(s, m, replay) {
+    const road = $('#road'), car = $('#road-car'), band = $('#road-band'), done = $('#road-done');
+    const { d, unit } = s;
+    road.hidden = look.layout === 'now' || look.road === 'off';
+    if (road.hidden) return;
+    let max, at, endAt, aLbl, bLbl, showBand = false;
+    if (look.road === 'route') {
+      // The road is the matched place: start on the left, end on the right, the car stops at your distance.
+      const p = m.cap ? m.top : m.best;
+      if (!p) { road.hidden = true; return; }
+      max = Math.max(p.km, d.mid) * 1.06;
+      at = m.cap ? p.km : d.mid;
+      endAt = p.km;
+      aLbl = p.a ? `<b>${p.a}</b>` : 'start';
+      bLbl = p.a ? `<b>${p.b}</b>` : `<b>${p.b}</b>`;
+    } else {
+      // The road is your range: 0 to the far end, the likely stretch shaded, the car at the middle.
+      max = d.p95 * 1.06;
+      at = d.mid;
+      const flag = m.cap ? m.top : m.best;
+      endAt = flag && flag.km <= max ? flag.km : null;
+      aLbl = `0 ${unit}`;
+      bLbl = endAt != null ? `<b>${flag.b}</b>` : '';
+      showBand = !s.one;
+    }
+    const pct = x => `${Math.max(0, Math.min(100, x / max * 100)).toFixed(2)}%`;
+    band.hidden = !showBand;
+    band.style.left = pct(d.p5); band.style.width = `calc(${pct(d.p95)} - ${pct(d.p5)})`;
+    $('#road-end-b').hidden = endAt == null;
+    $('#road-end-b').style.left = pct(endAt || 0);
+    const bl = $('#road-b');
+    bl.innerHTML = bLbl; bl.style.left = pct(endAt || 0);
+    bl.classList.toggle('is-end', (endAt || 0) / max > 0.85);
+    $('#road-a').innerHTML = aLbl;
+
+    const animate = look.motion === 'drive' && !reduced();
+    const go = () => {
+      car.style.left = pct(at); done.style.width = pct(at);
+      if (!animate) return;
+      car.classList.add('is-driving');
+      clearTimeout(car._t);
+      car._t = setTimeout(() => {
+        car.classList.remove('is-driving');
+        car.classList.toggle('is-off', !!m.cap && look.cap !== 'moon');
+      }, 1500);
+    };
+    car.classList.remove('is-off');
+    if (animate && (replay || firstDraw)) {
+      // Back to the start without motion, then drive.
+      road.classList.add('no-anim');
+      car.style.left = '0%'; done.style.width = '0%';
+      void road.offsetWidth;
+      road.classList.remove('no-anim');
+      requestAnimationFrame(() => requestAnimationFrame(go));
+    } else {
+      road.classList.toggle('no-anim', !animate);
+      go();
+      if (!animate) car.classList.toggle('is-off', false);
+    }
+    firstDraw = false;
+  }
+
+  // The headline distance counts up to its value while the car drives.
+  let raf = 0;
+  function countUp(to, unit, replay) {
+    cancelAnimationFrame(raf);
+    const nodes = [$('#lead-km'), $('#big-km')];
+    const write = v => { nodes[0].textContent = `${dist(v, unit)} ${unit}`; nodes[1].textContent = dist(v, unit); };
+    const from = replay ? 0 : shownMid;
+    shownMid = to;
+    if (look.motion !== 'drive' || reduced() || from === to) { write(to); return; }
+    const t0 = performance.now(), dur = 1400;
+    const step = now => {
+      const t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 4);
+      write(from + (to - from) * e);
+      if (t < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  }
+
+  function debug(s, m) {
+    const { d } = s;
+    const near = m.list.map(p => `${p.a ? p.a + '→' + p.b : p.b} ${km(p.km)}`).join(' · ');
+    const pick = m.cap ? `CAP (past ${placeWords(m.top)}, ${km(m.top.km)} km × 1.3)` : m.none ? 'NONE (below the shortest ÷ 1.5)' : `${placeWords(m.best)} ${km(m.best.km)} km · you/place = ${(d.mid / m.best.km).toFixed(2)}`;
+    $('#dbg').innerHTML = `<b>mid</b> ${s.kg.mid.toPrecision(3)} kg = ${d.mid.toPrecision(4)} km · <b>range</b> ${d.p5.toPrecision(3)}–${d.p95.toPrecision(3)} km · <b>pick</b> ${pick}\n<b>pool (${m.list.length})</b> ${near}`;
+  }
+
+  /* ---------- panel ---------- */
+  // The slider spans 0.1 g to 10 t of CO₂ on a log scale.
+  const LO = Math.log(1e-4), HI = Math.log(1e4);
+  const toKg = v => Math.exp(LO + (HI - LO) * v / 1000);
+  const toSl = kg => Math.round((Math.log(kg) - LO) / (HI - LO) * 1000);
+
+  function renderKnobs() {
+    $('#knobs').innerHTML = KNOBS.map(k => `<div class="looks-row"><span>${k.label}</span><div class="seg" role="radiogroup" aria-label="${k.label}">${k.opts.map(([v, l]) =>
+      `<button type="button" role="radio" aria-checked="${look[k.key] === v && !(k.key === 'ex' && look.kg)}" data-knob="${k.key}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('');
+    const kg = look.kg ? Number(look.kg) : EXAMPLES[look.ex];
+    $('#sl').value = toSl(kg);
+    $('#sl-val').textContent = `${mass(kg).join(' ')}`;
+  }
+  function writeHash() {
+    const p = new URLSearchParams();
+    for (const k of Object.keys(DEFAULT)) if (look[k] !== DEFAULT[k]) p.set(k, look[k]);
+    history.replaceState(null, '', `#${p}`);
+  }
+  function readHash() {
+    const p = new URLSearchParams(location.hash.slice(1));
+    for (const k of Object.keys(DEFAULT)) if (p.has(k)) look[k] = p.get(k);
+  }
+  function apply(replay) { renderKnobs(); writeHash(); draw(replay); }
+
+  document.addEventListener('click', async e => {
+    const k = e.target.closest('[data-knob]');
+    if (k) {
+      look[k.dataset.knob] = k.dataset.v;
+      if (k.dataset.knob === 'ex') look.kg = '';
+      apply(k.dataset.knob === 'road' || k.dataset.knob === 'layout');
+      return;
+    }
+    if (e.target.closest('[data-replay]')) { draw(true); return; }
+    if (e.target.closest('[data-reset]')) { Object.assign(look, DEFAULT); apply(true); return; }
+    const cl = e.target.closest('[data-copy-link]');
+    if (cl) {
+      let ok = false;
+      try { await navigator.clipboard.writeText(location.href); ok = true; } catch (_) { ok = false; }
+      $('span', cl).textContent = ok ? 'Link copied' : 'Copy it from the address bar';
+      clearTimeout(cl._t); cl._t = setTimeout(() => { $('span', cl).textContent = 'Copy link'; }, 2200);
+    }
+  });
+  // The debug slider moves the car without replaying the drive, so you can sweep through the list.
+  $('#sl').addEventListener('input', e => {
+    const kg = toKg(Number(e.target.value));
+    look.kg = String(Number(kg.toPrecision(3)));
+    $('#sl-val').textContent = mass(kg).join(' ');
+    for (const b of document.querySelectorAll('[data-knob="ex"]')) b.setAttribute('aria-checked', 'false');
+    writeHash(); draw(false);
+  });
+  document.addEventListener('keydown', e => {
+    const g = e.target.closest('[role="radiogroup"]');
+    if (!g || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    const items = [...g.querySelectorAll('[role="radio"]')], i = items.indexOf(e.target.closest('[role="radio"]'));
+    if (i < 0) return;
+    e.preventDefault();
+    const n = items[(i + (e.key === 'ArrowLeft' ? -1 : 1) + items.length) % items.length];
+    n.focus(); n.click();
+  });
+
+  readHash();
+  apply(true);
+})();
+</script>
+</body>
+</html>

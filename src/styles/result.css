@@ -1,0 +1,699 @@
+/* ---------- the result panel ---------- */
+.result {
+  position: relative;
+  isolation: isolate;
+  padding: 38px 46px 24px;
+  border-radius: var(--r-panel);
+  background-color: var(--navy);
+  background-image: linear-gradient(var(--pnl-grid) 1px, transparent 1px), linear-gradient(90deg, var(--pnl-grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-position: -1px -1px;
+  box-shadow: inset 0 0 0 1px var(--pnl-line), var(--shadow-card);
+  color: var(--pnl-fg);
+  caret-color: var(--data);
+}
+/* The panel takes the focus when the pill sends the reader back. Its ring lies outside it, on the page, so it is ink and not lime. */
+.result:focus-visible {
+  outline-color: var(--ink);
+}
+.result-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 28px 56px;
+  align-items: start;
+}
+.result-top.is-alone {
+  grid-template-columns: minmax(0, 1fr);
+}
+.readout {
+  min-width: 0;
+}
+.range {
+  font-size: 88px;
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  font-variant-numeric: lining-nums;
+}
+/* The numbers never break. The unit may drop to the next line when wide text spacing leaves it no room. */
+.range [data-range-seen],
+.range .under {
+  white-space: nowrap;
+}
+/* Less than the scale's smallest step: words in place of a number. */
+.range .under {
+  font-size: 0.6em;
+  letter-spacing: -0.035em;
+}
+.range .unit {
+  margin-left: 0.14em;
+  color: var(--pnl-fg2);
+  font-size: 0.38em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.range .about {
+  margin-right: 0.2em;
+  color: var(--pnl-fg2);
+  font-size: 0.38em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+/* A long range in grams or milligrams ("1,200–3,400 mg") steps down so it stays inside the panel. */
+.range.is-long {
+  font-size: 64px;
+}
+.range.is-longer {
+  font-size: 48px;
+}
+.range-sub {
+  margin-top: 14px;
+  color: var(--pnl-fg2);
+  font-size: 16px;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.tags.is-empty {
+  display: none;
+}
+/* The example page's own tag. It stands right under the line that names the range, on every screen. */
+.tag--example {
+  justify-self: start;
+  margin-top: 14px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 12px;
+  border: 1.5px dashed var(--data-line);
+  border-radius: var(--r-pill);
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.likely {
+  margin-top: 18px;
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+.hl {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  padding: 0 0.3em;
+  border-radius: 7px;
+  background: var(--accent);
+  color: var(--on-accent);
+  line-height: 1.3;
+}
+.one-note {
+  margin-top: 18px;
+  max-width: 52ch;
+  color: var(--pnl-fg2);
+  font-size: 15.5px;
+}
+/* ---------- the car figure: the distance, a real place of about that length, the range, a road ---------- */
+.car {
+  margin-top: 16px;
+  max-width: 560px;
+}
+.car-lead {
+  color: var(--pnl-fg);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+.car-lead .km {
+  color: var(--data);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.car-place {
+  margin-top: 6px;
+  color: var(--pnl-fg2);
+  font-size: 15.5px;
+  line-height: 1.45;
+}
+.car-place strong {
+  color: var(--pnl-fg);
+  font-weight: 600;
+}
+.car-range {
+  margin-top: 4px;
+  color: var(--pnl-fg3);
+  font-size: 14.5px;
+}
+.road {
+  --drive: 1.6s;
+  position: relative;
+  height: 64px;
+  margin-top: 14px;
+}
+.road-line,
+.road-done {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+}
+.road-line {
+  right: 0;
+  background: rgba(255, 255, 255, 0.14);
+}
+.road-done {
+  width: 0;
+  background: var(--data);
+  transition: width var(--drive) var(--ease);
+}
+.road-end {
+  position: absolute;
+  top: 28px;
+  width: 2px;
+  height: 14px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: var(--tick);
+}
+.road-end--start {
+  left: 0;
+}
+.road-lbl {
+  position: absolute;
+  top: 44px;
+  color: var(--pnl-fg2);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+.road-lbl--start {
+  left: 0;
+  transform: none;
+}
+.road-lbl.is-end {
+  transform: translateX(-100%);
+}
+.road-car {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 34px;
+  height: 28px;
+  margin-left: -17px;
+  color: var(--data);
+  transition: left var(--drive) var(--ease);
+}
+.road-car svg {
+  display: block;
+  width: 34px;
+  height: 28px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.road-car .body {
+  transform-origin: 50% 80%;
+}
+/* A small bounce while it drives in: five short beats, about as long as the drive, then it stops by itself. */
+.road-car.is-driving .body {
+  animation: road-bob 0.32s ease-in-out 5 alternate;
+}
+@keyframes road-bob {
+  to {
+    transform: translateY(-0.8px);
+  }
+}
+.road.no-anim,
+.road.no-anim * {
+  transition: none !important;
+  animation: none !important;
+}
+.history {
+  margin-top: 6px;
+  max-width: 52ch;
+  color: var(--pnl-fg3);
+  font-size: 14.5px;
+}
+.chart-slot {
+  margin-top: 14px;
+}
+
+/* ---------- the switches in the panel ---------- */
+.habits {
+  min-width: 0;
+}
+.habits h3 {
+  font-size: 18px;
+  letter-spacing: -0.015em;
+}
+.habits-note {
+  margin-top: 6px;
+  color: var(--pnl-fg2);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.toggles {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.tg {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-top: 1px solid var(--pnl-line);
+}
+.tg-text {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3px;
+  min-width: 0;
+}
+.tg-label {
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.tg-src {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--pnl-fg3);
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+/* ---------- the scale ---------- */
+.axis {
+  position: relative;
+  height: 28px;
+  margin-top: 6px;
+  border-top: 1px solid var(--axis);
+}
+.tick {
+  position: absolute;
+  top: 0;
+  left: calc(var(--n) * 20%);
+}
+.tick:nth-child(1) { --n: 0; }
+.tick:nth-child(2) { --n: 1; }
+.tick:nth-child(3) { --n: 2; }
+.tick:nth-child(4) { --n: 3; }
+.tick:nth-child(5) { --n: 4; }
+.tick:nth-child(6) { --n: 5; }
+.tick i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 6px;
+  background: var(--tick);
+}
+.tick em {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  transform: translateX(-50%);
+  color: var(--pnl-fg3);
+  font: 500 11.5px/1 var(--mono);
+  font-style: normal;
+  white-space: nowrap;
+}
+.tick:first-child em {
+  transform: none;
+}
+.tick:last-child em {
+  transform: translateX(-100%);
+}
+/* On a narrow scale the label before the last runs into it: the last one carries the unit ("1,000 mg"),
+   and wider letter spacing makes it longer still. Its tick stays, its number goes. */
+@media (max-width: 480px) {
+  .tick:nth-child(5) em {
+    display: none;
+  }
+}
+
+/* ---------- the 100 dots ---------- */
+.dp {
+  padding-right: var(--gutter, 24px);
+  /* A label that was placed for a wider window must not push the page sideways before it is placed again. */
+  overflow-x: clip;
+}
+/* Outcomes past the end of the scale stack in the gutter, over a dashed stretch of axis. */
+.dp .axis::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: -1px;
+  width: var(--gutter, 24px);
+  border-top: 1px dashed var(--axis);
+}
+.dp-area {
+  position: relative;
+  height: var(--area-h, 180px);
+}
+.dp-grid,
+.dp-dots {
+  position: absolute;
+  inset: 0;
+}
+.dp-grid span {
+  position: absolute;
+  top: 26px;
+  bottom: 0;
+  left: calc(var(--n) * 20%);
+  width: 1px;
+  background: var(--gline);
+}
+.dp-grid span:nth-child(1) { --n: 1; }
+.dp-grid span:nth-child(2) { --n: 2; }
+.dp-grid span:nth-child(3) { --n: 3; }
+.dp-grid span:nth-child(4) { --n: 4; }
+.dp-dots {
+  z-index: 1;
+}
+.dp-dot {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: var(--dot, 12px);
+  height: var(--dot, 12px);
+  border-radius: 50%;
+  background: var(--data);
+  transition: transform var(--move) var(--ease), background-color 0.3s, box-shadow 0.3s;
+  /* Each dot starts a hair after the one before (--i is its number), so a change reads as a wave. */
+  transition-delay: calc(var(--i, 0) * 2.4ms), 0s, 0s;
+}
+/* A move that is given a new target while it still waits starts its wait again. Under a dragged slider
+   that would hold most dots back until the finger stops, so there the wave is dropped. */
+.is-dragging .dp-dot {
+  transition-delay: 0s;
+  will-change: transform;
+}
+.dp-dot.tail {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--tail);
+}
+.dp-mid,
+.dp-ghost {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  transition: transform var(--move) var(--ease), opacity 0.6s;
+}
+.dp-mid {
+  border-left: 1.5px solid var(--marker);
+}
+.dp-mid-label {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  /* The label changes sides in step with the line, so it never sticks out on the way. */
+  transition: left var(--move) var(--ease);
+}
+.dp-ghost {
+  top: 26px;
+  border-left: 1.5px dashed var(--ghost);
+  opacity: 0;
+}
+.dp-ghost.is-on {
+  opacity: 1;
+}
+.dp-foot {
+  margin-top: 4px;
+}
+.dp-bracket {
+  position: relative;
+  height: 44px;
+}
+.dp-bracket-line {
+  position: absolute;
+  top: 0;
+  height: 10px;
+  min-width: 3px;
+  border: 1.5px solid var(--data-line);
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+  transition: left var(--move) var(--ease), width var(--move) var(--ease);
+}
+.dp-bracket-ghost {
+  position: absolute;
+  top: 0;
+  height: 10px;
+  border: 1.5px dashed var(--ghost);
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.dp-bracket-ghost.is-on {
+  opacity: 1;
+}
+.dp-bracket-label {
+  position: absolute;
+  top: 19px;
+  color: var(--pnl-fg2);
+  font-size: 13.5px;
+  white-space: nowrap;
+  transition: left var(--move) var(--ease);
+}
+.dp-bracket-label b {
+  color: var(--pnl-fg);
+  font: 600 13px/1 var(--mono);
+}
+
+/* ---------- before there is a result ---------- */
+.result-empty h3 {
+  max-width: 18ch;
+  font-size: 40px;
+}
+.result-empty p {
+  margin-top: 12px;
+  max-width: 52ch;
+  color: var(--pnl-fg2);
+}
+.result-empty .axis {
+  margin-top: 96px;
+}
+
+/* ---------- the pinned pill ---------- */
+.pin {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: 22px;
+  max-width: calc(100% - 24px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 24px);
+  transition: opacity 0.25s var(--ease), transform 0.45s var(--ease), visibility 0s linear 0.45s;
+}
+.pin.is-on {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition: opacity 0.25s var(--ease), transform 0.45s var(--ease), visibility 0s;
+}
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  /* A least height, so wider letter or word spacing can make the pill grow instead of spilling out of it. */
+  min-height: 58px;
+  padding: 0 9px 0 22px;
+  border-radius: var(--r-pill);
+  background: rgba(10, 16, 32, 0.9);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: var(--shadow-float), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  color: var(--on-navy);
+  transition: box-shadow 0.35s var(--ease);
+}
+.pill.flash {
+  box-shadow: var(--shadow-float), inset 0 0 0 2px var(--accent);
+}
+.pill-range {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.pill-range small {
+  margin-left: 3px;
+  color: var(--on-navy-2);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.pill-range .about {
+  margin-right: 4px;
+  color: var(--on-navy-2);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.pill-mid {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--on-navy-2);
+  font: 500 13px/1 var(--font);
+  white-space: nowrap;
+}
+.pill-mid b {
+  font: 500 13px/1 var(--mono);
+}
+.pill-mid::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.pill .band {
+  width: 150px;
+}
+.round-btn {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--on-navy);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.round-btn:hover {
+  background: rgba(255, 255, 255, 0.17);
+}
+/* The pill's chip is a badge on the pill's top edge: half on the pill, and ringed in the pill's navy,
+   so it reads as part of the pill and never as something loose on the text behind. */
+.pin-delta {
+  position: absolute;
+  left: 50%;
+  top: -11px;
+  margin: 0;
+  box-shadow: 0 0 0 3px var(--navy);
+  transform: translate(-50%, 6px);
+}
+.pin-delta.is-on {
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 1100px) {
+  .result-top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .habits {
+    max-width: 560px;
+  }
+  /* In one column a tag that appears above the switches would push them away from under the finger that
+     just flipped one. So here the tags sit below the switches, in a row that keeps its room when empty. */
+  .result-top:not(.is-alone) {
+    row-gap: 0;
+  }
+  .result-top:not(.is-alone) .readout {
+    display: contents;
+  }
+  .result-top:not(.is-alone) .habits {
+    margin-top: 28px;
+  }
+  .result-top:not(.is-alone) .tags,
+  .result-top:not(.is-alone) .tags.is-empty {
+    display: flex;
+    order: 1;
+    min-height: 32px;
+    margin-top: 12px;
+  }
+}
+@media (max-width: 640px) {
+  .result {
+    padding: 26px 20px 18px;
+    border-radius: var(--r-card);
+  }
+  .range {
+    font-size: 60px;
+  }
+  .range.is-long {
+    font-size: 44px;
+  }
+  .range.is-longer {
+    font-size: 34px;
+  }
+  .likely {
+    font-size: 20px;
+  }
+  .pin {
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+    max-width: none;
+    transform: translateY(24px);
+  }
+  .pin.is-on {
+    transform: none;
+  }
+  .pill {
+    gap: 10px;
+    min-height: 54px;
+    padding-left: 18px;
+  }
+  .pill .band {
+    flex: 1;
+    width: auto;
+    min-width: 40px;
+  }
+  /* Out of sight, still read out: the number after the lime dot keeps its name. */
+  .pill .long {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .round-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+@media (pointer: coarse) {
+  .round-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+@media (max-width: 360px) {
+  .range.is-long {
+    font-size: 38px;
+  }
+  .range.is-longer {
+    font-size: 30px;
+  }
+}

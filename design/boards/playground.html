@@ -1,0 +1,1483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ai-co2 · Playground</title>
+<meta name="description" content="The ai-co2 page with a panel for switching between the style options.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400;500;600&family=Schibsted+Grotesk:wght@400..900&display=swap">
+<style>
+:root{
+  --ink:#0B1222; --ink-2:#4A5168; --ink-3:#666B80;
+  --navy:#0A1020; --navy-2:#111A2F;
+  --on-navy:#F4F2EA; --on-navy-2:#A9B0C4; --on-navy-3:#8A93AA; --navy-line:rgba(255,255,255,.09);
+  --ok:#16794F; --ok-soft:#E3F1E9; --bad:#B42318; --bad-line:#D4483B; --bad-soft:#FBEAE7;
+  --shadow-card:0 1px 2px rgba(11,18,34,.05),0 12px 32px -18px rgba(11,18,34,.22);
+  --shadow-float:0 20px 44px -18px rgba(10,16,32,.6),0 2px 8px rgba(10,16,32,.2);
+  --ease:cubic-bezier(.16,1,.3,1); --move:.75s;
+  --font:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+/* The looks: every switch in the playground panel lands on one of these body attributes. */
+body{
+  --paper:#FBFAF4; --paper-2:#F3F1E7; --card:#FFFEFA; --line:#E4E1D3; --line-2:#D3CFBE;
+  --accent:#C8F04B; --accent-press:#B6DE38; --accent-deep:#5E8200; --on-accent:#0A1020;
+  --accent-soft:color-mix(in srgb,var(--accent) 24%,transparent);
+  --accent-line:color-mix(in srgb,var(--accent) 80%,transparent);
+  --head:"Schibsted Grotesk",ui-sans-serif,system-ui,sans-serif; --head-track:-.035em;
+  --s:1; --hs:1; --c:var(--ink); --knob-on:var(--paper);
+}
+body[data-bg="white"]{--paper:#FFFFFF;--paper-2:#F3F4F6;--card:#FFFFFF;--line:#E5E7EB;--line-2:#D1D5DB}
+body[data-accent="aqua"]{--accent:#5EE6C8;--accent-press:#43D4B4;--accent-deep:#0B8A70}
+body[data-head="archivo"]{--head:"Archivo",ui-sans-serif,system-ui,sans-serif;--head-track:-.03em}
+body[data-head="bricolage"]{--head:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;--head-track:-.035em}
+body[data-space="compact"]{--s:.66;--hs:.86;font-size:16px}
+body.is-dragging{--move:.12s}
+
+/* Two surfaces the estimate can sit on. */
+.ctx-navy{--pnl-bg:var(--navy);--pnl-fg:var(--on-navy);--pnl-fg2:var(--on-navy-2);--pnl-fg3:var(--on-navy-3);--pnl-line:var(--navy-line);--pnl-grid:rgba(255,255,255,.04);--axis:rgba(255,255,255,.24);--tick:rgba(255,255,255,.34);--gline:rgba(255,255,255,.07);--data:var(--accent);--data-soft:var(--accent-soft);--data-line:var(--accent-line);--marker:var(--on-navy);--pin-ring:0 0 0 3px var(--navy);--ghost:rgba(255,255,255,.55);--tail:var(--on-navy-3);--c:var(--on-navy);--knob-on:var(--navy);--trk:rgba(255,255,255,.08)}
+.ctx-paper{--pnl-bg:var(--card);--pnl-fg:var(--ink);--pnl-fg2:var(--ink-2);--pnl-fg3:var(--ink-3);--pnl-line:var(--line-2);--pnl-grid:rgba(11,18,34,.035);--axis:rgba(11,18,34,.22);--tick:rgba(11,18,34,.3);--gline:rgba(11,18,34,.07);--data:var(--accent-deep);--data-soft:color-mix(in srgb,var(--accent-deep) 18%,transparent);--data-line:var(--accent-deep);--marker:var(--ink);--pin-ring:0 0 0 2px var(--ink);--ghost:rgba(11,18,34,.5);--tail:var(--ink-3);--c:var(--ink);--knob-on:var(--paper);--trk:rgba(11,18,34,.07)}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:80px}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;caret-color:var(--ink);padding-bottom:120px;transition:background-color .3s}
+body[data-space="compact"]{font-size:16px}
+::selection{background:var(--accent);color:var(--on-accent)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.ctx-navy :focus-visible,.pill :focus-visible,.prompt :focus-visible{outline-color:var(--accent)}
+h1,h2,h3,h4{margin:0;font-family:var(--head);font-weight:800;letter-spacing:var(--head-track);line-height:1.04;text-wrap:balance}
+p{margin:0}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
+b,strong{font-weight:700}
+button,input,textarea{font:inherit;color:inherit}
+code{font:500 .86em/1 var(--mono);padding:.18em .42em;border-radius:6px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.i-s{width:15px;height:15px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.no-move,.no-anim,.no-anim *{transition:none !important}
+.wrap{width:min(1200px,100% - 64px);margin-inline:auto}
+
+/* ---------- header and intro ---------- */
+.site{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.wordmark{font-family:var(--head);font-weight:900;font-size:23px;letter-spacing:-.04em;line-height:1;text-decoration:none}
+.site-nav{display:flex;gap:22px;font-size:15px;color:var(--ink-2)}
+.site-nav a{text-decoration:none}
+.site-nav a:hover{color:var(--ink);text-decoration:underline}
+.intro{padding:calc(88px*var(--s)) 0 calc(16px*var(--s))}
+.intro h1{font-size:calc(76px*var(--hs));letter-spacing:-.04em;line-height:.95}
+body[data-title="highlight"] .title-mark{padding:0 .12em;margin:0 -.04em;border-radius:.14em;background:var(--accent);color:var(--on-accent)}
+body[data-title="underline"] .title-mark{background:linear-gradient(var(--accent),var(--accent)) 0 96%/100% .14em no-repeat;padding-bottom:.04em}
+.intro .lede{margin-top:calc(24px*var(--s));max-width:52ch;color:var(--ink-2);font-size:21px;line-height:1.45}
+.intro .meta{display:flex;align-items:center;gap:8px;margin-top:calc(20px*var(--s));font-size:14.5px;color:var(--ink-3)}
+figure{margin:0}
+figcaption{margin-top:14px;font-size:15px;line-height:1.5;color:var(--ink-2);max-width:78ch}
+figcaption b{color:var(--ink)}
+.side-hint{display:none}
+.notes h3,.counted h3{font-size:18px;letter-spacing:-.015em}
+.notes ul,.list{list-style:none;margin:12px 0 0;padding:0}
+.notes li,.list li{padding:11px 0;border-top:1px solid var(--line);color:var(--ink-2);font-size:15px;line-height:1.5}
+.notes li b{color:var(--ink)}
+
+/* ---------- controls shared by every part ---------- */
+.card{background:var(--card);border-radius:18px;box-shadow:inset 0 0 0 1px var(--line),var(--shadow-card)}
+.seg{display:inline-flex;padding:3px;border-radius:999px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--line)}
+.seg button{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:32px;padding:0 13px;border:0;border-radius:999px;background:transparent;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;white-space:nowrap;transition:background-color .15s,color .15s,box-shadow .15s}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-checked="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(11,18,34,.08),inset 0 0 0 1px var(--line-2)}
+.btn{display:inline-flex;align-items:center;gap:9px;height:42px;padding:0 20px;border:0;border-radius:999px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;text-decoration:none;transition:background-color .15s,color .15s,transform .1s}
+.btn:active{transform:translateY(1px)}
+.btn--primary{background:var(--accent);color:var(--on-accent)}
+.btn--primary:hover{background:var(--accent-press)}
+.btn--quiet{background:transparent;color:var(--on-navy-2)}
+.btn--quiet:hover{background:rgba(255,255,255,.07);color:var(--on-navy)}
+.btn--line{height:38px;padding:0 16px;font-size:14.5px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink)}
+.btn--line:hover{background:var(--paper-2)}
+.switch{position:relative;flex:none;width:44px;height:26px;padding:0;border:1.5px solid color-mix(in srgb,var(--c) 42%,transparent);border-radius:999px;background:transparent;cursor:pointer;transition:background-color .2s var(--ease),border-color .2s var(--ease)}
+.switch .knob{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:color-mix(in srgb,var(--c) 58%,transparent);transition:transform .25s var(--ease),background-color .2s}
+.switch:hover{border-color:color-mix(in srgb,var(--c) 70%,transparent)}
+.switch[aria-checked="true"]{background:var(--c);border-color:var(--c)}
+.switch[aria-checked="true"] .knob{transform:translateX(18px);background:var(--knob-on)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+.chip--checked{background:var(--ok-soft);color:var(--ok)}
+.chip--problem{background:var(--bad-soft);color:var(--bad)}
+.chip--waiting{color:var(--ink-2);border:1.5px dashed var(--line-2)}
+mark.save{padding:.06em .3em;border-radius:6px;background:var(--accent);color:var(--on-accent);font-weight:600;white-space:nowrap}
+.delta{display:inline-block;margin-left:8px;padding:5px 8px;border-radius:999px;background:var(--accent);color:var(--on-accent);font:600 12px/1 var(--mono);white-space:nowrap;vertical-align:1px;opacity:0;transform:translateY(5px);transition:opacity .2s,transform .35s var(--ease);pointer-events:none}
+.delta.is-on{opacity:1;transform:none}
+
+/* ---------- the two tool cards ---------- */
+.tool-icon{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;background:var(--navy);color:var(--on-navy)}
+.choose{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:calc(24px*var(--s) + 4px)}
+.choice{display:grid;grid-template-rows:auto 1fr auto;gap:calc(22px*var(--s) + 2px);padding:calc(14px*var(--s) + 2px);padding-bottom:calc(26px*var(--s) + 4px);border:0;border-radius:22px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line),var(--shadow-card);text-align:left;cursor:pointer;transition:box-shadow .25s var(--ease),transform .25s var(--ease)}
+.choice:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1.5px var(--ink),0 2px 4px rgba(11,18,34,.06),0 24px 44px -22px rgba(11,18,34,.35)}
+.choice-scene{display:grid;align-content:center;gap:9px;height:calc(150px*var(--s) + 20px);padding:0 calc(26px*var(--s) + 2px);border-radius:14px;background-color:var(--navy);background-image:linear-gradient(var(--pnl-grid) 1px,transparent 1px),linear-gradient(90deg,var(--pnl-grid) 1px,transparent 1px);background-size:44px 44px;background-position:-1px -1px;overflow:hidden}
+.scene-line{font:400 13px/1.3 var(--mono);color:var(--on-navy-2);white-space:nowrap}
+.scene-line i{font-style:normal;color:var(--on-navy-3)}
+.scene-out{color:var(--accent)}
+.scene-drop{justify-self:center;display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:14px;border:1.5px dashed var(--accent-line);font:500 14px/1 var(--mono);color:var(--accent);transition:transform .35s var(--ease)}
+.choice:hover .scene-drop{transform:translateY(-4px)}
+.choice-text{display:grid;gap:8px;padding:0 calc(12px*var(--s) + 2px)}
+.choice-text b{font-family:var(--head);font-size:calc(34px*var(--hs));font-weight:800;letter-spacing:-.035em;line-height:1}
+.choice-text span{font-size:17px;line-height:1.5;color:var(--ink-2);max-width:40ch}
+.choice-go{justify-self:start;display:inline-flex;align-items:center;gap:10px;height:46px;margin-left:calc(12px*var(--s) + 2px);padding:0 22px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:16px;font-weight:600;transition:background-color .15s,gap .25s var(--ease)}
+.choice:hover .choice-go{background:var(--accent-press);gap:14px}
+body[data-state="first"] .data-card{background:none;box-shadow:none;border-radius:0}
+body[data-state="first"] .data-body .notes{padding:calc(40px*var(--s)) 0 0;border:0}
+.chosen{display:flex;align-items:center;gap:14px;padding:calc(16px*var(--s) + 4px) calc(24px*var(--s) + 8px);border-bottom:1px solid var(--line)}
+.chosen h3{font-size:22px;letter-spacing:-.025em;margin-right:auto}
+body[data-state="first"] :is(.chosen,.data-body .tool-stack){display:none}
+body[data-state="first"] .data-body{grid-template-columns:1fr}
+body:not([data-state="first"]) .choose{display:none}
+.data-body{display:grid;grid-template-columns:minmax(0,1fr) 320px}
+.data-body .notes{padding:calc(28px*var(--s) + 4px) calc(24px*var(--s) + 8px);border-left:1px solid var(--line)}
+.tool-stack{min-width:0}
+.tool{padding:calc(26px*var(--s) + 4px) calc(24px*var(--s) + 8px)}
+.tool[hidden]{display:none}
+#tool-cc:not([data-state="checked"]) [data-tool-toggle],#tool-gpt:not([data-gpt="done"]) [data-tool-toggle]{display:none}
+.tool-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px}
+.tool-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--navy);color:var(--on-navy)}
+.tool-head h2{font-size:21px;letter-spacing:-.02em}
+.tool-status{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:15px;color:var(--ink-2)}
+.tool-body{display:none;margin-top:20px;border-top:1px solid var(--line)}
+.tool[data-open="true"] .tool-body{display:block}
+.steps{list-style:none;margin:0;padding:0}
+.step{display:grid;grid-template-columns:32px minmax(0,1fr);gap:16px;padding-top:22px}
+.step-n{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--line-2);font:600 14px/1 var(--mono)}
+.step h3{margin:5px 0 6px;font-size:18px;letter-spacing:-.015em;line-height:1.25}
+.step-body>p{color:var(--ink-2);font-size:15.5px;max-width:64ch}
+.prompt{position:relative;margin-top:14px;border-radius:14px;background:var(--navy);color:#DCE1EE;overflow:hidden;caret-color:var(--accent)}
+.prompt-body{position:relative}
+.prompt pre{margin:0;padding:16px 20px;max-height:132px;overflow:hidden;font:400 12.5px/1.65 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;transition:max-height .45s var(--ease)}
+.prompt.is-open pre{max-height:2000px}
+.prompt:not(.is-open) .prompt-fade{position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(rgba(10,16,32,0),var(--navy));pointer-events:none}
+.prompt-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid var(--navy-line);background:var(--navy-2)}
+.answer{display:block;width:100%;min-height:120px;margin-top:12px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line-2);background:#fff;color:var(--ink);font:400 12.5px/1.65 var(--mono);white-space:pre;overflow-x:auto;resize:vertical;transition:border-color .15s,box-shadow .15s}
+.answer::placeholder{color:var(--ink-3)}
+.answer:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(11,18,34,.08)}
+.tool[data-state="problem"] .answer{border-color:var(--bad-line)}
+.answer-msg{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:14.5px;line-height:1.45;color:var(--ink-3)}
+.answer-msg .i{margin-top:1px}
+.tool[data-state="problem"] .answer-msg{color:var(--bad)}
+.tool[data-state="checked"] .answer-msg{display:none}
+.sum-line{display:flex;gap:8px;align-items:flex-start;margin-top:12px;color:var(--ok);font-size:14.5px;font-weight:600;line-height:1.45}
+.sum-line .i{margin-top:2px}
+.models{width:100%;margin-top:10px;border-collapse:collapse;font-size:14.5px}
+.models th{padding:0 0 8px;text-align:left;font-size:12.5px;font-weight:600;color:var(--ink-3);border-bottom:1px solid var(--line)}
+.models td{padding:9px 0;border-bottom:1px solid var(--line)}
+.models td:first-child{padding-right:12px;white-space:nowrap}
+.models tr:last-child td{border-bottom:0}
+.models .r{text-align:right;padding-right:24px}
+.share{display:flex;align-items:center;gap:10px}
+.share-bar{flex:1;height:6px;border-radius:999px;background:rgba(11,18,34,.07)}
+.share-bar i{display:block;height:100%;border-radius:999px;background:var(--ink)}
+.share .num{width:3.2em;text-align:right;font-size:13px}
+.gpt-steps{margin:18px 0 0;padding:0 0 0 22px;color:var(--ink-2);font-size:15.5px;line-height:1.6}
+.gpt-steps b{color:var(--ink)}
+.drop{display:grid;justify-items:center;gap:4px;margin-top:16px;padding:28px 20px;border-radius:14px;border:1.5px dashed var(--line-2);background:var(--paper);text-align:center;cursor:pointer;transition:border-color .15s,background-color .15s}
+.drop:hover,.drop.is-over{border-color:var(--ink);background:var(--paper-2)}
+.drop .i{width:26px;height:26px;margin-bottom:6px;color:var(--ink-2)}
+.drop b{font-size:16px}
+.drop span{font-size:14px;color:var(--ink-3)}
+.drop-msg{margin-top:10px;font-size:14.5px;color:var(--ok);font-weight:600}
+
+/* ---------- layout: one column, or a side column for the result ---------- */
+.layout{width:min(1200px,100% - 64px);margin:0 auto}
+.aside{display:none}
+@media (min-width:1100px){
+  body[data-pin="side"] .layout{display:grid;grid-template-columns:minmax(0,1fr) 384px;gap:48px;align-items:start}
+  body[data-pin="side"] .aside{display:block;position:sticky;top:20px}
+  body[data-pin="side"] .side-hint{display:inline}
+  body[data-pin="side"] .data-body{grid-template-columns:1fr}
+  body[data-pin="side"] .data-body .notes{border-left:0;border-top:1px solid var(--line)}
+}
+.sec{padding-top:calc(96px*var(--s))}
+.sec--first{padding-top:calc(88px*var(--s))}
+.sec-head{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px calc(24px*var(--s) + 4px);align-items:end;margin-bottom:calc(28px*var(--s))}
+body[data-pin="side"] .sec-head{grid-template-columns:1fr}
+.sec-head h2{font-size:calc(46px*var(--hs));letter-spacing:-.035em;line-height:1}
+.sec-head p{color:var(--ink-2);max-width:56ch;padding-bottom:6px}
+
+/* ---------- the result ---------- */
+.result{position:relative;isolation:isolate;border-radius:22px;background-color:var(--pnl-bg);color:var(--pnl-fg);background-image:linear-gradient(var(--pnl-grid) 1px,transparent 1px),linear-gradient(90deg,var(--pnl-grid) 1px,transparent 1px);background-size:44px 44px;background-position:-1px -1px;box-shadow:inset 0 0 0 1px var(--pnl-line),var(--shadow-card);padding:calc(38px*var(--s)) calc(46px*var(--s)) calc(24px*var(--s));caret-color:var(--data);transition:background-color .3s,color .3s}
+.result-top{display:grid;grid-template-columns:minmax(0,1fr);gap:28px 56px;align-items:start}
+.result-top.has-habits{grid-template-columns:minmax(0,1fr) minmax(280px,360px)}
+.range{font-family:var(--head);font-weight:800;font-size:calc(88px*var(--hs));line-height:.86;letter-spacing:-.04em;font-variant-numeric:lining-nums;white-space:nowrap}
+.range .unit{margin-left:.14em;font-size:.38em;font-weight:700;letter-spacing:-.01em;color:var(--pnl-fg2)}
+.range-sub{margin-top:14px;color:var(--pnl-fg2);font-size:16px}
+.likely{margin-top:calc(16px*var(--s) + 2px);font-size:23px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.hl{display:inline-block;padding:0 .3em;border-radius:7px;background:var(--accent);color:var(--on-accent);font-variant-numeric:tabular-nums;line-height:1.3}
+.ctx-paper .hl{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.car{margin-top:8px;color:var(--pnl-fg2);font-size:15.5px;max-width:52ch}
+.history{margin-top:6px;color:var(--pnl-fg3);font-size:14.5px;max-width:52ch}
+.preview-tag{display:none;align-items:center;gap:8px;margin-top:14px;width:max-content;max-width:100%;padding:6px 12px;border-radius:999px;border:1.5px dashed var(--data-line);font-size:13.5px;font-weight:600;line-height:1.2}
+.is-preview .preview-tag{display:inline-flex}
+.chart-slot{margin-top:calc(14px*var(--s))}
+.chart-note{margin-top:2px;color:var(--pnl-fg3);font-size:13.5px}
+.aside .result{padding:26px 26px 18px}
+.aside .range{font-size:calc(58px*var(--hs))}
+.aside .likely{font-size:19px}
+
+.habits h3{font-size:18px;letter-spacing:-.015em}
+.habits-note{margin-top:6px;color:var(--pnl-fg2,var(--ink-2));font-size:14.5px;line-height:1.45}
+.main-habits{padding-top:calc(32px*var(--s))}
+.aside figcaption{font-size:14px}
+.main-habits .habits{max-width:720px}
+.toggles{list-style:none;margin:12px 0 0;padding:0}
+.tg{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid var(--pnl-line,var(--line))}
+.tg-text{display:grid;gap:3px;min-width:0}
+.tg-label{font-weight:600;font-size:15.5px;line-height:1.3}
+.tg-src{display:inline-flex;align-items:center;gap:6px;color:var(--pnl-fg3,var(--ink-3));font-size:13px;line-height:1.2}
+
+/* axis, shared by the charts */
+.axis{position:relative;height:28px;margin-top:6px;border-top:1px solid var(--axis,rgba(11,18,34,.2))}
+.tick{position:absolute;top:0}
+.tick i{position:absolute;left:0;top:0;width:1px;height:6px;background:var(--tick,rgba(11,18,34,.3))}
+.tick em{position:absolute;top:10px;left:0;transform:translateX(-50%);font:500 11.5px/1 var(--mono);font-style:normal;color:var(--pnl-fg3,var(--ink-3));white-space:nowrap}
+.tick:first-child em{transform:none}
+.tick:last-child em{transform:translateX(-100%)}
+
+/* dots */
+.dp{padding-right:var(--gutter,24px)}
+.dp .axis::after{content:"";position:absolute;left:100%;top:-1px;width:var(--gutter,24px);border-top:1px dashed var(--axis)}
+.dp-area{position:relative}
+.dp-grid,.dp-dots{position:absolute;inset:0}
+.dp-grid span{position:absolute;top:26px;bottom:0;width:1px;background:var(--gline)}
+.dp-dots{z-index:1}
+.dp-dot{position:absolute;left:0;bottom:0;border-radius:50%;background:var(--data);will-change:transform;transition:transform var(--move) var(--ease),background-color .3s}
+.dp-dot.tail{background:transparent;box-shadow:inset 0 0 0 1.5px var(--tail)}
+.dp-mid,.dp-ghost{position:absolute;top:0;bottom:0;left:0;width:0;transition:transform var(--move) var(--ease),opacity .6s}
+.dp-mid{border-left:1.5px solid var(--marker)}
+.dp-mid-label{position:absolute;top:0;left:10px;white-space:nowrap;font-size:14px;font-weight:600;line-height:1}
+.dp-ghost{top:26px;border-left:1.5px dashed var(--ghost);opacity:0}
+.dp-ghost.is-on{opacity:1}
+.dp-foot{margin-top:4px}
+.dp-bracket{position:relative;height:44px}
+.dp-bracket-line{position:absolute;top:0;height:10px;border:1.5px solid var(--data-line);border-top:0;border-radius:0 0 6px 6px;transition:left var(--move) var(--ease),width var(--move) var(--ease)}
+.dp-bracket-ghost{position:absolute;top:0;height:10px;border:1.5px dashed var(--ghost);border-top:0;border-radius:0 0 6px 6px;opacity:0;transition:opacity .6s}
+.dp-bracket-ghost.is-on{opacity:1}
+.dp-bracket-label{position:absolute;top:19px;transform:translateX(-50%);white-space:nowrap;font-size:13.5px;color:var(--pnl-fg2);transition:left var(--move) var(--ease)}
+.dp-bracket-label b{color:var(--pnl-fg);font:600 13px/1 var(--mono)}
+
+/* band */
+.bb-area{position:relative;height:76px}
+.bb-track{position:absolute;left:0;right:0;bottom:12px;height:14px;border-radius:999px;background:var(--trk,rgba(11,18,34,.07))}
+.bb-band,.bb-ghost{position:absolute;top:0;bottom:0;border-radius:999px;transition:left var(--move) var(--ease),width var(--move) var(--ease),opacity .6s}
+.bb-band{background:var(--data-soft);box-shadow:inset 0 0 0 1.5px var(--data-line)}
+.bb-ghost{top:-5px;bottom:-5px;border:1.5px dashed var(--ghost);opacity:0}
+.bb-ghost.is-on{opacity:1}
+.bb-pin{position:absolute;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:var(--accent);box-shadow:var(--pin-ring);transition:left var(--move) var(--ease)}
+.bb-lab{position:absolute;bottom:34px;transform:translateX(-50%);font:600 13px/1 var(--mono);color:var(--pnl-fg2);transition:left var(--move) var(--ease)}
+.bb-mid{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap;font-size:14px;font-weight:600;line-height:1;transition:left var(--move) var(--ease)}
+.bb-mid::after{content:"";position:absolute;left:50%;top:22px;height:22px;border-left:1.5px solid var(--marker)}
+.bb-mid.anchor-l{transform:translateX(-14px)}
+.bb-mid.anchor-l::after{left:14px}
+.bb--mini .bb-area{height:14px}
+.bb--mini .bb-track{bottom:4px;height:6px}
+.bb--mini .bb-pin{width:12px;height:12px;margin:-6px 0 0 -6px}
+.bb--mini .bb-ghost{top:-3px;bottom:-3px}
+.bb--accent .bb-band{background:var(--accent);box-shadow:inset 0 0 0 1.5px var(--ink)}
+
+/* curve */
+.cv-area{position:relative;height:176px}
+.cv-svg{position:absolute;left:0;right:0;bottom:0;top:28px;width:100%;height:calc(100% - 28px);overflow:visible}
+.cv-out{fill:var(--gline)}
+.cv-in{fill:var(--data-soft)}
+.cv-line{fill:none;stroke:var(--data);stroke-width:2;vector-effect:non-scaling-stroke}
+.cv-ghost{fill:none;stroke:var(--ghost);stroke-width:1.5;stroke-dasharray:5 5;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .6s}
+.cv-ghost.is-on{opacity:1}
+.cv-mid{stroke:var(--marker);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.cv-mid-label{position:absolute;top:0;transform:translateX(-12px);white-space:nowrap;font-size:14px;font-weight:600;line-height:1}
+
+/* ---------- page states ---------- */
+.result-empty{display:none}
+.result-empty h3{font-size:calc(40px*var(--hs));letter-spacing:-.035em;max-width:18ch}
+.result-empty p{margin-top:12px;color:var(--pnl-fg2);max-width:52ch}
+.result-empty .axis{margin-top:calc(72px*var(--s) + 24px)}
+.result-empty .ghost-row{display:flex;gap:3px;align-items:flex-end;height:0}
+body:is([data-state="first"],[data-state="steps"],[data-state="loading"],[data-state="error"]) .result-empty{display:block}
+body:is([data-state="first"],[data-state="steps"],[data-state="loading"],[data-state="error"]) :is(.result-top,.chart-slot,#chart-note,#tips,#contribute,.main-habits){display:none}
+body[data-tool="cc"] :is(.history,.tip--gpt,#habits){display:none}
+body[data-tool="gpt"] #tryit,body[data-pin="side"] #tryit{display:none}
+body[data-tool="gpt"] .tip--cc{display:none}
+.partial{display:none;align-items:center;gap:8px;margin-top:14px;width:fit-content;max-width:100%;padding:6px 12px;border-radius:999px;border:1.5px dashed var(--pnl-line);font-size:13.5px;font-weight:600;line-height:1.2;color:var(--pnl-fg2)}
+body:is([data-state="one"],[data-state="loading"]) .partial{display:inline-flex}
+.switch:disabled{opacity:.4;cursor:not-allowed}
+.progress{display:none;margin-top:16px}
+.progress-bar{height:8px;border-radius:999px;background:rgba(11,18,34,.08);overflow:hidden}
+.progress-bar i{display:block;width:32%;height:100%;border-radius:999px;background:var(--ink)}
+.progress p{margin-top:8px;font-size:14.5px;color:var(--ink-2)}
+#tool-gpt[data-gpt="loading"] .progress{display:block}
+#tool-gpt[data-gpt="loading"] :is(.drop,.gpt-steps){display:none}
+#tool-gpt[data-gpt="problem"] .drop{border-color:var(--bad-line)}
+.drop-msg.is-bad{display:flex;gap:8px;align-items:flex-start;color:var(--bad);font-weight:400}
+.drop-msg.is-bad .i{margin-top:2px}
+
+/* ---------- tips ---------- */
+.tips{padding:4px calc(30px*var(--s) + 2px)}
+.tip{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 40px;align-items:start;padding:calc(26px*var(--s) + 2px) 0;border-top:1px solid var(--line)}
+.tip:first-child{border-top:0}
+.tip h3{font-size:calc(24px*var(--hs));letter-spacing:-.03em;line-height:1.1}
+.tip p{margin-top:10px;color:var(--ink-2);max-width:62ch}
+.tip .how{font-size:15.5px}
+.tip .how b{color:var(--ink)}
+.tip-side{display:grid;gap:12px;justify-items:end;min-width:220px;padding-top:4px}
+.pv{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.tv{display:grid;gap:4px;width:240px}
+.tv-row{display:grid;grid-template-columns:48px minmax(0,1fr) 62px;gap:10px;align-items:center}
+.tv-label{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.tv-val{font:500 12.5px/1 var(--mono);text-align:right;white-space:nowrap;color:var(--ink-2)}
+
+/* ---------- contribute ---------- */
+.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.opt{display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;padding:calc(26px*var(--s) + 2px) calc(26px*var(--s) + 2px);border-left:1px solid var(--line)}
+.opt:first-child{border-left:0}
+.opt-kind{font-size:13px;font-weight:600;color:var(--ink-3)}
+.opt h3{font-size:calc(24px*var(--hs));letter-spacing:-.03em;margin-top:2px}
+.opt dl{display:grid;gap:10px;margin:0}
+.opt dt{font-size:12.5px;font-weight:600;color:var(--ink-3)}
+.opt dd{margin:2px 0 0;font-size:15px;line-height:1.45;color:var(--ink-2)}
+.opt dd.num{font-size:14px;color:var(--ink)}
+.opt .btn{justify-self:start}
+.fine{margin-top:12px;font-size:13.5px;color:var(--ink-3)}
+
+/* ---------- how it's calculated ---------- */
+.method summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:calc(18px*var(--s) + 2px) calc(28px*var(--s) + 2px);cursor:pointer;list-style:none;font-size:16px;font-weight:700}
+.method summary::-webkit-details-marker{display:none}
+.method .when-open,.method[open] .when-closed{display:none}
+.method[open] .when-open{display:inline}
+.counted{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 48px;margin-top:22px}
+.method summary .i{transition:transform .3s var(--ease)}
+.method[open] summary .i{transform:rotate(180deg)}
+.method-body{padding:0 calc(28px*var(--s) + 2px) calc(26px*var(--s) + 2px);border-top:1px solid var(--line)}
+.formula{margin-top:20px;padding:14px 16px;border-radius:12px;background:var(--paper-2);font:500 13.5px/1.5 var(--mono);color:var(--ink)}
+.sliders{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 32px;margin-top:22px}
+.sl-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.sl-top label{font-size:14.5px;font-weight:600;line-height:1.35}
+.sl-top output{font:600 14px/1 var(--mono);white-space:nowrap}
+.sl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:10px 0 0;background:transparent;cursor:pointer}
+.sl input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:linear-gradient(90deg,var(--ink) 0 var(--p,50%),rgba(11,18,34,.12) var(--p,50%) 100%)}
+.sl input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:rgba(11,18,34,.12)}
+.sl input[type=range]::-moz-range-progress{height:6px;border-radius:999px;background:var(--ink)}
+.sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8px;border-radius:50%;background:var(--card);box-shadow:0 0 0 2px var(--ink),0 2px 6px rgba(11,18,34,.25)}
+.sl input[type=range]::-moz-range-thumb{width:20px;height:20px;border:2px solid var(--ink);border-radius:50%;background:var(--card)}
+.sl-scale{display:flex;justify-content:space-between;font:500 11.5px/1 var(--mono);color:var(--ink-3)}
+.sl-src{margin-top:8px;font-size:12.5px;line-height:1.45;color:var(--ink-3)}
+.method-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-size:14.5px;color:var(--ink-2)}
+
+.foot{margin-top:calc(80px*var(--s));padding:22px 0;border-top:1px solid var(--line);color:var(--ink-3);font-size:14px;line-height:1.6}
+
+/* ---------- the pinned bars ---------- */
+.pin{position:fixed;z-index:40;opacity:0;visibility:hidden;transition:opacity .25s var(--ease),transform .45s var(--ease),visibility 0s linear .45s}
+.pin.is-on{opacity:1;visibility:visible;transition:opacity .25s var(--ease),transform .45s var(--ease),visibility 0s}
+.pin--pill{left:50%;bottom:22px;transform:translate(-50%,24px)}
+.pin--pill.is-on{transform:translate(-50%,0)}
+.pin--strip,.pin--head{left:0;right:0;top:0;transform:translateY(-100%)}
+.pin--strip.is-on,.pin--head.is-on{transform:none}
+.pill{position:relative;display:flex;align-items:center;gap:16px;height:58px;padding:0 9px 0 22px;border-radius:999px;background:rgba(10,16,32,.9);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);color:var(--on-navy);box-shadow:var(--shadow-float),inset 0 0 0 1px rgba(255,255,255,.08);transition:box-shadow .35s var(--ease)}
+.pill.flash{box-shadow:var(--shadow-float),inset 0 0 0 2px var(--accent)}
+.pill-range,.strip-range,.head-range{font-family:var(--head);font-weight:800;letter-spacing:-.025em;white-space:nowrap;line-height:1}
+.pill-range{font-size:20px}
+.pill-range small,.strip-range small,.head-range small{margin-left:3px;font-size:13px;font-weight:600;letter-spacing:0}
+.pill-range small{color:var(--on-navy-2)}
+.pill-mid,.strip-mid{display:inline-flex;align-items:center;gap:7px;font:500 13px/1 var(--font);white-space:nowrap}
+.pill-mid b,.strip-mid b{font:500 13px/1 var(--mono)}
+.pill-mid{color:var(--on-navy-2)}
+.pill-mid::before,.strip-mid::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.strip-mid::before{box-shadow:0 0 0 1.5px var(--ink)}
+.pill .chart{width:150px}
+.round-btn{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;transition:background-color .15s}
+.pill .round-btn{background:rgba(255,255,255,.09);color:var(--on-navy)}
+.pill .round-btn:hover{background:rgba(255,255,255,.17)}
+.pin-delta{position:absolute;left:50%;top:-16px;margin:0;transform:translate(-50%,6px)}
+.pin-delta.is-on{transform:translate(-50%,0)}
+.strip{background:color-mix(in srgb,var(--paper) 90%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(11,18,34,.4);transition:box-shadow .35s var(--ease)}
+.strip.flash{box-shadow:0 2px 0 var(--ink),0 10px 24px -18px rgba(11,18,34,.4)}
+.strip-in{display:flex;align-items:center;gap:16px;height:56px}
+.strip-range{font-size:19px}
+.strip-range small{color:var(--ink-2)}
+.strip-mid{color:var(--ink-2)}
+.strip .chart{flex:1;min-width:60px}
+.strip .round-btn,.head-bar .round-btn{width:36px;height:36px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink)}
+.strip .pin-delta{position:static;margin-left:6px;transform:translateY(5px)}
+.strip .pin-delta.is-on{transform:none}
+.head-bar{display:flex;align-items:center;gap:14px;padding:10px 16px 12px;background:var(--pnl-bg);color:var(--pnl-fg);border-radius:0 0 18px 18px;box-shadow:inset 0 -1px 0 var(--pnl-line),var(--shadow-float);transition:box-shadow .35s var(--ease)}
+.head-bar.flash{box-shadow:inset 0 -2px 0 var(--data),var(--shadow-float)}
+.head-range{font-size:24px}
+.head-range small{color:var(--pnl-fg2)}
+.head-bar .chart{flex:1;min-width:60px}
+.ctx-navy .head-bar .round-btn{background:rgba(255,255,255,.09);box-shadow:none;color:var(--on-navy)}
+
+/* ---------- the playground panel (not part of the page) ---------- */
+.looks-btn{position:fixed;z-index:60;left:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 14px;border:1.5px dashed var(--ink);border-radius:999px;background:var(--card);color:var(--ink);font-size:14.5px;font-weight:700;box-shadow:var(--shadow-card);cursor:pointer}
+.looks{position:fixed;z-index:61;left:16px;bottom:72px;width:320px;max-height:calc(100vh - 96px);overflow:auto;padding:16px 16px 14px;border-radius:16px;background:var(--card);border:1.5px dashed var(--ink);box-shadow:0 24px 48px -20px rgba(11,18,34,.45);opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .2s,transform .3s var(--ease),visibility 0s linear .3s}
+.looks.is-open{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .3s var(--ease),visibility 0s}
+.looks-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
+.looks-head b{font-size:16px}
+.looks-head span{font-size:12.5px;color:var(--ink-3)}
+.looks-row{display:grid;gap:6px;padding:9px 0;border-top:1px solid var(--line)}
+.looks-row>span{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.looks .seg{display:flex}
+.looks .seg button{flex:1;height:30px;padding:0 6px;font-size:13px}
+.looks-foot{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.looks-foot .btn,.looks-head .btn{height:34px;padding:0 13px;font-size:13.5px}
+.looks-head .btn{margin-left:auto}
+.looks-hide{display:none}
+.looks-note{margin-top:10px;font-size:12px;color:var(--ink-3);line-height:1.45}
+/* On wider screens the panel is a slim bar along the bottom, so it never covers what you compare. */
+@media (min-width:900px){
+  .looks{left:0;right:0;bottom:0;width:auto;max-height:none;overflow:visible;display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 16px;padding:10px 20px 12px;border:0;border-top:1.5px dashed var(--ink);border-radius:0;box-shadow:0 -12px 32px -20px rgba(11,18,34,.35);transform:translateY(100%)}
+  .looks.is-open{transform:none}
+  .looks-head,.looks-note{display:none}
+  #knobs{display:contents}
+  .looks-row{gap:4px;padding:0;border:0}
+  .looks-row>span{font-size:11.5px}
+  .looks .seg{display:inline-flex}
+  .looks .seg button{flex:none;height:28px;padding:0 9px;font-size:12.5px}
+  .looks-foot{margin-left:auto;padding:0;border:0}
+  .looks-foot .btn{height:34px}
+  .looks-hide{display:inline-flex;width:34px;padding:0;justify-content:center}
+  body.dock-open .looks-btn{display:none}
+  body.dock-open{padding-bottom:calc(120px + var(--dock-h,64px))}
+  body.dock-open .pin--pill{bottom:calc(var(--dock-h,64px) + 14px)}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .result-top.has-habits{grid-template-columns:1fr}
+  .result-top.has-habits .habits{max-width:560px}
+  .sliders{grid-template-columns:1fr}
+}
+@media (max-width:900px){
+  .sec-head,.data-body,.counted{grid-template-columns:1fr}
+  .data-body .notes{border-left:0;border-top:1px solid var(--line)}
+  .options{grid-template-columns:1fr}
+  .opt{border-left:0;border-top:1px solid var(--line)}
+  .opt:first-child{border-top:0}
+  .tip{grid-template-columns:1fr}
+  .tip-side{justify-items:start}
+  .looks-btn{left:0;bottom:auto;top:50%;transform:translateY(-50%);border-radius:0 999px 999px 0;border-left:0;padding:0 12px 0 10px}
+  .looks{left:8px;right:8px;width:auto;bottom:8px;max-height:74vh}
+}
+@media (max-width:640px){
+  .wrap,.layout{width:calc(100% - 32px)}
+  .site-nav{display:none}
+  .intro{padding-top:calc(48px*var(--s))}
+  .intro h1{font-size:calc(46px*var(--hs))}
+  .intro .lede{font-size:18px}
+  .choose{grid-template-columns:1fr}
+  .chosen{flex-wrap:wrap;padding:14px 18px}
+  .tool{padding:20px 18px}
+  .result{padding:26px 20px 18px;border-radius:18px}
+  .range{font-size:calc(60px*var(--hs))}
+  .likely{font-size:20px}
+  .step{grid-template-columns:28px minmax(0,1fr);gap:12px}
+  .tips{padding:4px 20px}
+  .models .r{padding-right:12px}
+  .pin--pill{left:12px;right:12px;bottom:14px;transform:translateY(24px)}
+  .pin--pill.is-on{transform:none}
+  .pill{gap:10px;height:54px;padding-left:18px}
+  .pill .chart{flex:1;width:auto;min-width:50px}
+  .pill .long,.strip .long{display:none}
+  .strip-in{gap:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;transition-delay:0s !important;animation-duration:.01ms !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body data-result="dots" data-pin="pill" data-accent="lime" data-head="schibsted" data-panel="navy" data-bg="white" data-space="roomy" data-state="done" data-title="highlight">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2.2"/><path d="M15.5 8.5V6.2A2.2 2.2 0 0 0 13.3 4H6.2A2.2 2.2 0 0 0 4 6.2v7.1a2.2 2.2 0 0 0 2.2 2.2h2.3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.2 2.9 19.5h18.2L12 4.2Z"/><path d="M12 10v4.4"/><path d="M12 17.3v.1"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.6"/><path d="m7.5 9.8 3 2.6-3 2.6"/><path d="M13 15h4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M5.2 5h13.6A1.7 1.7 0 0 1 20.5 6.7v8.6a1.7 1.7 0 0 1-1.7 1.7H11l-4.6 3.5V17H5.2a1.7 1.7 0 0 1-1.7-1.7V6.7A1.7 1.7 0 0 1 5.2 5Z"/><path d="M8 10h8"/><path d="M8 13h5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5.5 12h12.7"/><path d="m12.8 6.5 5.5 5.5-5.5 5.5"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 18.5V5.8"/><path d="m6.5 11.2 5.5-5.5 5.5 5.5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></symbol>
+  <symbol id="i-typical" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" stroke-dasharray="3.2 2.8"/></symbol>
+  <symbol id="i-export" viewBox="0 0 24 24"><path d="M7 3.8h6.8l4.2 4.2v11.5a.7.7 0 0 1-.7.7H7a.7.7 0 0 1-.7-.7V4.5a.7.7 0 0 1 .7-.7Z"/><path d="M13.6 3.8v4.4H18"/></symbol>
+  <symbol id="i-wait" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><path d="M12 8v4.3l2.8 1.7"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12s3.4-6.3 9.2-6.3 9.2 6.3 9.2 6.3-3.4 6.3-9.2 6.3S2.8 12 2.8 12Z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15.5V4.5"/><path d="m7.5 9 4.5-4.5L16.5 9"/><path d="M4.5 15v3.3a1.7 1.7 0 0 0 1.7 1.7h11.6a1.7 1.7 0 0 0 1.7-1.7V15"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 5h5v5"/><path d="M19 5l-8 8"/><path d="M17.5 13.5v4.3a1.7 1.7 0 0 1-1.7 1.7H6.2a1.7 1.7 0 0 1-1.7-1.7V8.2a1.7 1.7 0 0 1 1.7-1.7h4.3"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M5 7h9"/><path d="M18 7h1"/><circle cx="16" cy="7" r="2"/><path d="M5 17h3"/><path d="M12 17h7"/><circle cx="10" cy="17" r="2"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="site">
+    <a class="wordmark" href="#top">ai-co2</a>
+    <nav class="site-nav" aria-label="Page"><a href="#how">How it’s calculated</a><a href="https://github.com/squaloo-studio/ai-co2">Source on GitHub</a></nav>
+  </header>
+  <div class="intro" id="top">
+    <h1>The <span class="title-mark">CO₂</span> of your AI use</h1>
+    <p class="lede">ai-co2 turns what you spent in Claude Code or in ChatGPT into a CO₂ range for the last 30 days, then shows how to cut it.</p>
+    <p class="meta"><svg class="i i-s" aria-hidden="true"><use href="#i-lock"/></svg>Runs in your browser. Nothing is uploaded.</p>
+  </div>
+</div>
+
+<div class="layout">
+  <main class="main">
+    <section class="sec sec--first" id="data" aria-labelledby="h-data">
+      <div class="sec-head">
+        <h2 id="h-data">Your data</h2>
+        <p>Choose Claude Code or ChatGPT. The page then works with the one you pick.</p>
+      </div>
+      <div class="card data-card">
+        <div class="choose" role="group" aria-label="Claude Code or ChatGPT">
+          <button type="button" class="choice" data-choose="cc">
+            <span class="choice-scene ctx-navy" aria-hidden="true">
+              <span class="scene-line"><i>›</i> Count my Claude Code token use…</span>
+              <span class="scene-line scene-out">ai-co2 v1 | 2026-08-30 to 2026-09-29</span>
+              <span class="scene-line scene-out">claude-opus-5-5 | in 2184390 | …</span>
+            </span>
+            <span class="choice-text"><b>Claude Code</b><span>Copy a prompt into Claude Code, and paste its short answer back here.</span></span>
+            <span class="choice-go">Use Claude Code<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </button>
+          <button type="button" class="choice" data-choose="gpt">
+            <span class="choice-scene ctx-navy" aria-hidden="true">
+              <span class="scene-drop"><svg class="i" aria-hidden="true"><use href="#i-export"/></svg>chatgpt-export.zip</span>
+            </span>
+            <span class="choice-text"><b>ChatGPT</b><span>Ask ChatGPT for your data export, and drop the ZIP file here.</span></span>
+            <span class="choice-go">Use ChatGPT<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </button>
+        </div>
+        <div class="chosen">
+          <span class="tool-icon"><svg class="i" aria-hidden="true"><use id="chosen-icon" href="#i-terminal"/></svg></span>
+          <h3 id="chosen-name">Claude Code</h3>
+          <button type="button" class="btn btn--line" data-switch-tool><span id="switch-label">Switch to ChatGPT</span></button>
+        </div>
+        <div class="data-body">
+        <div class="tool-stack">
+        <article class="tool" id="tool-cc" data-open="false" data-state="checked" aria-labelledby="chosen-name">
+          <div class="tool-head">
+            <div>
+                            <p class="tool-status" id="cc-status"></p>
+            </div>
+            <button type="button" class="btn btn--line" data-tool-toggle aria-expanded="false" aria-controls="cc-body">Paste a new answer</button>
+          </div>
+          <div class="tool-body" id="cc-body">
+            <ol class="steps">
+              <li class="step">
+                <span class="step-n" aria-hidden="true">1</span>
+                <div class="step-body">
+                  <h3>Copy this prompt into Claude Code</h3>
+                  <p>In the terminal or your IDE. Claude counts your usage without changing any file, and replies with a few lines of totals.</p>
+                  <div class="prompt">
+    <div class="prompt-body"><pre id="prompt-text">Count my Claude Code token use for the last 30 days, for ai-co2.
+This is read-only: don't create, change, move or delete any file.
+
+1. Run the Python script below exactly as it is.
+2. If Python 3 isn't installed, write your own code that follows
+   the same rules:
+   - read ~/.claude/projects/**/*.jsonl, including subagents/
+   - keep only entries from the last 30 days
+   - count each message once: match on message.id + requestId
+     and keep the entry with the highest output token count
+   - add the tokens up per model
+3. Reply with the result block only, exactly as printed.
+
+(The script follows here in the real prompt.)</pre><span class="prompt-fade" aria-hidden="true"></span></div>
+                    <div class="prompt-actions">
+                      <button type="button" class="btn btn--primary" data-copy><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy prompt</span></button>
+                      <button type="button" class="btn btn--quiet" data-expand aria-expanded="false" aria-controls="prompt-text"><span>Show all</span></button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="step">
+                <span class="step-n" aria-hidden="true">2</span>
+                <div class="step-body">
+                  <h3><label for="answer">Paste Claude’s answer here</label></h3>
+                  <textarea class="answer" id="answer" wrap="off" spellcheck="false" autocomplete="off" placeholder="Paste the whole reply. It starts with “ai-co2 v1”." aria-describedby="answer-msg"></textarea>
+                  <p class="answer-msg" id="answer-msg" aria-live="polite"></p>
+                  <div id="cc-sum"></div>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </article>
+        <article class="tool" id="tool-gpt" data-open="false" aria-labelledby="chosen-name" hidden>
+          <div class="tool-head">
+            <div>
+                            <p class="tool-status" id="gpt-status"></p>
+            </div>
+            <button type="button" class="btn btn--line" data-tool-toggle aria-expanded="false" aria-controls="gpt-body">Drop a new export</button>
+          </div>
+          <div class="tool-body" id="gpt-body">
+            <ol class="gpt-steps">
+              <li>In ChatGPT, open <b>Settings › Data controls › Export data</b>.</li>
+              <li>Open the email you get and download the ZIP. The link works for 24 hours.</li>
+              <li>Drop the ZIP below. It’s read in your browser, and nothing is uploaded.</li>
+            </ol>
+            <label class="drop" id="drop" for="zip">
+              <input type="file" id="zip" accept=".zip" class="sr">
+              <svg class="i" aria-hidden="true"><use href="#i-upload"/></svg>
+              <b>Drop your ChatGPT ZIP here</b>
+              <span>or click to choose the file</span>
+            </label>
+            <div class="progress" role="status">
+          <div class="progress-bar"><i></i></div>
+          <p>Reading your export in this tab: 412 of 1,284 conversations. Large exports take a minute.</p>
+        </div>
+        <p class="drop-msg" id="drop-msg" aria-live="polite"></p>
+          </div>
+        </article>
+        </div>
+        <aside class="notes" aria-labelledby="h-leaves">
+          <h3 id="h-leaves">What leaves your computer</h3>
+          <ul>
+            <li data-for="gpt" hidden><b>From ChatGPT:</b> nothing. The export is read in this browser tab.</li>
+            <li data-for="cc"><b>From Claude Code:</b> only the totals. Your own Claude Code does the counting, so they pass through Claude like any other message.</li>
+            <li><b>Afterwards:</b> nothing is kept. Closing the tab clears everything.</li>
+          </ul>
+        </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="ch-result" aria-labelledby="h-result">
+      <div class="sec-head">
+        <h2 id="h-result">Your result</h2>
+        <p>The last 30 days, as a range. It moves whenever you change anything on this page, and a small copy stays on screen while you scroll.<span class="side-hint"> Here it waits in the column on the right.</span></p>
+      </div>
+      <div id="slot-main">
+        <figure class="result-fig" id="result-fig">
+          <section class="result ctx-navy" id="result" aria-labelledby="h-result">
+            <div class="result-empty">
+              <h3>Your range will land here</h3>
+              <p>Add Claude Code or ChatGPT above. As soon as one is in, you’ll see your last 30 days as a range on this scale.</p>
+              <div class="axis" data-axis></div>
+            </div>
+            <div class="result-top has-habits" id="result-top">
+              <div class="readout">
+                <p class="range"><span data-bind="p5">3.7</span>–<span data-bind="p95">34</span><span class="unit">kg</span></p>
+                <p class="range-sub">CO₂e from <span id="tool-word">Claude Code</span> in the last 30 days (30 Aug – 29 Sep)</p>
+                <p class="preview-tag"><svg class="i i-s" aria-hidden="true"><use href="#i-eye"/></svg><span id="preview-label">Preview</span></p>
+                <p class="likely">Middle estimate: <span class="hl"><span data-bind="mid">9.8</span> kg</span></p>
+                <p class="car">About as much as driving a new petrol car <span data-bind="carLo">20</span>–<span data-bind="carHi">210</span> km. The middle estimate is about <span data-bind="carMid">60</span> km.</p>
+                <p class="history">Your whole ChatGPT history, since March 2023: <span data-bind="hLo">16</span>–<span data-bind="hHi">130</span> kg.</p>
+              </div>
+              <div id="slot-habits-panel">
+                <div class="habits" id="habits">
+                  <h3>Hidden work in ChatGPT</h3>
+                  <p class="habits-note">Exports don’t show it, so it’s estimated on top. Switch off what you don’t use.</p>
+                  <div data-toggles></div>
+                </div>
+                <div class="habits" id="tryit">
+                  <h3>Try a change</h3>
+                  <p class="habits-note">Flip one and watch your range move. The details are under “Ways to cut”.</p>
+                  <ul class="toggles">
+                    <li class="tg"><div class="tg-text"><span class="tg-label" id="try-opus">Sonnet for routine work</span><span class="tg-src"><span>Saves roughly <span data-bind="opusLo">1</span>–<span data-bind="opusHi">5</span> kg a month</span></span></div><button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="try-opus" data-preview="opus"><span class="knob"></span></button></li>
+                    <li class="tg"><div class="tg-text"><span class="tg-label" id="try-clear">Clear between tasks</span><span class="tg-src"><span>Saves roughly <span data-bind="clearLo">1</span>–<span data-bind="clearHi">7</span> kg a month</span></span></div><button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="try-clear" data-preview="clear"><span class="knob"></span></button></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="chart-slot" id="chart-slot"></div>
+          </section>
+          <figcaption id="chart-note"></figcaption>
+        </figure>
+      </div>
+      <div class="main-habits" id="slot-habits-main" hidden></div>
+    </section>
+
+    <section class="sec" id="tips" aria-labelledby="h-tips">
+      <div class="sec-head">
+        <h2 id="h-tips">Ways to cut</h2>
+        <p>Picked from your own numbers, biggest saving first.</p>
+      </div>
+      <figure>
+        <div class="card tips">
+          <article class="tip tip--cc">
+            <div>
+              <h3>Most of your footprint is Opus</h3>
+              <p>About 80% of your estimate comes from Opus 5.5. Sonnet for routine work, like tests, renames and small fixes, would save roughly <mark class="save"><span data-bind="opusLo">1</span>–<span data-bind="opusHi">5</span> kg a month</mark>.</p>
+              <p class="how"><b>How:</b> type <code>/model sonnet</code> before routine work, and <code>/model opus</code> when a task needs it.</p>
+            </div>
+            <div class="tip-side">
+              <div class="tv" aria-hidden="true">
+                <div class="tv-row"><span class="tv-label">Now</span><div class="chart ctx-paper" data-widget="band" data-opts="mini" data-src="now"></div><span class="tv-val"><span data-bind="nowLo">3.7</span>–<span data-bind="nowHi">34</span></span></div>
+                <div class="tv-row"><span class="tv-label">Sonnet</span><div class="chart ctx-paper" data-widget="band" data-opts="mini accent" data-src="after"></div><span class="tv-val"><span data-bind="afterLo">3.1</span>–<span data-bind="afterHi">29</span></span></div>
+              </div>
+              <div class="pv"><span id="pv-opus">Apply this tip</span><button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="pv-opus" data-preview="opus"><span class="knob"></span></button></div>
+            </div>
+          </article>
+          <article class="tip tip--cc">
+            <div>
+              <h3>Long conversations get re-read</h3>
+              <p>Every new message makes Claude read the whole conversation again, from its cache. Cache reads are the biggest unknown in your estimate. Starting fresh between tasks would save roughly <mark class="save"><span data-bind="clearLo">1</span>–<span data-bind="clearHi">7</span> kg a month</mark>.</p>
+              <p class="how"><b>How:</b> type <code>/clear</code> when you move on to a new task.</p>
+            </div>
+            <div class="tip-side">
+              <div class="pv"><span id="pv-clear">Apply this tip</span><button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="pv-clear" data-preview="clear"><span class="knob"></span></button></div>
+            </div>
+          </article>
+          <article class="tip tip--gpt">
+            <div>
+              <h3>Thinking models for quick questions</h3>
+              <p>Most of your ChatGPT messages used a thinking model, which works through hidden steps before it answers. For quick questions the standard model is enough, and would save up to <mark class="save"><span data-bind="thinkHi">2</span> kg a month</mark>.</p>
+              <p class="how"><b>How:</b> pick the standard model in ChatGPT’s model menu for everyday questions.</p>
+            </div>
+            <div class="tip-side">
+              <div class="pv"><span id="pv-think">Apply this tip</span><button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="pv-think" data-preview="think"><span class="knob"></span></button></div>
+            </div>
+          </article>
+        </div>
+        <figcaption><b>Each saving is a range too.</b> Apply a tip and your range changes everywhere on the page. Switch it off to go back.</figcaption>
+      </figure>
+    </section>
+
+    <section class="sec" id="contribute" aria-labelledby="h-contribute">
+      <div class="sec-head">
+        <h2 id="h-contribute">Fund carbon removal</h2>
+        <p>Cutting comes first. If you also want to pay for removing or avoiding CO₂, here are three kinds. It’s a contribution: it doesn’t cancel what you used. Funding removal of your <span data-bind="p5">3.7</span>–<span data-bind="p95">34</span> kg would cost about €<span data-bind="eurLo">0.37</span>–<span data-bind="eurHi">16</span>, depending on the method.</p>
+      </div>
+      <figure>
+        <div class="card options">
+          <article class="opt">
+            <div><p class="opt-kind">Lasting removal</p><h3>Climeworks</h3></div>
+            <dl>
+              <div><dt>Price</dt><dd>€100 a tonne (mostly nature-based) up to €480 (technical removal)</dd></div>
+              <div><dt>Minimum</dt><dd>10 kg</dd></div>
+            </dl>
+            <dl>
+              <div><dt>What you get</dt><dd>Removal certified under Puro or Isometric.</dd></div>
+              <div><dt>For your range</dt><dd class="num">€<span data-bind="eurLo">0.37</span>–<span data-bind="eurHi">16</span></dd></div>
+            </dl>
+            <button type="button" class="btn btn--line">Go to Climeworks<svg class="i i-s" aria-hidden="true"><use href="#i-out"/></svg></button>
+          </article>
+          <article class="opt">
+            <div><p class="opt-kind">EU avoidance</p><h3>ForTomorrow</h3></div>
+            <dl>
+              <div><dt>Price</dt><dd>About €65–75 a tonne</dd></div>
+              <div><dt>Minimum</dt><dd>One-off or monthly</dd></div>
+            </dl>
+            <dl>
+              <div><dt>What you get</dt><dd>EU emission allowances bought and deleted, so industry can’t use them.</dd></div>
+              <div><dt>For your range</dt><dd class="num">€<span data-bind="ftLo">0.24</span>–<span data-bind="ftHi">2.5</span></dd></div>
+            </dl>
+            <button type="button" class="btn btn--line">Go to ForTomorrow<svg class="i i-s" aria-hidden="true"><use href="#i-out"/></svg></button>
+          </article>
+          <article class="opt">
+            <div><p class="opt-kind">Donation fund</p><h3>Effektiv Spenden</h3></div>
+            <dl>
+              <div><dt>Price</dt><dd>Any amount</dd></div>
+              <div><dt>Minimum</dt><dd>None</dd></div>
+            </dl>
+            <dl>
+              <div><dt>What you get</dt><dd>A donation to their climate fund. No kilograms are claimed. Tax-deductible in Germany, Austria and Switzerland.</dd></div>
+              <div><dt>For your range</dt><dd>You choose</dd></div>
+            </dl>
+            <button type="button" class="btn btn--line">Go to Effektiv Spenden<svg class="i i-s" aria-hidden="true"><use href="#i-out"/></svg></button>
+          </article>
+        </div>
+        <figcaption><b>Example prices from the plan, last checked 28 Sep 2026.</b> ai-co2 takes no commission.</figcaption>
+      </figure>
+    </section>
+
+    <section class="sec" id="how" aria-labelledby="h-how">
+      <div class="sec-head">
+        <h2 id="h-how">How it’s calculated</h2>
+        <p>Every assumption, where it comes from, and a slider for each. The biggest unknown is how much energy a cache read takes.</p>
+      </div>
+      <figure>
+        <details class="card method">
+          <summary><span class="when-closed">Show every assumption</span><span class="when-open">Hide the assumptions</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+          <div class="method-body">
+            <p class="formula">CO₂ = energy per output-equivalent token × data-centre overhead × grid × hardware</p>
+            <div class="counted">
+              <div>
+                <h3>Counted</h3>
+                <ul class="list">
+                  <li>Every token, by model and type: fresh input, cache writes, cache reads and output.</li>
+                  <li>Hidden work that a ChatGPT export doesn’t show, through the toggles in your result.</li>
+                  <li>Data-centre overhead and the electricity grid.</li>
+                  <li>Making the hardware, about 10–13% on top.</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Left out</h3>
+                <ul class="list">
+                  <li>Water. Published figures differ by more than ten times, so any number would mislead.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="sliders" id="sliders"></div>
+            <div class="method-foot">
+              <span>Every low or every high assumption combined: <b class="num"><span data-bind="xLo">0.7</span>–<span data-bind="xHi">428</span> kg</b></span>
+              <button type="button" class="btn btn--line" data-reset-sliders>Back to typical values</button>
+            </div>
+          </div>
+        </details>
+        <figcaption><b>Estimates, not measurements.</b> Every number on this page is a range, and the extreme range above covers every low or every high assumption at once.</figcaption>
+      </figure>
+    </section>
+  </main>
+  <aside class="aside" aria-label="Your result"><div id="slot-aside"></div></aside>
+</div>
+
+<footer class="wrap foot">ai-co2 is free and open source (MIT), a Squaloo Studio project.</footer>
+
+<!-- pinned bars: only the chosen one ever shows -->
+<div class="pin pin--pill" id="pin-pill" aria-hidden="true">
+  <div class="pill">
+    <span class="pill-range"><span data-bind="p5">3.7</span>–<span data-bind="p95">34</span><small>kg</small></span>
+    <span class="pill-mid"><span class="long">middle estimate&nbsp;</span><b data-bind="mid">9.8</b></span>
+    <div class="chart ctx-navy" data-widget="band" data-opts="mini"></div>
+    <button type="button" class="round-btn" data-top aria-label="Back to the result" tabindex="-1"><svg class="i" aria-hidden="true"><use href="#i-up"/></svg></button>
+    <span class="delta pin-delta"></span>
+  </div>
+</div>
+<div class="pin pin--strip ctx-paper" id="pin-strip" aria-hidden="true">
+  <div class="strip"><div class="strip-in wrap">
+    <span class="strip-range"><span data-bind="p5">3.7</span>–<span data-bind="p95">34</span><small>kg</small></span>
+    <span class="strip-mid"><span class="long">middle estimate&nbsp;</span><b data-bind="mid">9.8</b><span class="delta pin-delta"></span></span>
+    <div class="chart" data-widget="band" data-opts="mini"></div>
+    <button type="button" class="round-btn" data-top aria-label="Back to the result" tabindex="-1"><svg class="i" aria-hidden="true"><use href="#i-up"/></svg></button>
+  </div></div>
+</div>
+<div class="pin pin--head ctx-navy" id="pin-head" aria-hidden="true">
+  <div class="head-bar">
+    <span class="head-range"><span data-bind="p5">3.7</span>–<span data-bind="p95">34</span><small>kg</small></span>
+    <div class="chart" data-widget="band" data-opts="mini"></div>
+    <button type="button" class="round-btn" data-top aria-label="Back to the result" tabindex="-1"><svg class="i" aria-hidden="true"><use href="#i-up"/></svg></button>
+  </div>
+</div>
+
+<!-- the playground panel -->
+<button type="button" class="looks-btn" id="looks-btn" aria-expanded="false" aria-controls="looks"><svg class="i" aria-hidden="true"><use href="#i-sliders"/></svg>Looks</button>
+<aside class="looks" id="looks" aria-label="Playground controls">
+  <div class="looks-head"><b>Playground</b><span>Not part of the page</span><button type="button" class="btn btn--line" data-close-looks>Done</button></div>
+  <div id="knobs"></div>
+  <div class="looks-foot">
+    <button type="button" class="btn btn--primary" data-copy-link><span>Copy link</span></button>
+    <button type="button" class="btn btn--line" data-reset-look>Reset</button>
+    <button type="button" class="btn btn--line looks-hide" data-close-looks aria-label="Hide the panel"><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+  </div>
+  <p class="looks-note">Example numbers from the plan. The link remembers every choice, so you can send it back to me.</p>
+</aside>
+
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- example numbers ---------- */
+  const BASE = { p5: 3.7, mid: 9.8, p95: 34 };
+  const GPT = { p5: 0.6, mid: 1.8, p95: 6.5 };
+  const HIST = { p5: 16, mid: 42, p95: 130 };
+  const TOGGLES = [
+    { id: 'thinking', label: 'Thinking', src: 'Typical setting', kind: 'typical', factor: 0.82 },
+    { id: 'memory', label: 'Memory and hidden instructions', src: 'Typical setting', kind: 'typical', factor: 0.93 },
+    { id: 'search', label: 'Search results and files', src: 'Set from your export', kind: 'export', factor: 0.9 },
+  ];
+  const TIPS = [
+    { id: 'opus', factor: 0.84, label: 'Sonnet for routine work' },
+    { id: 'clear', factor: 0.8, label: 'Clear between tasks' },
+    { id: 'think', factor: 0.95, label: 'Standard model for quick questions' },
+  ];
+  const SLIDERS = [
+    { id: 'energy', label: 'Energy per 1,000 output tokens, large models', low: 0.55, high: 3.2, vals: [0.5, 1.0, 5.4], unit: ' Wh', dec: 1,
+      src: 'EcoLogits 0.11.1, Epoch AI (Feb 2025), Oviedo et al. in Joule (2026), ML.ENERGY v3. Checked 27 Sep 2026.' },
+    { id: 'cache', label: 'Weight of a cache read, compared with one output token', low: 0.47, high: 3.0, vals: [0.001, 0.015, 0.1], unit: '', dec: 3,
+      src: 'Caravaca (2025), Delavande and Luccioni (2026), Irminsul (2026). The biggest unknown. Checked 28 Sep 2026.' },
+    { id: 'grid', label: 'Grid carbon intensity', low: 0.77, high: 1.31, vals: [270, 350, 460], unit: ' g/kWh', dec: 0,
+      src: 'EPA eGRID, Google and Microsoft reports, Ember world average 2025. Checked 27 Sep 2026.' },
+  ];
+  const LOOKS = [
+    { key: 'result', label: 'Result', opts: [['dots', 'Dots'], ['band', 'Band'], ['curve', 'Curve']] },
+    { key: 'pin', label: 'Pinned bar', opts: [['pill', 'Pill'], ['strip', 'Strip'], ['side', 'Side']] },
+    { key: 'accent', label: 'Accent', opts: [['lime', 'Lime'], ['aqua', 'Aqua']] },
+    { key: 'head', label: 'Heading font', opts: [['schibsted', 'Schibsted'], ['archivo', 'Archivo'], ['bricolage', 'Bricolage']] },
+    { key: 'panel', label: 'Result panel', opts: [['navy', 'Navy'], ['light', 'Light']] },
+    { key: 'bg', label: 'Page background', opts: [['paper', 'Paper'], ['white', 'White']] },
+    { key: 'space', label: 'Spacing', opts: [['roomy', 'Roomy'], ['compact', 'Compact']] },
+    { key: 'title', label: 'Title', opts: [['highlight', 'Highlight'], ['underline', 'Underline'], ['plain', 'Plain']] },
+    { key: 'tool', label: 'Tool chosen', opts: [['cc', 'Claude Code'], ['gpt', 'ChatGPT']] },
+    { key: 'state', label: 'Page state', opts: [['first', 'First visit'], ['steps', 'Steps'], ['loading', 'Loading'], ['error', 'Error'], ['done', 'Done']] },
+  ];
+  const DEFAULT_LOOK = { result: 'dots', pin: 'pill', accent: 'lime', head: 'schibsted', panel: 'navy', bg: 'white', space: 'roomy', tool: 'cc', state: 'done', title: 'highlight' };
+  const KG_PER_KM = 0.16;
+  const SCALES = [10, 20, 50, 100, 200, 500, 1000];
+  let XMAX = 50;
+
+  const state = { on: { thinking: true, memory: true, search: true }, preview: { opus: false, clear: false, think: false }, sl: { energy: 0.5, cache: 0.5, grid: 0.5 } };
+  const look = { ...DEFAULT_LOOK };
+
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const wide = matchMedia('(min-width: 1100px)');
+  const reduced = () => mq.matches;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const scale = (v, f) => ({ p5: v.p5 * f, mid: v.mid * f, p95: v.p95 * f });
+  const logLerp = (t, lo, mid, hi) => (t < 0.5 ? lo * Math.pow(mid / lo, t * 2) : mid * Math.pow(hi / mid, (t - 0.5) * 2));
+  const habitsF = () => TOGGLES.reduce((f, t) => (state.on[t.id] ? f : f * t.factor), 1);
+  const scienceF = () => SLIDERS.reduce((f, s) => f * logLerp(state.sl[s.id], s.low, 1, s.high), 1);
+  const liveTips = () => TIPS.filter(t => (t.id === 'think') === (look.tool === 'gpt'));
+  const tipsF = () => liveTips().reduce((f, t) => (state.preview[t.id] ? f * t.factor : f), 1);
+  const previewing = () => liveTips().some(t => state.preview[t.id]);
+  function snapshot() {
+    const gptTool = look.tool === 'gpt';
+    const now = scale(gptTool ? GPT : BASE, (gptTool ? habitsF() : 1) * scienceF());
+    const after = scale(now, TIPS[0].factor);
+    return { now, after, shown: previewing() ? scale(now, tipsF()) : now, hist: scale(HIST, habitsF() * scienceF()) };
+  }
+  const pct = kg => `${(Math.max(0, Math.min(XMAX, kg)) / XMAX * 100).toFixed(3)}%`;
+  const span = v => `${((Math.min(XMAX, v.p95) - Math.max(0, v.p5)) / XMAX * 100).toFixed(3)}%`;
+  const scaleFor = p95 => SCALES.find(s => p95 * 1.08 <= s) || SCALES[SCALES.length - 1];
+
+  function invNorm(p) {
+    const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+    const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+    const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+    const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+    const lo = 0.02425;
+    if (p < lo) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - lo) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+  // A split log-normal through the 5th percentile, the most likely value and the 95th.
+  function quantile(v, p) {
+    const z = invNorm(p);
+    return v.mid * Math.exp(z * Math.log(z < 0 ? v.mid / v.p5 : v.p95 / v.mid) / 1.6449);
+  }
+
+  /* ---------- markup for repeated parts ---------- */
+  let uid = 0;
+  const icon = (id, cls = '') => `<svg class="i ${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+  $$('[data-toggles]').forEach(el => {
+    el.innerHTML = `<ul class="toggles">${TOGGLES.map(t => {
+      const id = `tg-${++uid}`;
+      return `<li class="tg"><div class="tg-text"><span class="tg-label" id="${id}">${t.label}</span><span class="tg-src">${icon(t.kind, 'i-s')}${t.src}</span></div><button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="${id}" data-toggle="${t.id}"><span class="knob"></span></button></li>`;
+    }).join('')}</ul>`;
+  });
+  const fmtVal = (s, t) => { const x = logLerp(t, s.vals[0], s.vals[1], s.vals[2]); return `${s.dec ? x.toFixed(s.dec) : Math.round(x)}${s.unit}`; };
+  $('#sliders').innerHTML = SLIDERS.map(s => `<div class="sl">
+      <div class="sl-top"><label for="sl-${s.id}">${s.label}</label><output class="num" for="sl-${s.id}" data-slv="${s.id}">${fmtVal(s, 0.5)}</output></div>
+      <input type="range" id="sl-${s.id}" min="0" max="1000" value="500" data-slider="${s.id}" aria-describedby="src-${s.id}">
+      <div class="sl-scale"><span>${fmtVal(s, 0)}</span><span>typical</span><span>${fmtVal(s, 1)}</span></div>
+      <p class="sl-src" id="src-${s.id}">${s.src}</p>
+    </div>`).join('');
+  $('#knobs').innerHTML = LOOKS.map(k => `<div class="looks-row"><span id="kl-${k.key}">${k.label}</span><div class="seg" role="radiogroup" aria-labelledby="kl-${k.key}">${k.opts.map(([v, l]) => `<button type="button" role="radio" aria-checked="false" data-knob="${k.key}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('');
+
+  /* ---------- charts ---------- */
+  function drawAxis(axis) {
+    const step = XMAX / 5;
+    axis.innerHTML = [0, 1, 2, 3, 4, 5].map(i => `<span class="tick" style="left:${i * 20}%"><i></i><em>${i * step}${i === 5 ? ' kg' : ''}</em></span>`).join('');
+  }
+  // The chip shows the difference between the two numbers the reader actually sees, never a hidden decimal.
+  function showDelta(el, from, to) {
+    if (!el) return;
+    const d = Math.round((parseFloat(kg(to)) - parseFloat(kg(from))) * 10) / 10;
+    if (!d) return;
+    el.textContent = `${d < 0 ? '−' : '+'}${Math.abs(d)} kg`;
+    el.classList.remove('is-on'); void el.offsetWidth; el.classList.add('is-on');
+    clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('is-on'), 2600);
+  }
+  // A ghost marks where the range was: it fades after a change, and holds while a preview is on.
+  function setGhost(g, at, held, apply) {
+    clearTimeout(g._t);
+    if (!at) { g.classList.remove('is-on'); return; }
+    g.classList.add('no-move'); apply(g, at); void g.offsetWidth; g.classList.remove('no-move');
+    g.classList.add('is-on');
+    if (!held) g._t = setTimeout(() => g.classList.remove('is-on'), reduced() ? 2600 : 1400);
+  }
+  const moved = (a, b) => a && (Math.abs(a.mid - b.mid) > 0.05 || Math.abs(a.p95 - b.p95) > 0.05);
+
+  function Dots(el, init) {
+    const N = 100;
+    el.classList.add('dp');
+    el.innerHTML = `
+      <div class="dp-area"><div class="dp-grid"></div><div class="dp-ghost"></div>
+        <div class="dp-mid"><span class="dp-mid-label">middle estimate <b data-bind="mid">9.8</b> kg<span class="delta"></span></span></div>
+        <div class="dp-dots"></div></div>
+      <div class="axis"></div>
+      <div class="dp-foot"><div class="dp-bracket"><span class="dp-bracket-ghost"></span><span class="dp-bracket-line"></span><span class="dp-bracket-label">90 of 100 land here: <b data-bind="p5">3.7</b>–<b data-bind="p95">34</b> kg</span></div></div>`;
+    const area = $('.dp-area', el), wrap = $('.dp-dots', el), grid = $('.dp-grid', el), mid = $('.dp-mid', el), ghost = $('.dp-ghost', el), label = $('.dp-mid-label', el);
+    const line = $('.dp-bracket-line', el), bghost = $('.dp-bracket-ghost', el), blabel = $('.dp-bracket-label', el), delta = $('.delta', el), axis = $('.axis', el);
+    const dots = Array.from({ length: N }, (_, i) => {
+      const d = document.createElement('span');
+      d.className = `dp-dot${i < 5 || i >= 95 ? ' tail' : ''}`;
+      d.style.transitionDelay = `${Math.round(i * 2.4)}ms`;
+      wrap.appendChild(d);
+      return d;
+    });
+    let W = 0, D = 12, S = 15, G = 24, last = init;
+    // Outcomes above the end of the scale stack in a gutter past it.
+    function stacks(v) {
+      const binKg = S / (W / XMAX), cols = new Map(), pos = [];
+      let max = 0, over = 0;
+      for (let i = 0; i < N; i++) {
+        const q = Math.max(0, quantile(v, (i + 0.5) / N));
+        if (q > XMAX) { pos.push([W + G / 2, over * S]); over += 1; max = Math.max(max, over); continue; }
+        const c = Math.round(q / binKg), s = cols.get(c) || 0;
+        cols.set(c, s + 1); max = Math.max(max, s + 1);
+        pos.push([c * S, s * S]);
+      }
+      return { pos, max };
+    }
+    function measure() {
+      const outer = el.clientWidth || 600;
+      D = outer < 480 ? 8 : outer < 760 ? 10 : 12;
+      S = D + (outer < 480 ? 2 : 3);
+      G = D + 14;
+      el.style.setProperty('--gutter', `${G}px`);
+      W = area.clientWidth || 600;
+      // Tall enough for the most concentrated range the scale keeps before it steps down.
+      const saved = XMAX; XMAX = 50;
+      const max = Math.max(stacks(scale(BASE, 0.43)).max, stacks(BASE).max);
+      XMAX = saved;
+      area.style.height = `${max * S + 26}px`;
+      dots.forEach(d => { d.style.width = d.style.height = `${D}px`; });
+    }
+    function rescale() {
+      drawAxis(axis);
+      grid.innerHTML = [1, 2, 3, 4].map(i => `<span style="left:${i * 20}%"></span>`).join('');
+    }
+    function place(v, prev, base) {
+      last = v;
+      const { pos } = stacks(v), k = W / XMAX;
+      dots.forEach((d, i) => { d.style.transform = `translate3d(${(pos[i][0] - D / 2).toFixed(1)}px,${(-pos[i][1]).toFixed(1)}px,0)`; });
+      const mx = Math.min(W, v.mid * k);
+      mid.style.transform = `translateX(${mx.toFixed(1)}px)`;
+      const lw = label.offsetWidth;
+      let off = 10;
+      if (mx + off + lw > W + G) off = -(10 + lw);
+      if (mx + off < 0) off = -mx;
+      label.style.left = `${off}px`;
+      line.style.left = pct(v.p5); line.style.width = span(v);
+      blabel.style.left = pct((Math.max(0, v.p5) + Math.min(XMAX, v.p95)) / 2);
+      const was = base || (moved(prev, v) ? prev : null);
+      setGhost(ghost, was, !!base, (g, at) => { g.style.transform = `translateX(${(Math.min(XMAX, at.mid) * k).toFixed(1)}px)`; });
+      setGhost(bghost, was, !!base, (g, at) => { g.style.left = pct(at.p5); g.style.width = span(at); });
+      if (prev) showDelta(delta, prev.mid, v.mid);
+    }
+    rescale(); measure(); place(init);
+    const ro = new ResizeObserver(() => {
+      if (Math.abs(area.clientWidth - W) < 1 && el.clientWidth) return;
+      el.classList.add('no-anim'); measure(); place(last); void el.offsetWidth; el.classList.remove('no-anim');
+    });
+    ro.observe(el);
+    return { el, update: place, rescale: () => { rescale(); place(last); }, destroy: () => ro.disconnect() };
+  }
+
+  function Band(el, o, init) {
+    el.classList.add('bb');
+    if (o.mini) el.classList.add('bb--mini');
+    if (o.accent) el.classList.add('bb--accent');
+    const labels = !o.mini;
+    el.innerHTML = `<div class="bb-area">
+        ${labels ? '<span class="bb-mid">middle estimate <b data-bind="mid">9.8</b> kg<span class="delta"></span></span><span class="bb-lab bb-lab--lo" data-bind="p5">3.7</span><span class="bb-lab bb-lab--hi" data-bind="p95">34</span>' : ''}
+        <div class="bb-track"><span class="bb-ghost"></span><span class="bb-band"></span><span class="bb-pin"></span></div>
+      </div>${labels ? '<div class="axis"></div>' : ''}`;
+    const band = $('.bb-band', el), pin = $('.bb-pin', el), ghost = $('.bb-ghost', el), axis = $('.axis', el);
+    const lo = $('.bb-lab--lo', el), hi = $('.bb-lab--hi', el), midL = $('.bb-mid', el), delta = $('.delta', el);
+    const put = (node, v) => { node.style.left = pct(v.p5); node.style.width = span(v); };
+    let last = init;
+    function place(v, prev, base) {
+      last = v;
+      put(band, v); pin.style.left = pct(v.mid);
+      if (labels) {
+        lo.style.left = pct(v.p5); hi.style.left = pct(v.p95); midL.style.left = pct(v.mid);
+        midL.classList.toggle('anchor-l', v.mid / XMAX < 0.3);
+      }
+      setGhost(ghost, base || (moved(prev, v) ? prev : null), !!base, put);
+      if (prev && delta) showDelta(delta, prev.mid, v.mid);
+    }
+    if (axis) drawAxis(axis);
+    place(init);
+    return { el, update: place, src: o.src, rescale: () => { if (axis) drawAxis(axis); place(last); }, destroy() {} };
+  }
+
+  const KS = 200, KX = 140;
+  function densities(v) {
+    const h = 0.045 * (v.p95 - v.p5) + 0.006 * XMAX, qs = new Float64Array(KS), ys = new Float64Array(KX + 1);
+    for (let i = 0; i < KS; i++) qs[i] = quantile(v, (i + 0.5) / KS);
+    const norm = 1 / (KS * h * Math.sqrt(2 * Math.PI));
+    for (let j = 0; j <= KX; j++) {
+      const x = j / KX * XMAX; let s = 0;
+      for (let i = 0; i < KS; i++) { const z = (x - qs[i]) / h; if (z > -6 && z < 6) s += Math.exp(-0.5 * z * z); }
+      ys[j] = s * norm * XMAX;
+    }
+    return ys;
+  }
+  let YMAX = 0;
+  let cvId = 0;
+  function Curve(el, init) {
+    const id = `cv-clip-${++cvId}`;
+    el.classList.add('cv');
+    el.innerHTML = `<div class="cv-area">
+        <span class="cv-mid-label">middle estimate <b data-bind="mid">9.8</b> kg<span class="delta"></span></span>
+        <svg class="cv-svg" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
+          <defs><clipPath id="${id}"><rect class="cv-clip" x="0" y="-10" width="0" height="220"/></clipPath></defs>
+          <path class="cv-out"/><path class="cv-in" clip-path="url(#${id})"/><path class="cv-ghost"/><path class="cv-line"/>
+          <line class="cv-mid" x1="0" x2="0" y1="0" y2="200"/>
+        </svg></div><div class="axis"></div>`;
+    if (!YMAX) { const saved = XMAX; XMAX = 50; YMAX = Math.max(...densities(scale(BASE, 0.43))) * 1.06; XMAX = saved; }
+    const axis = $('.axis', el), out = $('.cv-out', el), inn = $('.cv-in', el), stroke = $('.cv-line', el), ghost = $('.cv-ghost', el);
+    const clip = $('.cv-clip', el), midLine = $('.cv-mid', el), label = $('.cv-mid-label', el), delta = $('.delta', el);
+    function path(v) {
+      const ys = densities(v);
+      let d = '';
+      for (let j = 0; j <= KX; j++) d += `${j ? 'L' : 'M'}${(j / KX * 1000).toFixed(1)},${(200 - Math.min(1, ys[j] / YMAX) * 192).toFixed(1)}`;
+      return d;
+    }
+    function draw(v) {
+      const d = path(v), area = `M0,200 ${d.replace(/^M/, 'L')} L1000,200 Z`;
+      out.setAttribute('d', area); inn.setAttribute('d', area); stroke.setAttribute('d', d);
+      clip.setAttribute('x', (Math.max(0, v.p5) / XMAX * 1000).toFixed(1));
+      clip.setAttribute('width', ((Math.min(XMAX, v.p95) - Math.max(0, v.p5)) / XMAX * 1000).toFixed(1));
+      const mx = (Math.min(XMAX, v.mid) / XMAX * 1000).toFixed(1);
+      midLine.setAttribute('x1', mx); midLine.setAttribute('x2', mx);
+      label.style.left = pct(v.mid);
+    }
+    let cur = init, raf = 0;
+    function place(v, prev, base) {
+      const from = cur, g = base || (moved(prev, v) ? prev : null);
+      cancelAnimationFrame(raf); clearTimeout(ghost._t);
+      if (g) {
+        ghost.setAttribute('d', path(g)); ghost.classList.add('is-on');
+        if (!base) ghost._t = setTimeout(() => ghost.classList.remove('is-on'), reduced() ? 2600 : 1400);
+      } else ghost.classList.remove('is-on');
+      if (prev) showDelta(delta, prev.mid, v.mid);
+      if (!prev || reduced() || document.body.classList.contains('is-dragging')) { cur = v; draw(v); return; }
+      const t0 = performance.now();
+      const tick = now => {
+        const t = Math.min(1, (now - t0) / 750), e = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        cur = { p5: from.p5 + (v.p5 - from.p5) * e, mid: from.mid + (v.mid - from.mid) * e, p95: from.p95 + (v.p95 - from.p95) * e };
+        draw(cur);
+        if (t < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }
+    drawAxis(axis); draw(init);
+    return { el, update: place, rescale: () => { drawAxis(axis); draw(cur); }, destroy: () => cancelAnimationFrame(raf) };
+  }
+
+  /* ---------- wiring ---------- */
+  let last = snapshot();
+  const widgets = [];
+  function makeWidget(el) {
+    const opts = (el.dataset.opts || '').split(/\s+/), kind = el.dataset.widget, src = el.dataset.src;
+    const init = src ? last[src] : last.shown;
+    if (kind === 'dots') return Dots(el, init);
+    if (kind === 'curve') return Curve(el, init);
+    return Band(el, { mini: opts.includes('mini'), accent: opts.includes('accent'), src }, init);
+  }
+  $$('[data-widget]').forEach(el => widgets.push(makeWidget(el)));
+
+  $$('[data-axis]').forEach(drawAxis);
+  let binds = [];
+  const collectBinds = () => { binds = $$('[data-bind]'); };
+  const kg = x => (x < 10 ? x.toFixed(1).replace(/\.0$/, '') : String(Math.round(x)));
+  const km = x => String(Math.round(x / KG_PER_KM / 10) * 10);
+  const eur = x => (x < 1 ? x.toFixed(2) : x < 10 ? x.toFixed(1).replace(/\.0$/, '') : String(Math.round(x)));
+  function texts(s) {
+    const v = s.shown, now = s.now, t = { p5: kg(v.p5), mid: kg(v.mid), p95: kg(v.p95), carLo: km(v.p5), carMid: km(v.mid), carHi: km(v.p95),
+      hLo: kg(s.hist.p5), hHi: kg(s.hist.p95), eurLo: eur(v.p5 * 0.1), eurHi: eur(v.p95 * 0.48), ftLo: eur(v.p5 * 0.065), ftHi: eur(v.p95 * 0.075),
+      nowLo: kg(now.p5), nowHi: kg(now.p95), afterLo: kg(s.after.p5), afterHi: kg(s.after.p95) };
+    for (const tip of TIPS) { const sv = scale(now, 1 - tip.factor); t[`${tip.id}Lo`] = String(Math.max(1, Math.round(sv.p5))); t[`${tip.id}Hi`] = String(Math.max(1, Math.round(sv.p95))); }
+    const lows = SLIDERS.reduce((f, sl) => f * sl.low, 1), highs = SLIDERS.reduce((f, sl) => f * sl.high, 1), hab = habitsF();
+    t.xLo = kg(BASE.p5 * hab * lows); t.xHi = kg(BASE.p95 * hab * highs);
+    return t;
+  }
+  function writeTexts(s) {
+    const t = texts(s);
+    for (const el of binds) { const x = t[el.dataset.bind]; if (x !== undefined && el.textContent !== x) el.textContent = x; }
+  }
+  let traf = 0;
+  const mixV = (a, b, e) => ({ p5: a.p5 + (b.p5 - a.p5) * e, mid: a.mid + (b.mid - a.mid) * e, p95: a.p95 + (b.p95 - a.p95) * e });
+  function tweenTexts(from, to) {
+    cancelAnimationFrame(traf);
+    if (reduced() || document.body.classList.contains('is-dragging')) { writeTexts(to); return; }
+    const t0 = performance.now();
+    const tick = now => {
+      const t = Math.min(1, (now - t0) / 700), e = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      writeTexts({ shown: mixV(from.shown, to.shown, e), now: mixV(from.now, to.now, e), after: mixV(from.after, to.after, e), hist: mixV(from.hist, to.hist, e) });
+      if (t < 1) traf = requestAnimationFrame(tick);
+    };
+    traf = requestAnimationFrame(tick);
+  }
+  const describe = v => `Likely range ${kg(v.p5)} to ${kg(v.p95)} kilograms of CO2e, middle estimate ${kg(v.mid)}.`;
+  const resultChart = () => widgets.find(w => w.el.closest('#chart-slot'));
+  function label(s) {
+    const c = resultChart();
+    if (c) { c.el.setAttribute('role', 'img'); c.el.setAttribute('aria-label', describe(s.shown)); }
+    const on = liveTips().filter(t => state.preview[t.id]);
+    $('#preview-label').textContent = on.length === 1 ? `With: ${on[0].label}` : `With ${on.length} tips applied`;
+    $('#result').classList.toggle('is-preview', on.length > 0);
+  }
+
+  // One change moves every bar at once.
+  function commit(quiet = false) {
+    const next = snapshot(), prev = last;
+    last = next;
+    const need = scaleFor(Math.max(next.shown.p95, next.now.p95));
+    const rescaled = need !== XMAX;
+    if (rescaled) { XMAX = need; widgets.forEach(w => w.rescale()); }
+    for (const w of widgets) {
+      const key = w.src || 'shown';
+      w.update(next[key], quiet ? null : prev[key], key === 'shown' && previewing() ? next.now : null);
+    }
+    tweenTexts(prev, next);
+    $$('[data-toggle]').forEach(b => b.setAttribute('aria-checked', String(state.on[b.dataset.toggle])));
+    $$('[data-preview]').forEach(b => b.setAttribute('aria-checked', String(state.preview[b.dataset.preview])));
+    label(next);
+    if (!quiet) {
+      $$('.pill, .strip, .head-bar').forEach(p => {
+        showDelta($('.pin-delta', p), prev.shown.mid, next.shown.mid);
+        p.classList.remove('flash'); void p.offsetWidth; p.classList.add('flash');
+        clearTimeout(p._t); p._t = setTimeout(() => p.classList.remove('flash'), 1100);
+      });
+      $('#live').textContent = `Estimate updated. ${describe(next.shown)}`;
+    }
+  }
+
+  /* ---------- looks ---------- */
+  const NOTES = {
+    dots: '<b>How to read it.</b> Each dot is one possible outcome out of 100. Where they pile up is where your footprint most likely sits, and the hollow ones at the edges are the unlikely extremes. The line marks the middle estimate: half of the dots are below it, half above.',
+    band: '<b>How to read it.</b> The bar spans the likely range, where 90 of 100 possible outcomes land. The pin marks the middle estimate: half of the outcomes are below it, half above.',
+    curve: '<b>How to read it.</b> The hill shows how likely each value is. The shaded part holds 90 of 100 possible outcomes.',
+  };
+  function mountChart() {
+    const old = resultChart();
+    if (old) { old.destroy(); widgets.splice(widgets.indexOf(old), 1); }
+    const slot = $('#chart-slot');
+    slot.innerHTML = `<div class="chart" data-widget="${look.result}"></div>`;
+    widgets.push(makeWidget($('.chart', slot)));
+    $('#chart-note').innerHTML = NOTES[look.result];
+    collectBinds(); writeTexts(last); label(last);
+  }
+  function placeResult() {
+    const fig = $('#result-fig'), habits = $('#habits'), side = look.pin === 'side';
+    const sideWide = side && wide.matches;
+    (sideWide ? $('#slot-aside') : $('#slot-main')).appendChild(fig);
+    const mainHabits = $('#slot-habits-main');
+    if (side) { mainHabits.appendChild(habits); mainHabits.hidden = false; } else { $('#slot-habits-panel').appendChild(habits); mainHabits.hidden = true; }
+    $('#result-top').classList.toggle('has-habits', !side);
+    habits.classList.toggle('ctx-navy', !side && look.panel === 'navy');
+    habits.classList.toggle('ctx-paper', !side && look.panel === 'light');
+    syncPins();
+  }
+  function applyLook(changed) {
+    for (const k of Object.keys(look)) document.body.dataset[k] = look[k];
+    const result = $('#result'), head = $('#pin-head');
+    for (const el of [result, head]) { el.classList.toggle('ctx-navy', look.panel === 'navy'); el.classList.toggle('ctx-paper', look.panel === 'light'); }
+    if (!changed || changed === 'result') mountChart();
+    if (!changed || changed === 'pin' || changed === 'panel') placeResult();
+    if (!changed || changed === 'state' || changed === 'tool') applyState();
+    $$('[data-knob]').forEach(b => b.setAttribute('aria-checked', String(look[b.dataset.knob] === b.dataset.v)));
+    const hash = new URLSearchParams(look).toString();
+    try { history.replaceState(null, '', `#${hash}`); } catch (_) { /* file URLs can refuse this */ }
+  }
+  // The page's own states: before any data, one tool in, a big export loading, and things going wrong.
+  const PROSE = 'Here’s your Claude Code usage for the last 30 days:\n\n- Opus 5.5: about 576 million tokens, mostly cache reads\n- Sonnet 5.5: about 184 million tokens\n- Haiku 4.5: about 21 million tokens';
+  function applyState() {
+    const tool = look.tool, gptEl = $('#tool-gpt'), gs = $('#gpt-status'), dm = $('#drop-msg');
+    let st = look.state;
+    if (st === 'loading' && tool === 'cc') st = 'steps';
+    const openCard = (card, open) => { card.dataset.open = String(open); $('[data-tool-toggle]', card).setAttribute('aria-expanded', String(open)); };
+    cc.hidden = tool !== 'cc'; gptEl.hidden = tool !== 'gpt';
+    $('#chosen-name').textContent = tool === 'cc' ? 'Claude Code' : 'ChatGPT';
+    $('#switch-label').textContent = tool === 'cc' ? 'Switch to ChatGPT' : 'Switch to Claude Code';
+    $('#chosen-icon').setAttribute('href', tool === 'cc' ? '#i-terminal' : '#i-chat');
+    $('#tool-word').textContent = tool === 'cc' ? 'Claude Code' : 'ChatGPT';
+    $$('.notes [data-for]').forEach(li => { li.hidden = look.state !== 'first' && li.dataset.for !== tool; });
+    ta.value = st === 'done' ? SAMPLE : st === 'error' ? PROSE : ''; evaluate();
+    openCard(cc, st !== 'done');
+    const g = st === 'done' ? 'done' : st === 'loading' ? 'loading' : st === 'error' ? 'problem' : 'waiting';
+    gptEl.dataset.gpt = g;
+    openCard(gptEl, g !== 'done');
+    gs.innerHTML = g === 'done' ? `<span class="chip chip--checked">${icon('check', 'i-s')}Read</span><span>1,284 conversations · 612 messages in the last 30 days</span>`
+      : g === 'loading' ? `<span class="chip chip--waiting">${icon('wait', 'i-s')}Reading</span><span>412 of 1,284 conversations</span>`
+      : g === 'problem' ? `<span class="chip chip--problem">${icon('alert', 'i-s')}Needs a look</span><span>That file couldn’t be read</span>`
+      : `<span class="chip chip--waiting">${icon('wait', 'i-s')}Waiting</span><span>Drop your export</span>`;
+    dm.className = `drop-msg${g === 'problem' ? ' is-bad' : ''}`;
+    dm.innerHTML = g === 'problem' ? `${icon('alert', 'i-s')}<span>This ZIP isn’t a ChatGPT export: it has no conversations file. Download the export from OpenAI’s email again, and drop that file.</span>` : '';
+    $('#result-top').classList.toggle('has-habits', look.pin !== 'side');
+    $('.result-empty p').textContent = look.state === 'first' ? 'Pick your tool above. As soon as your data is in, you’ll see your last 30 days as a range on this scale.' : 'As soon as your data is in, you’ll see your last 30 days as a range on this scale.';
+    commit(true);
+    syncPins();
+  }
+  function readHash() {
+    const p = new URLSearchParams(location.hash.slice(1));
+    for (const k of LOOKS) { const v = p.get(k.key); if (v && k.opts.some(([o]) => o === v)) look[k.key] = v; }
+  }
+
+  /* ---------- pinned bars ---------- */
+  const pins = { pill: $('#pin-pill'), strip: $('#pin-strip'), head: $('#pin-head') };
+  function syncPins() {
+    const r = $('#result').getBoundingClientRect();
+    const away = r.bottom < 120 && look.state === 'done';
+    const which = look.pin === 'pill' ? 'pill' : look.pin === 'strip' ? 'strip' : wide.matches ? null : 'head';
+    for (const [k, el] of Object.entries(pins)) {
+      const on = away && k === which;
+      el.classList.toggle('is-on', on);
+      el.setAttribute('aria-hidden', String(!on));
+      $$('[data-top]', el).forEach(b => { b.tabIndex = on ? 0 : -1; });
+    }
+  }
+  let sraf = 0;
+  addEventListener('scroll', () => { cancelAnimationFrame(sraf); sraf = requestAnimationFrame(syncPins); }, { passive: true });
+  wide.addEventListener('change', placeResult);
+
+  /* ---------- Claude Code card ---------- */
+  const SAMPLE = [
+    'ai-co2 v1 | 2026-08-30 to 2026-09-29',
+    'claude-opus-5-5 | in 2184390 | cache_write 21662104 | cache_read 548310227 | out 4106552',
+    'claude-sonnet-5-5 | in 911204 | cache_write 8904117 | cache_read 172556093 | out 1380961',
+    'claude-haiku-4-5 | in 1002387 | cache_write 1240008 | cache_read 18771460 | out 402113',
+  ].join('\n');
+  const cc = $('#tool-cc'), ta = $('#answer'), msg = $('#answer-msg'), sum = $('#cc-sum'), status = $('#cc-status');
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const day = s => { const [, m, d] = s.split('-').map(Number); return `${d} ${MONTHS[m - 1]}`; };
+  const bigTokens = n => (n >= 1e9 ? `${(n / 1e9).toFixed(2)} billion` : n >= 1e6 ? `${Math.round(n / 1e6)} million` : n.toLocaleString('en'));
+  const niceModel = m => { const x = m.match(/^claude-([a-z]+)-(\d+)-(\d+)/); return x ? `${x[1][0].toUpperCase()}${x[1].slice(1)} ${x[2]}.${x[3]}` : m; };
+  const classWeight = m => (/opus|fable/i.test(m) ? 1 : /haiku|mini|nano|lite/i.test(m) ? 0.1 : 0.6);
+  function parse(text) {
+    const lines = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    if (!lines.length) return { state: 'waiting' };
+    const head = lines[0].match(/^ai-co2 v1 \| (\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2})$/);
+    if (!head) return { state: 'problem', text: /token/i.test(text) ? 'This looks like Claude’s own summary, not the answer block. Ask Claude to “reply with the result block only”, then paste that.' : 'This doesn’t look like the ai-co2 answer, which starts with “ai-co2 v1”. Copy Claude’s whole reply and paste it again.' };
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const m = lines[i].match(/^([\w.-]+) \| in (\d+) \| cache_write (\d+) \| cache_read (\d+) \| out (\d+)$/);
+      if (!m) return { state: 'problem', text: `Line ${i + 1} doesn’t match the format. Each model line looks like “model | in … | cache_write … | cache_read … | out …”.` };
+      rows.push({ model: m[1], in: +m[2], cw: +m[3], cr: +m[4], out: +m[5] });
+    }
+    if (!rows.length) return { state: 'problem', text: 'The answer has no model lines. Run the prompt again and paste the whole reply.' };
+    const days = Math.round((Date.parse(head[2]) - Date.parse(head[1])) / 864e5);
+    if (!(days >= 28 && days <= 31)) return { state: 'problem', text: `These dates cover ${days} days. Run the prompt again so the count covers the last 30 days.` };
+    return { state: 'checked', from: head[1], to: head[2], rows };
+  }
+  function evaluate() {
+    const r = parse(ta.value);
+    cc.dataset.state = r.state;
+    if (r.state === 'checked') {
+      const rows = r.rows.map(x => ({ ...x, tok: x.in + x.cw + x.cr + x.out, w: (x.out + (x.in + x.cw) * 0.15 + x.cr * 0.015) * classWeight(x.model) })).sort((a, b) => b.w - a.w);
+      const W = rows.reduce((s, x) => s + x.w, 0), T = rows.reduce((s, x) => s + x.tok, 0);
+      status.innerHTML = `<span class="chip chip--checked">${icon('check', 'i-s')}Counted</span><span>${rows.length} models · ${bigTokens(T)} tokens · ${day(r.from)} – ${day(r.to)}</span>`;
+      sum.innerHTML = `<p class="sum-line">${icon('check', 'i-s')}<span>The numbers look plausible.</span></p><table class="models"><thead><tr><th scope="col">Model</th><th scope="col" class="r">Tokens</th><th scope="col">Share of the estimate</th></tr></thead><tbody>${rows.map(x => {
+        const share = x.w / W * 100;
+        return `<tr><td>${niceModel(x.model)}</td><td class="r num">${(x.tok / 1e6).toFixed(1)}M</td><td><span class="share"><span class="share-bar"><i style="width:${Math.max(1, share).toFixed(1)}%"></i></span><span class="num">${share < 1 ? '&lt;1' : Math.round(share)}%</span></span></td></tr>`;
+      }).join('')}</tbody></table>`;
+      msg.innerHTML = '';
+    } else {
+      status.innerHTML = r.state === 'problem' ? `<span class="chip chip--problem">${icon('alert', 'i-s')}Needs a look</span><span>The last answer couldn’t be read</span>` : `<span class="chip chip--waiting">${icon('wait', 'i-s')}Waiting</span><span>Paste Claude’s answer</span>`;
+      sum.innerHTML = '';
+      msg.innerHTML = r.state === 'problem' ? `${icon('alert', 'i-s')}<span>${r.text}</span>` : '<span>The page reads the answer here in your browser. Nothing is uploaded.</span>';
+    }
+  }
+  ta.addEventListener('input', () => { clearTimeout(ta._t); ta._t = setTimeout(evaluate, 120); });
+  ta.value = SAMPLE; evaluate();
+
+  const drop = $('#drop'), dropMsg = $('#drop-msg');
+  const dropped = () => { dropMsg.textContent = 'In the playground nothing is read: this is where “Read 1,284 conversations” would appear.'; };
+  ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('is-over'); }));
+  ['dragleave', 'drop'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove('is-over'); if (t === 'drop') dropped(); }));
+  $('#zip').addEventListener('change', dropped);
+
+  /* ---------- input ---------- */
+  document.addEventListener('click', async e => {
+    const t = e.target.closest('[data-toggle]');
+    if (t) { state.on[t.dataset.toggle] = !state.on[t.dataset.toggle]; commit(); return; }
+    const p = e.target.closest('[data-preview]');
+    if (p) { state.preview[p.dataset.preview] = !state.preview[p.dataset.preview]; commit(); return; }
+    const ch = e.target.closest('[data-choose]');
+    if (ch) { look.tool = ch.dataset.choose; look.state = 'steps'; applyLook(); return; }
+    if (e.target.closest('[data-switch-tool]')) { look.tool = look.tool === 'cc' ? 'gpt' : 'cc'; look.state = 'steps'; applyLook(); return; }
+    const up = e.target.closest('[data-top]');
+    if (up) { $('#result').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); return; }
+    const k = e.target.closest('[data-knob]');
+    if (k) { look[k.dataset.knob] = k.dataset.v; applyLook(k.dataset.knob); return; }
+    const tt = e.target.closest('[data-tool-toggle]');
+    if (tt) { const card = tt.closest('.tool'), open = card.dataset.open !== 'true'; card.dataset.open = String(open); tt.setAttribute('aria-expanded', String(open)); return; }
+    const x = e.target.closest('[data-expand]');
+    if (x) { const open = x.closest('.prompt').classList.toggle('is-open'); x.setAttribute('aria-expanded', String(open)); $('span', x).textContent = open ? 'Show less' : 'Show all'; return; }
+    const c = e.target.closest('[data-copy]');
+    if (c) {
+      let ok = false;
+      try { await navigator.clipboard.writeText($('#prompt-text').textContent); ok = true; } catch (_) { ok = false; }
+      $('span', c).textContent = ok ? 'Copied' : 'Couldn’t copy. Select the text instead';
+      clearTimeout(c._t); c._t = setTimeout(() => { $('span', c).textContent = 'Copy prompt'; }, 2200);
+      return;
+    }
+    if (e.target.closest('[data-reset-sliders]')) {
+      SLIDERS.forEach(s => { state.sl[s.id] = 0.5; const input = $(`#sl-${s.id}`); input.value = 500; paintSlider(input); });
+      commit(); return;
+    }
+    if (e.target.closest('[data-reset-look]')) { Object.assign(look, DEFAULT_LOOK); applyLook(); return; }
+    const cl = e.target.closest('[data-copy-link]');
+    if (cl) {
+      let ok = false;
+      try { await navigator.clipboard.writeText(location.href); ok = true; } catch (_) { ok = false; }
+      $('span', cl).textContent = ok ? 'Link copied' : 'Copy it from the address bar';
+      clearTimeout(cl._t); cl._t = setTimeout(() => { $('span', cl).textContent = 'Copy link'; }, 2200);
+      return;
+    }
+    if (e.target.closest('[data-close-looks]')) setPanel(false);
+  });
+  document.addEventListener('keydown', e => {
+    const g = e.target.closest('[role="radiogroup"]');
+    if (!g || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+    const items = $$('[role="radio"]', g), i = items.indexOf(e.target.closest('[role="radio"]'));
+    if (i < 0) return;
+    e.preventDefault();
+    const n = items[(i + (e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 1) + items.length) % items.length];
+    n.focus(); n.click();
+  });
+
+  // Sliders: the bars follow while you drag, and settle with a delta when you let go.
+  let dragFrom = null;
+  function paintSlider(input) {
+    input.style.setProperty('--p', `${input.value / 10}%`);
+    const s = SLIDERS.find(x => x.id === input.dataset.slider);
+    $(`[data-slv="${s.id}"]`).textContent = fmtVal(s, input.value / 1000);
+  }
+  $$('[data-slider]').forEach(input => {
+    paintSlider(input);
+    input.addEventListener('pointerdown', () => { dragFrom = last; document.body.classList.add('is-dragging'); });
+    input.addEventListener('input', () => { state.sl[input.dataset.slider] = input.value / 1000; paintSlider(input); commit(document.body.classList.contains('is-dragging')); });
+    input.addEventListener('change', () => {
+      document.body.classList.remove('is-dragging');
+      if (dragFrom) {
+        const from = dragFrom; dragFrom = null;
+        for (const w of widgets) { const key = w.src || 'shown'; w.update(last[key], from[key], key === 'shown' && previewing() ? last.now : null); }
+        $$('.pill, .strip, .head-bar').forEach(p => showDelta($('.pin-delta', p), from.shown.mid, last.shown.mid));
+      }
+    });
+  });
+
+  /* ---------- panel ---------- */
+  const lb = $('#looks-btn'), panel = $('#looks'), docked = matchMedia('(min-width: 900px)');
+  function setPanel(open) {
+    panel.classList.toggle('is-open', open);
+    lb.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('dock-open', open && docked.matches);
+  }
+  lb.addEventListener('click', () => setPanel(!panel.classList.contains('is-open')));
+  docked.addEventListener('change', () => setPanel(panel.classList.contains('is-open')));
+  new ResizeObserver(() => document.body.style.setProperty('--dock-h', `${panel.offsetHeight}px`)).observe(panel);
+  addEventListener('keydown', e => {
+    if (e.key.toLowerCase() !== 'l' || e.metaKey || e.ctrlKey || e.altKey || e.target.closest('input, textarea')) return;
+    setPanel(!panel.classList.contains('is-open'));
+  });
+  setPanel(docked.matches);
+
+  readHash();
+  applyLook();
+  collectBinds();
+  writeTexts(last);
+  syncPins();
+})();
+</script>
+</body>
+</html>

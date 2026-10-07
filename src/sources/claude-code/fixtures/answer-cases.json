@@ -1,0 +1,2065 @@
+{
+ "note": "Test cases for readAnswer in answer.ts. All of it is invented data. Every expected value was written by hand. 'today' is the date the page would pass in. In 'expect', a key that is left out is not checked; 'notes' lists the expected note codes in order.",
+ "cases": [
+  {
+   "group": "good",
+   "name": "plain answer, exactly as the script prints it",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "one model only",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-sonnet-5 | in 10 | cache_write 20 | cache_read 30 | out 40\ntotal | 100",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-sonnet-5",
+      "in": 10,
+      "cacheWrite": 20,
+      "cacheRead": 30,
+      "out": 40
+     }
+    ],
+    "total": 100,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "zeros in some fields",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-sonnet-5 | in 0 | cache_write 0 | cache_read 500 | out 7\ntotal | 507",
+   "expect": {
+    "ok": true,
+    "models": [
+     {
+      "model": "claude-sonnet-5",
+      "in": 0,
+      "cacheWrite": 0,
+      "cacheRead": 500,
+      "out": 7
+     }
+    ],
+    "total": 507,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "model names with dots, colons, slashes and capitals",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nus.anthropic.claude-opus-4-8-v1:0 | in 1 | cache_write 2 | cache_read 3 | out 4\nMiniMax/M2@beta | in 5 | cache_write 6 | cache_read 7 | out 8\ntotal | 36",
+   "expect": {
+    "ok": true,
+    "models": [
+     {
+      "model": "us.anthropic.claude-opus-4-8-v1:0",
+      "in": 1,
+      "cacheWrite": 2,
+      "cacheRead": 3,
+      "out": 4
+     },
+     {
+      "model": "MiniMax/M2@beta",
+      "in": 5,
+      "cacheWrite": 6,
+      "cacheRead": 7,
+      "out": 8
+     }
+    ],
+    "total": 36,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "answer made yesterday is still fine",
+   "today": "2026-10-08",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "answer dated one day ahead of the page's clock (time zones)",
+   "today": "2026-10-06",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "no date given by the caller: date checks are skipped",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "the output of the test run in claude-code.md",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-04\nclaude-sonnet-5 | in 405 | cache_write 7883 | cache_read 226884 | out 551\nclaude-opus-5 | in 159419 | cache_write 0 | cache_read 0 | out 7805\nclaude-opus-5-5 | in 16 | cache_write 100 | cache_read 3000 | out 671\nclaude-fable-5-1 | in 8 | cache_write 80 | cache_read 800 | out 88\nclaude-haiku-4-5-20251001 | in 20 | cache_write 200 | cache_read 0 | out 300\nodd_model_v2 | in 1 | cache_write 1 | cache_read 1 | out 1\nm_4_-x | in 2 | cache_write 0 | cache_read 0 | out 0\ntotal | 408236",
+   "expect": {
+    "ok": true,
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-04",
+     "days": 27
+    },
+    "total": 408236,
+    "notes": []
+   }
+  },
+  {
+   "group": "good",
+   "name": "two model names that differ only in capitals are two models",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nClaude-X | in 1 | cache_write 0 | cache_read 0 | out 5\nclaude-x | in 1 | cache_write 0 | cache_read 0 | out 5\ntotal | 12",
+   "expect": {
+    "ok": true,
+    "models": [
+     {
+      "model": "Claude-X",
+      "in": 1,
+      "cacheWrite": 0,
+      "cacheRead": 0,
+      "out": 5
+     },
+     {
+      "model": "claude-x",
+      "in": 1,
+      "cacheWrite": 0,
+      "cacheRead": 0,
+      "out": 5
+     }
+    ],
+    "total": 12,
+    "notes": []
+   }
+  },
+  {
+   "group": "limit",
+   "name": "known limit: two numbers swapped between fields keep the same sum and are accepted",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-sonnet-5 | in 20 | cache_write 10 | cache_read 30 | out 40\ntotal | 100",
+   "expect": {
+    "ok": true,
+    "models": [
+     {
+      "model": "claude-sonnet-5",
+      "in": 20,
+      "cacheWrite": 10,
+      "cacheRead": 30,
+      "out": 40
+     }
+    ],
+    "total": 100,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "the same answer twice (the script's output and Claude's reply)",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186\n\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "whole terminal: folded script output, then Claude's reply",
+   "today": "2026-10-07",
+   "input": "⏺ Bash(python3 - <<'AI_CO2_END' …)\n  ⎿  ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n     claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\n     … +2 lines (ctrl+o to expand)\n\n⏺ ```\n  ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n  claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\n  claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\n  total | 1001968186\n  ```",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "whole terminal: full script output with its mark, no reply from Claude",
+   "today": "2026-10-07",
+   "input": "⏺ Bash(python3 - <<'AI_CO2_END' …)\n  ⎿  ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n     claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\n     claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\n     total | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "the prompt and the answer pasted together",
+   "today": "2026-10-07",
+   "input": "Please count my Claude Code token use for the last 30 days.\n  python3 - <<'AI_CO2_END'\n```python\nprint(\"ai-co2 v1 | %s to %s | %s\" % (first_day, today, data))\n```\n\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "the script's output is right and Claude's retyped copy has a wrong digit: the right one is used",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186\n\nHere you go:\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340119 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "written as a Markdown table",
+   "today": "2026-10-07",
+   "input": "| ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07 |\n|---|---|---|---|---|\n| claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447 |\n| claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220 |\n| total | 1001968186 |",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "bold marks around the lines",
+   "today": "2026-10-07",
+   "input": "**ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07**\n**claude-opus-5-5** | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\n**total | 1001968186**",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "inside a code fence",
+   "today": "2026-10-07",
+   "input": "```\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186\n```",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "code fence with a language tag and friendly sentences around it",
+   "today": "2026-10-07",
+   "input": "Here are your totals for the last 30 days:\n\n```text\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186\n```\n\nLet me know if you need anything else!",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "Windows line endings",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\r\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\r\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\r\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "terminal copy: bullet on the first line, two spaces before the others, spaces at line ends",
+   "today": "2026-10-07",
+   "input": "⏺ ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07   \n  claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447   \n  claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220   \n  total | 1001968186   ",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "non-breaking spaces instead of spaces",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "narrow no-break spaces, a zero-width space and a byte order mark",
+   "today": "2026-10-07",
+   "input": "﻿ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-​opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "tabs and doubled spaces between the parts",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1\t|  2026-09-08 to 2026-10-07\t|  data 2026-09-08 to 2026-10-07\nclaude-opus-5-5\t|  in 1204551\t|  cache_write 48211973\t|  cache_read 912340118\t|  out 6120447\nclaude-haiku-4-5-20251001\t|  in 80112\t|  cache_write 2400310\t|  cache_read 31200455\t|  out 410220\ntotal\t|  1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "no spaces around the bars",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1|2026-09-08 to 2026-10-07|data 2026-09-08 to 2026-10-07\nclaude-opus-5-5|in 1204551|cache_write 48211973|cache_read 912340118|out 6120447\nclaude-haiku-4-5-20251001|in 80112|cache_write 2400310|cache_read 31200455|out 410220\ntotal|1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "thousands separators: commas",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1,204,551 | cache_write 48,211,973 | cache_read 912,340,118 | out 6,120,447\nclaude-haiku-4-5-20251001 | in 80,112 | cache_write 2,400,310 | cache_read 31,200,455 | out 410,220\ntotal | 1,001,968,186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "thousands separators: dots",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1.204.551 | cache_write 48.211.973 | cache_read 912.340.118 | out 6.120.447\nclaude-haiku-4-5-20251001 | in 80.112 | cache_write 2.400.310 | cache_read 31.200.455 | out 410.220\ntotal | 1.001.968.186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "thousands separators: spaces",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1 204 551 | cache_write 48 211 973 | cache_read 912 340 118 | out 6 120 447\nclaude-haiku-4-5-20251001 | in 80 112 | cache_write 2 400 310 | cache_read 31 200 455 | out 410 220\ntotal | 1 001 968 186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "thousands separators: narrow no-break spaces and apostrophes",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1'204'551 | cache_write 48'211'973 | cache_read 912'340'118 | out 6'120'447\nclaude-haiku-4-5-20251001 | in 80 112 | cache_write 2 400 310 | cache_read 31'200'455 | out 410 220\ntotal | 1'001'968'186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "line wrapped between two parts, continuation indented",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 |\n  data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 |\n  cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "line wrapped in the middle of a number",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 9123\n  40118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "line wrapped in the middle of a model name",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-\n5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "line wrapped in the middle of a date and of the word cache_write",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10\n-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_\nwrite 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "all line breaks lost: everything on one line",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07 claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447 claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220 total | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "capital letters in the fixed words",
+   "today": "2026-10-07",
+   "input": "AI-CO2 V1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | Cache_Write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | Cache_Write 2400310 | cache_read 31200455 | out 410220\nTotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "typographic hyphens and box-drawing bars",
+   "today": "2026-10-07",
+   "input": "ai‑co2 v1 │ 2026‑09‑08 to 2026‑10‑07 │ data 2026‑09‑08 to 2026‑10‑07\nclaude‑opus‑5‑5 │ in 1204551 │ cache_write 48211973 │ cache_read 912340118 │ out 6120447\nclaude‑haiku‑4‑5‑20251001 │ in 80112 │ cache_write 2400310 │ cache_read 31200455 │ out 410220\ntotal │ 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "underscores eaten by Markdown",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cachewrite 48211973 | cacheread 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cachewrite 2400310 | cacheread 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "quoted with > marks, as in an email or chat reply",
+   "today": "2026-10-07",
+   "input": "> ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n> claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\n> claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\n> total | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "blank lines between the lines",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\n\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\n\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "damage",
+   "name": "inline code marks around every line",
+   "today": "2026-10-07",
+   "input": "`ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07`\n`claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447`\n`claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220`\n`total | 1001968186`",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "note",
+   "name": "logs cover only 12 of the 30 days",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-26 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-26",
+     "last": "2026-10-07",
+     "days": 12
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": [
+     "short-data"
+    ],
+    "noteMessages": [
+     "Your logs only have entries from 2026-09-26 to 2026-10-07 (12 days). The result covers those days, not a full 30."
+    ]
+   }
+  },
+  {
+   "group": "note",
+   "name": "first entry two days into the window (a weekend): no note",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-10 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "data": {
+     "first": "2026-09-10",
+     "last": "2026-10-07",
+     "days": 28
+    },
+    "notes": []
+   }
+  },
+  {
+   "group": "note",
+   "name": "first entry three days into the window: note",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-11 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "data": {
+     "first": "2026-09-11",
+     "last": "2026-10-07",
+     "days": 27
+    },
+    "notes": [
+     "short-data"
+    ]
+   }
+  },
+  {
+   "group": "note",
+   "name": "a single day of data",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-10-07 to 2026-10-07\nclaude-sonnet-5 | in 10 | cache_write 20 | cache_read 30 | out 40\ntotal | 100",
+   "expect": {
+    "ok": true,
+    "notes": [
+     "short-data"
+    ],
+    "noteMessages": [
+     "Your logs only have entries from 2026-10-07 to 2026-10-07 (1 day). The result covers those days, not a full 30."
+    ]
+   }
+  },
+  {
+   "group": "note",
+   "name": "answer from three weeks ago",
+   "today": "2026-10-28",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "notes": [
+     "stale"
+    ],
+    "noteMessages": [
+     "This answer ends on 2026-10-07. Run the prompt again if you want today's numbers."
+    ]
+   }
+  },
+  {
+   "group": "note",
+   "name": "answer seven days old: no note yet",
+   "today": "2026-10-14",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": true,
+    "window": {
+     "start": "2026-09-08",
+     "end": "2026-10-07",
+     "days": 30
+    },
+    "data": {
+     "first": "2026-09-08",
+     "last": "2026-10-07",
+     "days": 30
+    },
+    "models": [
+     {
+      "model": "claude-opus-5-5",
+      "in": 1204551,
+      "cacheWrite": 48211973,
+      "cacheRead": 912340118,
+      "out": 6120447
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "in": 80112,
+      "cacheWrite": 2400310,
+      "cacheRead": 31200455,
+      "out": 410220
+     }
+    ],
+    "total": 1001968186,
+    "notes": []
+   }
+  },
+  {
+   "group": "note",
+   "name": "very large output",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1000 | cache_write 1000 | cache_read 1000 | out 2000000001\ntotal | 2000003001",
+   "expect": {
+    "ok": true,
+    "total": 2000003001,
+    "notes": [
+     "high-output"
+    ]
+   }
+  },
+  {
+   "group": "note",
+   "name": "very large total",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1000 | cache_write 1000 | cache_read 100000000000 | out 1000\ntotal | 100000003000",
+   "expect": {
+    "ok": true,
+    "total": 100000003000,
+    "notes": [
+     "high-total"
+    ]
+   }
+  },
+  {
+   "group": "note",
+   "name": "output but no input for one model",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 10 | cache_write 20 | cache_read 30 | out 40\nglm-4.6 | in 0 | cache_write 0 | cache_read 0 | out 55\ntotal | 155",
+   "expect": {
+    "ok": true,
+    "total": 155,
+    "notes": [
+     "output-without-input"
+    ],
+    "noteMessages": [
+     "The model “glm-4.6” shows output but no input, which the logs of some gateways cause. The page will use it as it is."
+    ]
+   }
+  },
+  {
+   "group": "note",
+   "name": "largest number the page accepts",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 0 | cache_write 0 | cache_read 1000000000000 | out 1\ntotal | 1000000000001",
+   "expect": {
+    "ok": true,
+    "total": 1000000000001,
+    "notes": [
+     "high-total"
+    ]
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "empty field",
+   "today": "2026-10-07",
+   "input": "",
+   "expect": {
+    "ok": false,
+    "code": "empty",
+    "message": "Paste the answer from Claude Code here."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "only spaces and line breaks",
+   "today": "2026-10-07",
+   "input": " \n\t  ",
+   "expect": {
+    "ok": false,
+    "code": "empty"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "not text at all",
+   "today": "2026-10-07",
+   "input": null,
+   "expect": {
+    "ok": false,
+    "code": "empty"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "something else entirely",
+   "today": "2026-10-07",
+   "input": "npm ERR! code ENOENT\nnpm ERR! syscall open",
+   "expect": {
+    "ok": false,
+    "code": "no-header"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "the prompt itself pasted back instead of the answer",
+   "today": "2026-10-07",
+   "input": "Please count my Claude Code token use for the last 30 days.\nRun the Python script below exactly as it is.",
+   "expect": {
+    "ok": false,
+    "code": "no-header"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "Claude describes the result in words",
+   "today": "2026-10-07",
+   "input": "You used about 967 million tokens on claude-opus-5-5 and 34 million on Haiku in the last 30 days.",
+   "expect": {
+    "ok": false,
+    "code": "no-header"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "model lines without the first line",
+   "today": "2026-10-07",
+   "input": "claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "no-header"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a future format version",
+   "today": "2026-10-07",
+   "input": "ai-co2 v2 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "version"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "first line without the data part",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-header"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "date written another way",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 8 Sep 2026 to 7 Oct 2026 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-header"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "two different answers pasted together",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186\n\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-sonnet-5 | in 10 | cache_write 20 | cache_read 30 | out 40\ntotal | 100",
+   "expect": {
+    "ok": false,
+    "code": "two-answers",
+    "message": "There is more than one answer in here, and they differ. Paste just one."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "the header nine times",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n",
+   "expect": {
+    "ok": false,
+    "code": "two-answers"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "the prompt pasted back in place of the answer",
+   "today": "2026-10-07",
+   "input": "Please count my Claude Code token use for the last 30 days.\n  python3 - <<'AI_CO2_END'\n```python\nprint(\"ai-co2 v1 | %s to %s | %s\" % (first_day, today, data))\n```",
+   "expect": {
+    "ok": false,
+    "code": "pasted-prompt",
+    "message": "That is the prompt, not the answer. Paste it into Claude Code first, then paste Claude's answer here."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "last line missing (copied too little)",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220",
+   "expect": {
+    "ok": false,
+    "code": "truncated"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "cut off in the middle of a line",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_wr",
+   "expect": {
+    "ok": false,
+    "code": "truncated"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "one model line missing: numbers no longer add up",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "total-mismatch"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "one digit changed",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120448\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "total-mismatch"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "numbers rounded by Claude",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1.2M | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-line",
+    "message": "One line of the answer can't be read: “claude-opus-5-5 | in 1.2M | cache_write 48211973”. Copy the whole block from Claude Code again, without changing it."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a decimal number",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112.5 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a negative number",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in -80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a number in exponent form",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 9.1e8 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a field missing",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "fields in the wrong order",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | cache_write 2400310 | in 80112 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "an extra sentence between the lines",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nNote: Haiku was used by subagents.\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-line",
+    "message": "One line of the answer can't be read: “Note: Haiku was used by subagents.”. Copy the whole block from Claude Code again, without changing it."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "markup in a line is never echoed back as markup",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n<img src=x onerror=alert(1)> | in 1 | cache_write 1 | cache_read 1 | out 1\ntotal | 4",
+   "expect": {
+    "ok": false,
+    "code": "bad-line",
+    "message": "One line of the answer can't be read: “?img src=x onerror=alert(1)? | in 1 | cache_writ”. Copy the whole block from Claude Code again, without changing it."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a model name that starts with a digit",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\n4o-mini | in 1 | cache_write 1 | cache_read 1 | out 1\ntotal | 4",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a model name longer than 80 characters",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nmxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx | in 1 | cache_write 1 | cache_read 1 | out 1\ntotal | 4",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "20,000 letters after the first line (must still answer at once)",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\ntotal | 0",
+   "expect": {
+    "ok": false,
+    "code": "bad-line"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "the same model twice",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-sonnet-5 | in 1 | cache_write 1 | cache_read 1 | out 1\nclaude-sonnet-5 | in 1 | cache_write 1 | cache_read 1 | out 1\ntotal | 8",
+   "expect": {
+    "ok": false,
+    "code": "duplicate-model",
+    "message": "The model “claude-sonnet-5” appears twice. Copy the whole block from Claude Code again."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a number above the limit",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 0 | cache_write 0 | cache_read 1000000000001 | out 0\ntotal | 1000000000001",
+   "expect": {
+    "ok": false,
+    "code": "bad-number"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a number with 30 digits",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 0 | cache_write 0 | cache_read 999999999999999999999999999999 | out 0\ntotal | 999999999999999999999999999999",
+   "expect": {
+    "ok": false,
+    "code": "bad-number"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "more model lines than allowed",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nmodel-a0 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-b1 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-c2 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-d3 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-e4 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-f5 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-g6 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-h7 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-i8 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-j9 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-k10 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-l11 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-m12 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-n13 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-o14 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-p15 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-q16 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-r17 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-s18 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-t19 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-u20 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-v21 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-w22 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-x23 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-y24 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-z25 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-a26 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-b27 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-c28 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-d29 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-e30 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-f31 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-g32 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-h33 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-i34 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-j35 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-k36 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-l37 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-m38 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-n39 | in 1 | cache_write 1 | cache_read 1 | out 1\nmodel-o40 | in 1 | cache_write 1 | cache_read 1 | out 1\ntotal | 164",
+   "expect": {
+    "ok": false,
+    "code": "too-many-models"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "far too much text",
+   "today": "2026-10-07",
+   "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "expect": {
+    "ok": false,
+    "code": "too-long"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a window of 31 days",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-07 to 2026-10-07 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-window",
+    "message": "This answer covers 31 days. The page needs exactly 30. Copy the prompt from this page again and run it once more."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a window of 7 days",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-10-01 to 2026-10-07 | data 2026-10-01 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-window"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "start after end",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-10-07 to 2026-09-08 | data 2026-09-08 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-window"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "a date that does not exist",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-31 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-date"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "an answer from the future",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2027-01-01 to 2027-01-30 | data 2027-01-01 to 2027-01-30\nclaude-sonnet-5 | in 1 | cache_write 1 | cache_read 1 | out 1\ntotal | 4",
+   "expect": {
+    "ok": false,
+    "code": "future",
+    "message": "This answer ends on 30 Jan 2027, which is in the future. Check the date on your computer, then run the prompt again."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "data dates outside the window",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-08-01 to 2026-10-07\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-data-range"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "data dates in the wrong order",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-10-07 to 2026-09-08\nclaude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447\nclaude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220\ntotal | 1001968186",
+   "expect": {
+    "ok": false,
+    "code": "bad-data-range"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "says no data but lists a model",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data none\nclaude-sonnet-5 | in 1 | cache_write 1 | cache_read 1 | out 1\ntotal | 4",
+   "expect": {
+    "ok": false,
+    "code": "inconsistent"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "says there is data but lists no model",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-08 to 2026-10-07\ntotal | 0",
+   "expect": {
+    "ok": false,
+    "code": "inconsistent"
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "nothing found: the script's answer for an empty log folder",
+   "today": "2026-10-07",
+   "input": "ai-co2 v1 | 2026-09-08 to 2026-10-07 | data none\ntotal | 0",
+   "expect": {
+    "ok": false,
+    "code": "no-usage",
+    "message": "Claude Code found no use in the last 30 days on this computer. If you use Claude Code on another computer, run the prompt there."
+   }
+  },
+  {
+   "group": "refuse",
+   "name": "nothing found, inside a code fence with a sentence",
+   "today": "2026-10-07",
+   "input": "Nothing turned up:\n```\nai-co2 v1 | 2026-09-08 to 2026-10-07 | data none\ntotal | 0\n```",
+   "expect": {
+    "ok": false,
+    "code": "no-usage"
+   }
+  }
+ ]
+}

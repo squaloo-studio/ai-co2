@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.local
+
+# Working notes and review screenshots: useful while building, not part of the tool.
+.notes/
+.impeccable/

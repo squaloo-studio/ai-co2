@@ -1,0 +1,1278 @@
+<!doctype html>
+<html lang="en" data-accent="lime">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ai-co2 · Style board</title>
+<meta name="description" content="A style board for ai-co2: the result, the pinned bar, the Claude Code card and one cut tip.">
+<meta name="theme-color" content="#FBFAF4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Schibsted+Grotesk:wght@400..900&display=swap">
+<style>
+:root{
+  --paper:#FBFAF4; --paper-2:#F3F1E7; --card:#FFFEFA;
+  --ink:#0B1222; --ink-2:#4A5168; --ink-3:#666B80;
+  --line:#E4E1D3; --line-2:#D3CFBE;
+  --navy:#0A1020; --navy-2:#111A2F;
+  --on-navy:#F4F2EA; --on-navy-2:#A9B0C4; --on-navy-3:#8A93AA;
+  --navy-line:rgba(255,255,255,.09); --grid:rgba(255,255,255,.04);
+  --accent:#C8F04B; --accent-press:#B6DE38; --accent-soft:rgba(200,240,75,.24); --accent-line:rgba(200,240,75,.78);
+  --on-accent:#0A1020;
+  --ok:#16794F; --ok-soft:#E3F1E9; --bad:#B42318; --bad-line:#D4483B; --bad-soft:#FBEAE7;
+  --shadow-card:0 1px 2px rgba(11,18,34,.05),0 12px 32px -18px rgba(11,18,34,.22);
+  --shadow-float:0 20px 44px -18px rgba(10,16,32,.6),0 2px 8px rgba(10,16,32,.2);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --move:.75s;
+  --font:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+:root[data-accent="aqua"]{--accent:#5EE6C8;--accent-press:#43D4B4;--accent-soft:rgba(94,230,200,.22);--accent-line:rgba(94,230,200,.8)}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;padding-bottom:120px;caret-color:var(--ink)}
+::selection{background:var(--accent);color:var(--on-accent)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.plate :focus-visible,.pill :focus-visible,.prompt :focus-visible{outline-color:var(--accent)}
+h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.03em;line-height:1.04;text-wrap:balance}
+p{margin:0}
+b,strong{font-weight:700}
+button{font:inherit;color:inherit}
+code{font:500 .86em/1 var(--mono);padding:.18em .42em;border-radius:6px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.i-s{width:15px;height:15px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.no-move,.no-anim,.no-anim *{transition:none !important}
+.wrap{width:min(1200px,100% - 64px);margin-inline:auto}
+
+/* ---------- board chrome ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.wordmark{font-weight:900;font-size:23px;letter-spacing:-.04em;line-height:1}
+.topbar-right{display:flex;align-items:center;gap:18px}
+.topbar-meta{color:var(--ink-3);font-size:14px}
+.seg{display:inline-flex;padding:3px;border-radius:999px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--line)}
+.seg button{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 14px;border:0;border-radius:999px;background:transparent;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;transition:background-color .15s,color .15s,box-shadow .15s}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-checked="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(11,18,34,.08),inset 0 0 0 1px var(--line-2)}
+.dot{width:10px;height:10px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(11,18,34,.3)}
+
+.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px 64px;align-items:start;padding:34px 0 30px}
+.intro h1{font-size:56px;letter-spacing:-.04em;line-height:.95}
+.intro-text{display:grid;gap:14px;color:var(--ink-2);max-width:58ch}
+.intro-text .lede{color:var(--ink);font-size:19px;line-height:1.5}
+.intro-text .meta{font-size:14.5px;color:var(--ink-3)}
+
+.sec{padding-top:96px}
+.sec-head{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:12px 64px;align-items:end;margin-bottom:28px}
+.sec-head h2{font-size:46px;letter-spacing:-.035em;line-height:1}
+.sec-head p{color:var(--ink-2);max-width:60ch}
+figure{margin:0}
+figcaption,.fig-cap{margin-top:14px;font-size:15px;line-height:1.5;color:var(--ink-2);max-width:78ch}
+figcaption b,.fig-cap b{color:var(--ink)}
+
+/* ---------- plates (the estimate lives here) ---------- */
+.plate{position:relative;isolation:isolate;border-radius:22px;background-color:var(--navy);color:var(--on-navy);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:44px 44px;background-position:-1px -1px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),var(--shadow-card);caret-color:var(--accent)}
+.plate--lead{padding:36px 48px 26px}
+.lead-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,384px);gap:40px 64px;align-items:start}
+.range{font-weight:800;font-size:88px;line-height:.86;letter-spacing:-.04em;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}
+.range .unit{margin-left:.14em;font-size:.38em;font-weight:700;letter-spacing:-.01em;color:var(--on-navy-2)}
+.range-sub{margin-top:16px;color:var(--on-navy-2);font-size:16px}
+.likely{margin-top:16px;font-size:24px;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.hl{display:inline-block;padding:0 .3em;border-radius:7px;background:var(--accent);color:var(--on-accent);font-variant-numeric:tabular-nums;line-height:1.3}
+.car{margin-top:10px;color:var(--on-navy-2);font-size:16px;max-width:46ch}
+.preview-tag{display:none;align-items:center;gap:8px;margin-top:16px;width:max-content;max-width:100%;padding:6px 12px;border-radius:999px;border:1.5px dashed var(--accent-line);font-size:13.5px;font-weight:600;line-height:1.2}
+.is-preview .preview-tag{display:inline-flex}
+
+.habits{padding-top:6px}
+.habits h3{font-size:18px;letter-spacing:-.015em}
+.habits-note{margin-top:6px;color:var(--on-navy-2);font-size:14.5px;line-height:1.45}
+.toggles{list-style:none;margin:14px 0 0;padding:0}
+.tg{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid var(--line)}
+.plate .tg{border-top-color:var(--navy-line)}
+.tg-text{display:grid;gap:3px;min-width:0}
+.tg-label{font-weight:600;font-size:15.5px;line-height:1.3}
+.tg-src{display:inline-flex;align-items:center;gap:6px;color:var(--ink-3);font-size:13px;line-height:1.2}
+.plate .tg-src{color:var(--on-navy-3)}
+
+.switch{--c:var(--ink);--knob-on:var(--paper);position:relative;flex:none;width:44px;height:26px;padding:0;border:1.5px solid color-mix(in srgb,var(--c) 42%,transparent);border-radius:999px;background:transparent;cursor:pointer;transition:background-color .2s var(--ease),border-color .2s var(--ease)}
+.switch .knob{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:color-mix(in srgb,var(--c) 58%,transparent);transition:transform .25s var(--ease),background-color .2s}
+.switch:hover{border-color:color-mix(in srgb,var(--c) 70%,transparent)}
+.switch[aria-checked="true"]{background:var(--c);border-color:var(--c)}
+.switch[aria-checked="true"] .knob{transform:translateX(18px);background:var(--knob-on)}
+.plate .switch{--c:var(--on-navy);--knob-on:var(--navy)}
+
+.fig-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin-top:40px}
+.plate--compact{padding:30px 32px 22px}
+.range--m{font-size:60px}
+.plate--compact .range-sub{margin-top:12px;font-size:15px}
+.plate--compact .chart{margin-top:22px}
+
+/* delta chip: shows how much the most likely value just moved */
+.delta{display:inline-block;margin-left:8px;padding:5px 8px;border-radius:999px;background:var(--accent);color:var(--on-accent);font:600 12px/1 var(--mono);white-space:nowrap;vertical-align:1px;opacity:0;transform:translateY(5px);transition:opacity .2s,transform .35s var(--ease);pointer-events:none}
+.delta.is-on{opacity:1;transform:none}
+
+/* axis */
+.axis{position:relative;height:28px;margin-top:6px;border-top:1px solid rgba(255,255,255,.24)}
+.tick{position:absolute;top:0}
+.tick i{position:absolute;left:0;top:0;width:1px;height:6px;background:rgba(255,255,255,.34)}
+.tick em{position:absolute;top:10px;left:0;transform:translateX(-50%);font:500 11.5px/1 var(--mono);font-style:normal;color:var(--on-navy-3);white-space:nowrap}
+.tick:first-child em{transform:none}
+.tick:last-child em{transform:translateX(-100%)}
+.bb--paper .axis{border-top-color:rgba(11,18,34,.2)}
+.bb--paper .tick i{background:rgba(11,18,34,.3)}
+.bb--paper .tick em{color:var(--ink-3)}
+
+/* A · dots */
+.plate--lead .chart{margin-top:10px}
+#result .sec-head{margin-bottom:22px}
+.dp-area{position:relative}
+.dp-grid,.dp-dots{position:absolute;inset:0}
+.dp-grid span{position:absolute;top:26px;bottom:0;width:1px;background:rgba(255,255,255,.07)}
+.dp-dots{z-index:1}
+.dp-dot{position:absolute;left:0;bottom:0;border-radius:50%;background:var(--accent);will-change:transform;transition:transform var(--move) var(--ease),background-color .3s}
+.dp-dot.tail{background:transparent;box-shadow:inset 0 0 0 1.5px var(--on-navy-3)}
+.dp-mid,.dp-ghost{position:absolute;top:0;bottom:0;left:0;width:0;transition:transform var(--move) var(--ease),opacity .6s}
+.dp-mid{border-left:1.5px solid var(--on-navy)}
+.dp-mid-label{position:absolute;top:0;left:10px;white-space:nowrap;font-size:14px;font-weight:600;line-height:1}
+.dp-ghost{top:26px;border-left:1.5px dashed rgba(255,255,255,.55);opacity:0}
+.dp-ghost.is-on{opacity:1}
+.dp{padding-right:var(--gutter,24px)}
+.dp .axis::after{content:"";position:absolute;left:100%;top:-1px;width:var(--gutter,24px);border-top:1px dashed rgba(255,255,255,.24)}
+.dp-foot{margin-top:4px}
+.dp-bracket{position:relative;height:44px}
+.dp-bracket-line{position:absolute;top:0;height:10px;border:1.5px solid var(--accent-line);border-top:0;border-radius:0 0 6px 6px;transition:left var(--move) var(--ease),width var(--move) var(--ease)}
+.dp-bracket-ghost{position:absolute;top:0;height:10px;border:1.5px dashed rgba(255,255,255,.45);border-top:0;border-radius:0 0 6px 6px;opacity:0;transition:opacity .6s}
+.dp-bracket-ghost.is-on{opacity:1}
+.dp-bracket-label{position:absolute;top:19px;transform:translateX(-50%);white-space:nowrap;font-size:13.5px;color:var(--on-navy-2);transition:left var(--move) var(--ease)}
+.dp-bracket-label b{color:var(--on-navy);font:600 13px/1 var(--mono)}
+.chart-note{margin-top:2px;color:var(--on-navy-3);font-size:13.5px}
+
+/* B · band (also the mini bar in pinned bars) */
+.bb-area{position:relative;height:76px}
+.bb-track{position:absolute;left:0;right:0;bottom:12px;height:14px;border-radius:999px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.bb-band,.bb-ghost{position:absolute;top:0;bottom:0;border-radius:999px;transition:left var(--move) var(--ease),width var(--move) var(--ease),opacity .6s}
+.bb-band{background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent-line)}
+.bb-ghost{top:-5px;bottom:-5px;border:1.5px dashed rgba(255,255,255,.55);opacity:0}
+.bb-ghost.is-on{opacity:1}
+.bb-pin{position:absolute;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--navy);transition:left var(--move) var(--ease)}
+.bb-lab{position:absolute;bottom:34px;transform:translateX(-50%);font:600 13px/1 var(--mono);color:var(--on-navy-2);transition:left var(--move) var(--ease)}
+.bb-mid{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap;font-size:14px;font-weight:600;line-height:1;transition:left var(--move) var(--ease)}
+.bb-mid::after{content:"";position:absolute;left:50%;top:22px;height:22px;border-left:1.5px solid var(--on-navy)}
+.bb-mid.anchor-l{transform:translateX(-14px)}
+.bb-mid.anchor-l::after{left:14px}
+.bb--mini .bb-area{height:14px}
+.bb--mini .bb-track{bottom:4px;height:6px}
+.bb--mini .bb-pin{width:12px;height:12px;margin:-6px 0 0 -6px;box-shadow:0 0 0 2px var(--navy)}
+.bb--mini .bb-ghost{top:-3px;bottom:-3px}
+.bb--m .bb-area{height:22px}
+.bb--m .bb-track{bottom:5px;height:10px}
+.bb--m .bb-pin{width:16px;height:16px;margin:-8px 0 0 -8px;box-shadow:0 0 0 3px var(--navy)}
+.bb--paper .bb-track{background:rgba(11,18,34,.07);box-shadow:inset 0 0 0 1px rgba(11,18,34,.08)}
+.bb--paper .bb-band{background:rgba(11,18,34,.16);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.bb--paper .bb-pin{box-shadow:0 0 0 2px var(--ink)}
+.bb--paper .bb-ghost{border-color:rgba(11,18,34,.5)}
+.bb--paper .bb-lab{color:var(--ink-2)}
+.bb--paper .bb-mid::after{border-left-color:var(--ink)}
+.bb--accent .bb-band{background:var(--accent);box-shadow:inset 0 0 0 1.5px var(--ink)}
+
+/* C · curve */
+.cv-area{position:relative;height:176px}
+.cv-svg{position:absolute;left:0;right:0;bottom:0;top:28px;width:100%;height:calc(100% - 28px);overflow:visible}
+.cv-out{fill:rgba(255,255,255,.07)}
+.cv-in{fill:var(--accent-soft)}
+.cv-line{fill:none;stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.cv-ghost{fill:none;stroke:rgba(255,255,255,.55);stroke-width:1.5;stroke-dasharray:5 5;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .6s}
+.cv-ghost.is-on{opacity:1}
+.cv-mid{stroke:var(--on-navy);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.cv-mid-label{position:absolute;top:0;transform:translateX(-12px);white-space:nowrap;font-size:14px;font-weight:600;line-height:1}
+
+/* ---------- pinned bar frames ---------- */
+.desk-note{display:none;margin-top:10px;font-size:14px;color:var(--ink-3)}
+.pin-variant{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 36px;align-items:start;margin-top:48px}
+.pin-variant .fig-cap{grid-column:1/-1;margin-top:0}
+.frame-label{margin-top:10px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.frame{position:relative;overflow:hidden;background:var(--paper)}
+.frame--desk{height:640px;margin-top:9px;border-radius:16px;box-shadow:0 0 0 1px var(--line-2),var(--shadow-card)}
+.frame--phone{width:330px;height:640px;border-radius:38px;margin:9px;box-shadow:0 0 0 9px var(--navy),0 0 0 10px #2B3654,var(--shadow-card)}
+.fr-bar{position:absolute;z-index:6;left:0;right:0;top:0;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.fr-bar i{width:9px;height:9px;border-radius:50%;background:var(--line-2)}
+.fr-bar span{position:absolute;left:50%;transform:translateX(-50%);padding:3px 44px;border-radius:7px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);font:500 11.5px/1.4 var(--mono);color:var(--ink-3)}
+.frame--desk .fr-scroll{top:34px}
+.frame--desk .pin--strip{top:34px}
+.fr-scroll{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(11,18,34,.25) transparent}
+.fr-scroll::-webkit-scrollbar{width:8px}
+.fr-scroll::-webkit-scrollbar-thumb{background:rgba(11,18,34,.22);border-radius:8px}
+.mp{padding:18px 24px 120px;font-size:14.5px;line-height:1.5}
+.frame--phone .mp{padding:16px 16px 110px}
+.mp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.mp-logo{font-weight:900;letter-spacing:-.04em;font-size:17px;line-height:1}
+.mp-hint{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;color:var(--ink-3)}
+.mp-result{padding:22px 24px 16px;border-radius:16px}
+.frame--phone .mp-result{padding:18px 16px 14px}
+.range--s{font-size:50px}
+.frame--phone .range--s{font-size:42px}
+.mp-likely{margin-top:12px;font-size:16px;font-weight:600;line-height:1.3}
+.mp-result .chart{margin-top:14px}
+.mp-sec{margin-top:28px}
+.mp-sec h4{font-size:19px;letter-spacing:-.02em}
+.mp-note{margin-top:4px;color:var(--ink-2);font-size:13.5px;line-height:1.45}
+.mp .toggles{margin-top:8px}
+.mp .tg{padding:11px 0}
+.mp .tg-label{font-size:14.5px}
+.mp-card{margin-top:10px;padding:14px 16px;border-radius:14px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2);line-height:1.5}
+.mp-card b{color:var(--ink)}
+.mp-list{list-style:none;margin:10px 0 0;padding:0;border-radius:14px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.mp-list li{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.mp-list li:first-child{border-top:0}
+.mp-list span{color:var(--ink-2);text-align:right}
+.frame--phone .mp-list li{flex-direction:column;gap:1px}
+.frame--phone .mp-list span{text-align:left}
+.mp-fold{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);font-weight:700}
+mark.save{padding:.06em .3em;border-radius:6px;background:var(--accent);color:var(--on-accent);font-weight:600;white-space:nowrap}
+
+.pin{position:absolute;z-index:5;opacity:0;visibility:hidden;transition:opacity .25s var(--ease),transform .45s var(--ease),visibility 0s linear .45s}
+.is-pinned .pin,.page-pill.is-on{opacity:1;visibility:visible;transition:opacity .25s var(--ease),transform .45s var(--ease),visibility 0s}
+.pin--pill{left:50%;bottom:18px;transform:translate(-50%,20px)}
+.is-pinned .pin--pill{transform:translate(-50%,0)}
+.frame--phone .pin--pill{left:12px;right:12px;bottom:14px;transform:translateY(20px)}
+.frame--phone.is-pinned .pin--pill{transform:none}
+.pin--strip{left:0;right:0;top:0;transform:translateY(-100%)}
+.is-pinned .pin--strip{transform:none}
+
+.pill{position:relative;display:flex;align-items:center;gap:16px;height:58px;padding:0 9px 0 22px;border-radius:999px;background:rgba(10,16,32,.9);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);color:var(--on-navy);box-shadow:var(--shadow-float),inset 0 0 0 1px rgba(255,255,255,.08);transition:box-shadow .35s var(--ease)}
+.pill.flash{box-shadow:var(--shadow-float),inset 0 0 0 2px var(--accent)}
+.pill-range{font-weight:800;font-size:20px;letter-spacing:-.025em;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1}
+.pill-range small,.strip-range small{margin-left:3px;font-size:13px;font-weight:600;letter-spacing:0}
+.pill-range small{color:var(--on-navy-2)}
+.pill-mid,.strip-mid{display:inline-flex;align-items:center;gap:7px;font:500 13px/1 var(--font);white-space:nowrap}
+.pill-mid b,.strip-mid b{font:500 13px/1 var(--mono)}
+.pill-mid{color:var(--on-navy-2)}
+.pill-mid::before,.strip-mid::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.strip-mid::before{box-shadow:0 0 0 1.5px var(--ink)}
+.pill .chart{width:150px}
+.round-btn{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;transition:background-color .15s}
+.pill .round-btn{background:rgba(255,255,255,.09);color:var(--on-navy)}
+.pill .round-btn:hover{background:rgba(255,255,255,.17)}
+.pin-delta{position:absolute;left:50%;top:-16px;margin:0;transform:translate(-50%,6px)}
+.pin-delta.is-on{transform:translate(-50%,0)}
+.frame--phone .pill{gap:12px;height:54px;padding-left:18px}
+.frame--phone .pill .chart{flex:1;width:auto;min-width:50px}
+.frame--phone .long{display:none}
+.short{display:none}
+.frame--phone .short{display:inline}
+
+.strip{position:relative;display:flex;align-items:center;gap:16px;height:54px;padding:0 10px 0 24px;background:rgba(251,250,244,.9);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(11,18,34,.4);transition:box-shadow .35s var(--ease)}
+.strip.flash{box-shadow:0 2px 0 var(--ink),0 10px 24px -18px rgba(11,18,34,.4)}
+.strip-range{font-weight:800;font-size:18px;letter-spacing:-.02em;white-space:nowrap;line-height:1;font-variant-numeric:tabular-nums}
+.strip-range small{color:var(--ink-2)}
+.strip-mid{color:var(--ink-2)}
+.strip .chart{flex:1;min-width:60px}
+.strip .round-btn{width:36px;height:36px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink)}
+.strip .round-btn:hover{background:var(--paper-2)}
+.strip .pin-delta{position:static;margin-left:6px;transform:translateY(5px)}
+.strip .pin-delta.is-on{transform:none}
+.frame--phone .strip{padding-left:16px;gap:8px}
+.frame--phone .strip .chart{min-width:44px}
+
+.mp--side{display:grid;grid-template-columns:minmax(0,1fr) 256px;gap:22px;align-items:start}
+.mp--side .mp-main>.mp-sec:first-child{margin-top:0}
+.mp-aside{position:sticky;top:0}
+.mp-aside .range--s{font-size:40px}
+.side-note{margin-top:10px;font-size:12.5px;color:var(--on-navy-3);line-height:1.4}
+.frame--phone[data-kind="side"] .mp{padding-top:0}
+.mp-sticky{position:sticky;top:0;z-index:4;margin:0 -16px;padding-bottom:10px;background:var(--paper)}
+.frame--phone[data-kind="side"] .mp-result{border-radius:0 0 20px 20px;transition:padding .3s var(--ease)}
+.frame--phone[data-kind="side"] .range--s{transition:font-size .3s var(--ease)}
+.frame--phone[data-kind="side"] .mp-likely{max-height:40px;transition:max-height .3s var(--ease),opacity .2s,margin .3s var(--ease)}
+.frame--phone[data-kind="side"].is-compact .mp-result{padding:12px 16px 8px}
+.frame--phone[data-kind="side"].is-compact .range--s{font-size:24px}
+.frame--phone[data-kind="side"].is-compact .mp-likely{max-height:0;opacity:0;margin-top:0;overflow:hidden}
+.frame--phone[data-kind="side"] .mp-top{padding-top:16px}
+
+.page-pill{position:fixed;z-index:50;left:50%;bottom:22px;opacity:0;visibility:hidden;transform:translate(-50%,24px);transition:opacity .25s var(--ease),transform .45s var(--ease),visibility 0s linear .45s}
+.page-pill.is-on{transform:translate(-50%,0)}
+
+/* ---------- Claude Code card ---------- */
+.card{background:var(--card);border-radius:18px;box-shadow:inset 0 0 0 1px var(--line),var(--shadow-card)}
+.card-row{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;align-items:start}
+.state-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-size:14px;color:var(--ink-3)}
+.cc{padding:28px 30px 30px}
+.cc-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.cc-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:13px;background:var(--navy);color:var(--on-navy)}
+.cc-head h3{font-size:24px;letter-spacing:-.025em}
+.cc-sub{margin-top:3px;color:var(--ink-2);font-size:14.5px}
+.chip{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 13px;border-radius:999px;font-size:13.5px;font-weight:600;white-space:nowrap}
+.chip--waiting{color:var(--ink-2);border:1.5px dashed var(--line-2)}
+.chip--checked{background:var(--ok-soft);color:var(--ok)}
+.chip--problem{background:var(--bad-soft);color:var(--bad)}
+.steps{list-style:none;margin:0;padding:0}
+.step{display:grid;grid-template-columns:32px minmax(0,1fr);gap:16px;padding-top:26px}
+.step-n{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--line-2);font:600 14px/1 var(--mono)}
+.step h4{margin:5px 0 6px;font-size:19px;letter-spacing:-.015em;line-height:1.25}
+.step-body>p{color:var(--ink-2);font-size:15.5px;max-width:62ch}
+.prompt{position:relative;margin-top:16px;border-radius:14px;background:var(--navy);color:#DCE1EE;overflow:hidden;caret-color:var(--accent)}
+.prompt-body{position:relative}
+.prompt pre{margin:0;padding:18px 20px;max-height:178px;overflow:hidden;font:400 12.5px/1.65 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;transition:max-height .45s var(--ease)}
+.prompt.is-open pre{max-height:2000px}
+.prompt:not(.is-open) .prompt-fade{position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(rgba(10,16,32,0),var(--navy));pointer-events:none}
+.prompt-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid var(--navy-line);background:var(--navy-2)}
+.btn{display:inline-flex;align-items:center;gap:9px;height:42px;padding:0 20px;border:0;border-radius:999px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background-color .15s,color .15s,transform .1s}
+.btn:active{transform:translateY(1px)}
+.btn--primary{background:var(--accent);color:var(--on-accent)}
+.btn--primary:hover{background:var(--accent-press)}
+.btn--quiet{background:transparent;color:var(--on-navy-2)}
+.btn--quiet:hover{background:rgba(255,255,255,.07);color:var(--on-navy)}
+.answer{display:block;width:100%;min-height:132px;margin-top:14px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line-2);background:#fff;color:var(--ink);font:400 12.5px/1.65 var(--mono);white-space:pre;overflow-x:auto;resize:vertical;transition:border-color .15s,box-shadow .15s}
+.answer::placeholder{color:var(--ink-3)}
+.answer:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(11,18,34,.08)}
+.cc[data-state="problem"] .answer{border-color:var(--bad-line)}
+.cc[data-state="problem"] .answer:focus{box-shadow:0 0 0 3px rgba(180,35,24,.12)}
+.answer-msg{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:14.5px;line-height:1.45;color:var(--ink-3)}
+.answer-msg .i{margin-top:1px}
+.cc[data-state="problem"] .answer-msg{color:var(--bad)}
+.cc[data-state="checked"] .answer-msg{display:none}
+.cc-sum{display:none;margin-top:14px}
+.cc[data-state="checked"] .cc-sum{display:block}
+.sum-line{display:flex;gap:8px;align-items:flex-start;color:var(--ok);font-size:14.5px;font-weight:600;line-height:1.45}
+.sum-line .i{margin-top:2px}
+.models{width:100%;margin-top:12px;border-collapse:collapse;font-size:14.5px}
+.models th{padding:0 0 8px;text-align:left;font-size:12.5px;font-weight:600;color:var(--ink-3);border-bottom:1px solid var(--line)}
+.models td{padding:10px 0;border-bottom:1px solid var(--line)}
+.models td:first-child{padding-right:12px;white-space:nowrap}
+.models tr:last-child td{border-bottom:0}
+.models .r{text-align:right;padding-right:28px}
+.share{display:flex;align-items:center;gap:10px}
+.share-bar{flex:1;height:6px;border-radius:999px;background:rgba(11,18,34,.07)}
+.share-bar i{display:block;height:100%;border-radius:999px;background:var(--ink)}
+.share .num{width:3.2em;text-align:right;font-size:13px}
+.notes h3{font-size:18px;letter-spacing:-.015em}
+.notes ul{list-style:none;margin:14px 0 0;padding:0}
+.notes li{padding:12px 0;border-top:1px solid var(--line);color:var(--ink-2);font-size:15px;line-height:1.5}
+.notes .draft{margin-top:16px;font-size:13.5px;color:var(--ink-3)}
+
+/* ---------- cut tip ---------- */
+.tip{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:44px;padding:34px 36px}
+.tip h3{font-size:32px;letter-spacing:-.035em;line-height:1.05}
+.tip-main p{margin-top:14px;color:var(--ink-2);font-size:17.5px;line-height:1.55;max-width:54ch}
+.tip-main .how{font-size:15.5px}
+.tip-main .how b{color:var(--ink)}
+.tip-side{align-self:start;padding:6px 0 0 40px;border-left:1px solid var(--line)}
+.tv-row{display:grid;grid-template-columns:96px minmax(0,1fr) 54px;gap:14px;align-items:center;padding:6px 0}
+.tv-label{font-size:13.5px;font-weight:600;line-height:1.25}
+.tv-val{font:500 13px/1 var(--mono);text-align:right;color:var(--ink-2)}
+.tv-axis{display:grid;grid-template-columns:96px minmax(0,1fr) 54px;gap:14px}
+.tv-axis .axis{margin-top:4px}
+.pv{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line-2)}
+.pv-text{display:grid;gap:2px}
+.pv-text b{font-size:15px}
+.pv-text span{font-size:13px;color:var(--ink-3);line-height:1.35}
+
+/* ---------- system ---------- */
+.sys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px 48px}
+.sys-block{padding-top:20px;border-top:1px solid var(--line-2)}
+.sys h3{font-size:22px;letter-spacing:-.025em}
+.list{list-style:none;margin:12px 0 0;padding:0}
+.list li{padding:11px 0;border-top:1px solid var(--line);color:var(--ink-2);font-size:15.5px;line-height:1.5}
+.list li:first-child{border-top:0}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;margin-top:16px}
+.sw{overflow:hidden;border-radius:12px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.sw i{display:block;height:54px;background:var(--c);box-shadow:inset 0 0 0 1px rgba(11,18,34,.08)}
+.sw>span{display:grid;gap:3px;padding:10px 12px 12px;font-size:13.5px;font-weight:600;line-height:1.2}
+.sw small{font:500 11.5px/1.2 var(--mono);color:var(--ink-3)}
+.sw em{font-style:normal;font-weight:400;font-size:12.5px;color:var(--ink-2)}
+.type-row{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;align-items:baseline;padding:16px 0;border-top:1px solid var(--line)}
+.type-row:first-of-type{border-top:0}
+.type-row .who{font-size:13px;color:var(--ink-3);line-height:1.35}
+.type-row .who b{display:block;color:var(--ink);font-size:14px}
+.t-display{font-size:54px;font-weight:800;letter-spacing:-.04em;line-height:.95}
+.t-body{font-size:17px;color:var(--ink-2);max-width:48ch}
+.t-mono{font:400 14px/1.5 var(--mono)}
+
+.foot{margin-top:96px;padding:22px 0;border-top:1px solid var(--line);color:var(--ink-3);font-size:14px}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .lead-top{grid-template-columns:1fr}
+  .habits{max-width:560px}
+  .card-row{grid-template-columns:1fr}
+  .notes{max-width:640px}
+}
+@media (max-width:900px){
+  .intro,.sec-head,.tip,.sys{grid-template-columns:1fr}
+  .tip-side{padding:24px 0 0;border-left:0;border-top:1px solid var(--line)}
+  .fig-row{grid-template-columns:1fr}
+  .pin-variant{grid-template-columns:1fr;justify-items:center}
+  .pin-variant .fig-cap{justify-self:stretch}
+  .fr-col--desk{display:none}
+  .desk-note{display:block}
+}
+@media (max-width:640px){
+  .wrap{width:calc(100% - 32px)}
+  .topbar-meta{display:none}
+  .intro{padding:44px 0 32px}
+  .intro h1{font-size:46px}
+  .sec{padding-top:68px}
+  .sec-head h2{font-size:34px}
+  .plate--lead{padding:28px 20px 20px;border-radius:18px}
+  .plate--compact{padding:24px 20px 18px}
+  .range{font-size:64px}
+  .range--m{font-size:48px}
+  .likely{margin-top:20px;font-size:20px}
+  .plate--lead .chart{margin-top:34px}
+  .cc{padding:20px}
+  .cc-head{grid-template-columns:auto minmax(0,1fr)}
+  .cc-head .chip{grid-column:1/-1;justify-self:start}
+  .step{grid-template-columns:28px minmax(0,1fr);gap:12px}
+  .step-n{width:28px;height:28px}
+  .models .r{padding-right:14px}
+  .tip{padding:22px 20px;gap:26px}
+  .tip h3{font-size:26px}
+  .tv-row,.tv-axis{grid-template-columns:78px minmax(0,1fr) 48px;gap:10px}
+  .type-row{grid-template-columns:1fr;gap:8px}
+  .page-pill{left:12px;right:12px;transform:translateY(24px)}
+  .page-pill.is-on{transform:none}
+  .page-pill .pill .chart{flex:1;width:auto;min-width:50px}
+  .page-pill .long{display:none}
+  .page-pill .short{display:inline}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;transition-delay:0s !important;animation-duration:.01ms !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2.2"/><path d="M15.5 8.5V6.2A2.2 2.2 0 0 0 13.3 4H6.2A2.2 2.2 0 0 0 4 6.2v7.1a2.2 2.2 0 0 0 2.2 2.2h2.3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.2 2.9 19.5h18.2L12 4.2Z"/><path d="M12 10v4.4"/><path d="M12 17.3v.1"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.6"/><path d="m7.5 9.8 3 2.6-3 2.6"/><path d="M13 15h4"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 18.5V5.8"/><path d="m6.5 11.2 5.5-5.5 5.5 5.5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></symbol>
+  <symbol id="i-typical" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" stroke-dasharray="3.2 2.8"/></symbol>
+  <symbol id="i-export" viewBox="0 0 24 24"><path d="M7 3.8h6.8l4.2 4.2v11.5a.7.7 0 0 1-.7.7H7a.7.7 0 0 1-.7-.7V4.5a.7.7 0 0 1 .7-.7Z"/><path d="M13.6 3.8v4.4H18"/></symbol>
+  <symbol id="i-wait" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><path d="M12 8v4.3l2.8 1.7"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12s3.4-6.3 9.2-6.3 9.2 6.3 9.2 6.3-3.4 6.3-9.2 6.3S2.8 12 2.8 12Z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+</svg>
+
+<div class="wrap">
+  <div class="topbar">
+    <span class="wordmark">ai-co2</span>
+    <div class="topbar-right">
+      <span class="topbar-meta">Style board · 29 Sep 2026</span>
+      <div class="seg" role="radiogroup" aria-label="Accent colour">
+        <button type="button" role="radio" aria-checked="true" data-accent-set="lime"><span class="dot" style="background:#C8F04B"></span>Lime</button>
+        <button type="button" role="radio" aria-checked="false" data-accent-set="aqua"><span class="dot" style="background:#5EE6C8"></span>Aqua</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="intro">
+    <h1>How ai-co2 could look</h1>
+    <div class="intro-text">
+      <p class="lede">Inspired by the Improvability AI Emissions Tracker. Our own: Schibsted Grotesk, and an accent that only marks your data.</p>
+      <p class="meta">Flip any toggle and every range moves, the pinned bars too. Example numbers from the plan; the ChatGPT toggles are illustrative.</p>
+    </div>
+  </header>
+</div>
+
+<main>
+  <section class="sec wrap" id="result" aria-labelledby="h-result" style="padding-top:0">
+    <div class="sec-head">
+      <h2 id="h-result">The result</h2>
+      <p>Three ways to draw the same range. They share one set of numbers and toggles.</p>
+    </div>
+
+    <figure>
+      <div class="plate plate--lead" id="lead-plate">
+        <div class="lead-top">
+          <div class="readout">
+            <p class="range"><span data-bind="p5">4</span>–<span data-bind="p95">34</span><span class="unit">kg</span></p>
+            <p class="range-sub">CO₂e from your AI use, 30 Aug – 29 Sep</p>
+            <p class="preview-tag"><svg class="i i-s" aria-hidden="true"><use href="#i-eye"/></svg>Preview: Sonnet for routine work</p>
+            <p class="likely">Most likely around <span class="hl"><span data-bind="mid">10</span> kg</span></p>
+            <p class="car">About as much as driving a new petrol car <span data-bind="carLo">20</span>–<span data-bind="carHi">210</span> km. Most likely around <span data-bind="carMid">60</span> km.</p>
+          </div>
+          <div class="habits">
+            <h3>Hidden work in ChatGPT</h3>
+            <p class="habits-note">Exports don’t show it, so it’s estimated on top. Switch off what you don’t use.</p>
+            <div data-toggles></div>
+          </div>
+        </div>
+        <div class="chart" data-widget="dots"></div>
+        <p class="chart-note">Each dot is one possible outcome out of 100.</p>
+      </div>
+      <figcaption><b>A · Dots, the lead.</b> Where the dots pile up is where your footprint most likely sits, and the hollow ones at the edges are the unlikely extremes. It shows uncertainty without asking anyone to read a chart.</figcaption>
+    </figure>
+
+    <div class="fig-row">
+      <figure>
+        <div class="plate plate--compact">
+          <p class="range range--m"><span data-bind="p5">4</span>–<span data-bind="p95">34</span><span class="unit">kg</span></p>
+          <p class="range-sub">CO₂e, last 30 days</p>
+          <div class="chart" data-widget="band"></div>
+        </div>
+        <figcaption><b>B · Band.</b> The plain version: a bar from the low end to the high end, with a pin at the most likely value. The pinned bars below use this shape.</figcaption>
+      </figure>
+      <figure>
+        <div class="plate plate--compact">
+          <p class="range range--m"><span data-bind="p5">4</span>–<span data-bind="p95">34</span><span class="unit">kg</span></p>
+          <p class="range-sub">CO₂e, last 30 days</p>
+          <div class="chart" data-widget="curve"></div>
+        </div>
+        <figcaption><b>C · Curve.</b> The same range as a hill. Calm and elegant, but it asks more of people who don’t read charts.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="pinned" aria-labelledby="h-pinned">
+    <div class="sec-head">
+      <h2 id="h-pinned">The pinned bar</h2>
+      <div>
+        <p>When the result scrolls out of view, a small copy takes over. Scroll inside a frame, flip a toggle further down, and watch it move.</p>
+        <p class="desk-note">On a narrow screen only the phone frames show.</p>
+      </div>
+    </div>
+
+    <div class="pin-variant">
+      <div class="fr-col fr-col--desk"><div class="frame frame--desk" data-frame="pill-desk"></div><p class="frame-label">Desktop</p></div>
+      <div class="fr-col"><div class="frame frame--phone" data-frame="pill-phone"></div><p class="frame-label">Phone</p></div>
+      <p class="fig-cap"><b>A · Floating pill.</b> Borrowed from the reference’s Compare button. It stays out of the way, and its outline lights up when the range changes.</p>
+    </div>
+    <div class="pin-variant">
+      <div class="fr-col fr-col--desk"><div class="frame frame--desk" data-frame="strip-desk"></div><p class="frame-label">Desktop</p></div>
+      <div class="fr-col"><div class="frame frame--phone" data-frame="strip-phone"></div><p class="frame-label">Phone</p></div>
+      <p class="fig-cap"><b>B · Top strip.</b> Calm, and always in the same place. The bar runs almost the full width, so small moves are easier to see.</p>
+    </div>
+    <div class="pin-variant">
+      <div class="fr-col fr-col--desk"><div class="frame frame--desk" data-frame="side-desk"></div><p class="frame-label">Desktop</p></div>
+      <div class="fr-col"><div class="frame frame--phone" data-frame="side-phone"></div><p class="frame-label">Phone</p></div>
+      <p class="fig-cap"><b>C · Side column.</b> On desktop the result never leaves: it sits beside everything you change. On a phone it shrinks into the header as you scroll.</p>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="card" aria-labelledby="h-card">
+    <div class="sec-head">
+      <h2 id="h-card">The Claude Code card</h2>
+      <p>Copy a prompt into Claude Code, paste the answer back. The card has three states. Try them, or paste an answer of your own.</p>
+    </div>
+    <div class="card-row">
+      <div>
+        <div class="state-bar">
+          <span>Show</span>
+          <div class="seg" role="radiogroup" aria-label="Card state">
+            <button type="button" role="radio" aria-checked="false" data-state-set="waiting">Waiting</button>
+            <button type="button" role="radio" aria-checked="true" data-state-set="checked">Checked</button>
+            <button type="button" role="radio" aria-checked="false" data-state-set="problem">Problem</button>
+          </div>
+        </div>
+        <article class="card cc" id="cc" data-state="checked" aria-labelledby="cc-title">
+          <header class="cc-head">
+            <span class="cc-icon"><svg class="i" aria-hidden="true"><use href="#i-terminal"/></svg></span>
+            <div>
+              <h3 id="cc-title">Claude Code</h3>
+              <p class="cc-sub">Your own Claude Code counts the last 30 days.</p>
+            </div>
+            <span class="chip" id="cc-chip"></span>
+          </header>
+          <ol class="steps">
+            <li class="step">
+              <span class="step-n" aria-hidden="true">1</span>
+              <div class="step-body">
+                <h4>Copy this prompt into Claude Code</h4>
+                <p>In the terminal or your IDE. Claude counts your usage without changing any file, and replies with a few lines of totals.</p>
+                <div class="prompt">
+<div class="prompt-body"><pre id="prompt-text">Count my Claude Code token use for the last 30 days, for ai-co2.
+This is read-only: don't create, change, move or delete any file.
+
+1. Run the Python script below exactly as it is.
+2. If Python 3 isn't installed, write your own code that follows
+   the same rules:
+   - read ~/.claude/projects/**/*.jsonl, including subagents/
+   - keep only entries from the last 30 days
+   - count each message once: match on message.id + requestId
+     and keep the entry with the highest output token count
+   - add the tokens up per model
+3. Reply with the result block only, exactly as printed.
+
+python3 - &lt;&lt;'EOF'
+import glob, json, os
+from collections import defaultdict
+from datetime import datetime, timedelta, timezone
+
+now = datetime.now(timezone.utc)
+since = now - timedelta(days=30)
+root = os.path.expanduser("~/.claude/projects")
+best = {}
+for path in glob.glob(os.path.join(root, "**", "*.jsonl"), recursive=True):
+    with open(path, encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            try:
+                e = json.loads(line)
+                m = e.get("message") or {}
+                u = m.get("usage") or {}
+                t = datetime.fromisoformat(e["timestamp"].replace("Z", "+00:00"))
+            except Exception:
+                continue
+            if not u or t &lt; since:
+                continue
+            key = (m.get("id"), e.get("requestId"))
+            old = best.get(key)
+            if old is None or u.get("output_tokens", 0) > old[1].get("output_tokens", 0):
+                best[key] = (m.get("model", "unknown"), u)
+
+totals = defaultdict(lambda: [0, 0, 0, 0])
+for model, u in best.values():
+    s = totals[model]
+    s[0] += u.get("input_tokens", 0)
+    s[1] += u.get("cache_creation_input_tokens", 0)
+    s[2] += u.get("cache_read_input_tokens", 0)
+    s[3] += u.get("output_tokens", 0)
+
+print(f"ai-co2 v1 | {since:%Y-%m-%d} to {now:%Y-%m-%d}")
+for model, s in sorted(totals.items()):
+    print(f"{model} | in {s[0]} | cache_write {s[1]} | cache_read {s[2]} | out {s[3]}")
+EOF</pre><span class="prompt-fade" aria-hidden="true"></span></div>
+                  <div class="prompt-actions">
+                    <button type="button" class="btn btn--primary" data-copy><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy prompt</span></button>
+                    <button type="button" class="btn btn--quiet" data-expand aria-expanded="false" aria-controls="prompt-text"><span>Show all</span></button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-n" aria-hidden="true">2</span>
+              <div class="step-body">
+                <h4><label for="answer">Paste Claude’s answer here</label></h4>
+                <textarea class="answer" id="answer" wrap="off" spellcheck="false" autocomplete="off" placeholder="Paste the whole reply. It starts with “ai-co2 v1”." aria-describedby="answer-msg"></textarea>
+                <p class="answer-msg" id="answer-msg" aria-live="polite"></p>
+                <div class="cc-sum" id="cc-sum"></div>
+              </div>
+            </li>
+          </ol>
+        </article>
+      </div>
+      <aside class="notes" aria-labelledby="h-notes">
+        <h3 id="h-notes">Why it looks like this</h3>
+        <ul>
+          <li>The whole prompt is one click away, so nobody pastes something they haven’t seen.</li>
+          <li>The answer is checked as you paste it: first the format, then whether the numbers are plausible.</li>
+          <li>A problem says what went wrong and what to do next.</li>
+          <li>The card stays in ink. The accent is kept for your numbers and the one main action.</li>
+        </ul>
+        <p class="draft">The prompt, the script and the answer format are drafts.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="tip" aria-labelledby="h-tip">
+    <div class="sec-head">
+      <h2 id="h-tip">A cut tip</h2>
+      <p>Picked from your own numbers, with the saving as a range. Preview it, and every bar on this page shows the difference, including the pinned one at the bottom.</p>
+    </div>
+    <article class="card tip">
+      <div class="tip-main">
+        <h3>Most of your footprint is Opus</h3>
+        <p>About 80% of your estimate comes from Opus 5.5. Using Sonnet for routine work, like tests, renames and small fixes, would save roughly <mark class="save"><span data-bind="saveLo">1</span>–<span data-bind="saveHi">5</span> kg a month</mark>.</p>
+        <p class="how"><b>How:</b> type <code>/model sonnet</code> before routine work, and <code>/model opus</code> when a task needs it.</p>
+      </div>
+      <div class="tip-side">
+        <div class="tv-row">
+          <span class="tv-label">Now</span>
+          <div class="chart" data-widget="band" data-opts="mini paper" data-src="now"></div>
+          <span class="tv-val"><span data-bind="nowLo">4</span>–<span data-bind="nowHi">34</span></span>
+        </div>
+        <div class="tv-row">
+          <span class="tv-label">With Sonnet</span>
+          <div class="chart" data-widget="band" data-opts="mini paper accent" data-src="after"></div>
+          <span class="tv-val"><span data-bind="afterLo">3</span>–<span data-bind="afterHi">29</span></span>
+        </div>
+        <div class="tv-axis bb--paper" aria-hidden="true"><span></span><div class="axis" data-axis="sparse"></div><span></span></div>
+        <div class="pv">
+          <div class="pv-text"><b id="pv-label">Preview on every bar</b><span>Shows the saving on the result and the pinned bar.</span></div>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="pv-label" data-preview><span class="knob"></span></button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="sec wrap" id="system" aria-labelledby="h-system">
+    <div class="sec-head">
+      <h2 id="h-system">Type and colour</h2>
+      <p>What’s kept from the reference, what’s changed, and the pieces everything above is built from.</p>
+    </div>
+    <div class="sys">
+      <div class="sys-block">
+        <h3>Kept from the reference</h3>
+        <ul class="list">
+          <li>Warm paper and navy-black ink.</li>
+          <li>Deep navy panels with a faint grid, for the moments that matter.</li>
+          <li>Heavy headings with tight spacing.</li>
+          <li>Figures in JetBrains Mono.</li>
+          <li>Rounded cards, pill buttons and a floating dark pill.</li>
+        </ul>
+      </div>
+      <div class="sys-block">
+        <h3>Changed</h3>
+        <ul class="list">
+          <li>Schibsted Grotesk for every word. The reference asks for Nohemi, which never loads, so visitors actually see Helvetica.</li>
+          <li>Lime instead of blue and cyan, used only for your data and the main action. Aqua is the quieter option, closer to the reference.</li>
+          <li>No gradient text, no glows, no small spaced-out labels above headings.</li>
+          <li>Glass only on the pinned bar, where it keeps text readable over the page.</li>
+        </ul>
+      </div>
+      <div class="sys-block">
+        <h3>Colour</h3>
+        <div class="swatches">
+          <div class="sw" style="--c:#FBFAF4"><i></i><span>Paper<small>#FBFAF4</small><em>The page</em></span></div>
+          <div class="sw" style="--c:#FFFEFA"><i></i><span>Card<small>#FFFEFA</small><em>Cards</em></span></div>
+          <div class="sw" style="--c:#0B1222"><i></i><span>Ink<small>#0B1222</small><em>Text and rules</em></span></div>
+          <div class="sw" style="--c:#4A5168"><i></i><span>Ink 2<small>#4A5168</small><em>Secondary text</em></span></div>
+          <div class="sw" style="--c:#0A1020"><i></i><span>Navy<small>#0A1020</small><em>Result panels</em></span></div>
+          <div class="sw" style="--c:var(--accent)"><i></i><span><span data-accent-name>Lime</span><small data-accent-hex>#C8F04B</small><em>Your data, main action</em></span></div>
+          <div class="sw" style="--c:#16794F"><i></i><span>Counted<small>#16794F</small><em>Success</em></span></div>
+          <div class="sw" style="--c:#B42318"><i></i><span>Needs a look<small>#B42318</small><em>Problems</em></span></div>
+        </div>
+      </div>
+      <div class="sys-block">
+        <h3>Type</h3>
+        <div class="type-row"><span class="who"><b>Schibsted Grotesk 800</b>Headings, set tight</span><span class="t-display">4–34 kg</span></div>
+        <div class="type-row"><span class="who"><b>Schibsted Grotesk 400</b>Everything you read</span><span class="t-body">Using Sonnet for routine work would save roughly 1–7 kg a month.</span></div>
+        <div class="type-row"><span class="who"><b>JetBrains Mono</b>Figures, counts and pasted answers</span><span class="t-mono">cache_read 548310227</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">ai-co2 style board. A draft for choosing a direction, not the final page.</footer>
+
+<div class="page-pill" id="page-pill" aria-hidden="true">
+  <div class="pill">
+    <span class="pill-range"><span data-bind="p5">4</span>–<span data-bind="p95">34</span><small>kg</small></span>
+    <span class="pill-mid"><span class="long">most likely&nbsp;</span><b data-bind="mid">10</b></span>
+    <div class="chart" data-widget="band" data-opts="mini"></div>
+    <button type="button" class="round-btn" data-top aria-label="Back to the result" tabindex="-1"><svg class="i" aria-hidden="true"><use href="#i-up"/></svg></button>
+    <span class="delta pin-delta"></span>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- the model behind the example ---------- */
+  const BASE = { p5: 3.7, mid: 9.8, p95: 34 };
+  const TOGGLES = [
+    { id: 'thinking', label: 'Thinking', src: 'Typical setting', kind: 'typical', factor: 0.82 },
+    { id: 'memory', label: 'Memory and hidden instructions', src: 'Typical setting', kind: 'typical', factor: 0.93 },
+    { id: 'search', label: 'Search results and files', src: 'Set from your export', kind: 'export', factor: 0.9 },
+  ];
+  const TIP = 0.84, KG_PER_KM = 0.16, XMAX = 50;
+  const state = { on: { thinking: true, memory: true, search: true }, preview: false };
+
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => mq.matches;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const scale = (v, f) => ({ p5: v.p5 * f, mid: v.mid * f, p95: v.p95 * f });
+  const current = () => scale(BASE, TOGGLES.reduce((f, t) => (state.on[t.id] ? f : f * t.factor), 1));
+  const snapshot = () => { const now = current(), after = scale(now, TIP); return { now, after, shown: state.preview ? after : now }; };
+  const EXTREME = scale(BASE, TOGGLES.reduce((f, t) => f * t.factor, 1) * TIP);
+  const pct = kg => `${(Math.max(0, Math.min(XMAX, kg)) / XMAX * 100).toFixed(3)}%`;
+  const span = v => `${((Math.min(XMAX, v.p95) - Math.max(0, v.p5)) / XMAX * 100).toFixed(3)}%`;
+
+  // A split log-normal through the 5th percentile, the most likely value and the 95th.
+  function invNorm(p) {
+    const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+    const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+    const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+    const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+    const lo = 0.02425;
+    if (p < lo) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - lo) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+  function quantile(v, p) {
+    const z = invNorm(p);
+    const s = Math.log(z < 0 ? v.mid / v.p5 : v.p95 / v.mid) / 1.6449;
+    return v.mid * Math.exp(z * s);
+  }
+
+  /* ---------- markup for the repeated parts ---------- */
+  let uid = 0;
+  const icon = (id, cls = '') => `<svg class="i ${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+  const toggleList = () => `<ul class="toggles">${TOGGLES.map(t => {
+    const id = `tg-${++uid}`;
+    return `<li class="tg"><div class="tg-text"><span class="tg-label" id="${id}">${t.label}</span><span class="tg-src">${icon(t.kind, 'i-s')}${t.src}</span></div><button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="${id}" data-toggle="${t.id}"><span class="knob"></span></button></li>`;
+  }).join('')}</ul>`;
+
+  function miniResult(kind, device) {
+    const side = kind === 'side' && device === 'desk';
+    return `<div class="mp-result plate" data-sentinel>
+      <p class="range range--s"><span data-bind="p5">4</span>–<span data-bind="p95">34</span><span class="unit">kg</span></p>
+      <p class="mp-likely">Most likely around <span class="hl"><span data-bind="mid">10</span> kg</span></p>
+      <div class="chart" data-widget="band" data-opts="mini${device === 'desk' && !side ? ' m' : ''}"></div>
+      ${side ? '<p class="side-note">Updates as you change anything on the left.</p>' : ''}
+    </div>`;
+  }
+  function miniSections() {
+    return `
+      <section class="mp-sec"><h4>Your habits</h4><p class="mp-note">Hidden work in ChatGPT, estimated on top of your export.</p>${toggleList()}</section>
+      <section class="mp-sec"><h4>Ways to cut</h4>
+        <div class="mp-card"><b>Most of your footprint is Opus.</b> Sonnet for routine work would save roughly <mark class="save"><span data-bind="saveLo">1</span>–<span data-bind="saveHi">5</span> kg</mark> a month.</div>
+        <div class="mp-card"><b>Long conversations get re-read.</b> Starting fresh with <code>/clear</code> between tasks cuts the biggest unknown in your estimate.</div>
+      </section>
+      <section class="mp-sec"><h4>Contribute</h4><p class="mp-note">Funding removal of your <span data-bind="p5">4</span>–<span data-bind="p95">34</span> kg would cost about €<span data-bind="eurLo">0.37</span>–<span data-bind="eurHi">16</span>, depending on the method. Example prices from the plan, checked 28 Sep 2026.</p>
+        <ul class="mp-list"><li><b>Lasting removal</b><span>Climeworks · from 10 kg</span></li><li><b>EU avoidance</b><span>ForTomorrow · €65–75 a tonne</span></li><li><b>Donation fund</b><span>Effektiv Spenden · any amount</span></li></ul>
+      </section>
+      <section class="mp-sec mp-fold"><span>How it’s calculated</span>${icon('chevron')}</section>`;
+  }
+  function miniPage(kind, device) {
+    const top = `<div class="mp-top"><span class="mp-logo">ai-co2</span><span class="mp-hint">Scroll down${icon('chevron', 'i-s')}</span></div>`;
+    if (kind === 'side' && device === 'desk') {
+      return `<div class="mp">${top}<div class="mp--side"><div class="mp-main">${miniSections()}</div><div class="mp-aside">${miniResult(kind, device)}</div></div></div>`;
+    }
+    if (kind === 'side') return `<div class="mp"><div class="mp-sticky">${miniResult(kind, device)}</div>${top}${miniSections()}</div>`;
+    return `<div class="mp">${top}${miniResult(kind, device)}${miniSections()}</div>`;
+  }
+  function pinMarkup(kind) {
+    if (kind === 'pill') return `<div class="pin pin--pill" aria-hidden="true"><div class="pill">
+        <span class="pill-range"><span data-bind="p5">4</span>–<span data-bind="p95">34</span><small>kg</small></span>
+        <span class="pill-mid"><span class="long">most likely&nbsp;</span><b data-bind="mid">10</b></span>
+        <div class="chart" data-widget="band" data-opts="mini"></div>
+        <button type="button" class="round-btn" data-top aria-label="Back to the result" tabindex="-1">${icon('up')}</button>
+        <span class="delta pin-delta"></span></div></div>`;
+    if (kind === 'strip') return `<div class="pin pin--strip" aria-hidden="true"><div class="strip">
+        <span class="strip-range"><span data-bind="p5">4</span>–<span data-bind="p95">34</span><small>kg</small></span>
+        <span class="strip-mid"><span class="long">most likely&nbsp;</span><b data-bind="mid">10</b><span class="delta pin-delta"></span></span>
+        <div class="chart" data-widget="band" data-opts="mini paper"></div>
+        <button type="button" class="round-btn" data-top aria-label="Back to the result" tabindex="-1">${icon('up')}</button></div></div>`;
+    return '';
+  }
+
+  $$('[data-frame]').forEach(fr => {
+    const [kind, device] = fr.dataset.frame.split('-');
+    fr.dataset.kind = kind;
+    const bar = device === 'desk' ? '<div class="fr-bar" aria-hidden="true"><i></i><i></i><i></i><span>ai-co2</span></div>' : '';
+    fr.innerHTML = `${bar}<div class="fr-scroll">${miniPage(kind, device)}</div>${pinMarkup(kind)}`;
+  });
+  $$('[data-toggles]').forEach(el => { el.innerHTML = toggleList(); });
+
+  /* ---------- widgets ---------- */
+  function drawAxis(axis, ticks = [0, 10, 20, 30, 40, 50]) {
+    axis.innerHTML = ticks.map(k => `<span class="tick" style="left:${pct(k)}"><i></i><em>${k}${k === XMAX ? ' kg' : ''}</em></span>`).join('');
+  }
+  function showDelta(el, diff) {
+    if (!el || Math.abs(diff) < 0.5) return;
+    el.textContent = `${diff < 0 ? '−' : '+'}${Math.max(1, Math.round(Math.abs(diff)))} kg`;
+    el.classList.remove('is-on'); void el.offsetWidth; el.classList.add('is-on');
+    clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('is-on'), 2600);
+  }
+  // A ghost marks where the range was: it fades after a change, and holds while a preview is on.
+  function setGhost(g, at, held, apply) {
+    clearTimeout(g._t);
+    if (!at) { g.classList.remove('is-on'); return; }
+    g.classList.add('no-move'); apply(g, at); void g.offsetWidth; g.classList.remove('no-move');
+    g.classList.add('is-on');
+    if (!held) g._t = setTimeout(() => g.classList.remove('is-on'), reduced() ? 2600 : 1400);
+  }
+  const moved = (a, b) => a && (Math.abs(a.mid - b.mid) > 0.05 || Math.abs(a.p95 - b.p95) > 0.05);
+
+  function Dots(el) {
+    const N = 100;
+    el.classList.add('dp');
+    el.innerHTML = `
+      <div class="dp-area">
+        <div class="dp-grid"></div>
+        <div class="dp-ghost"></div>
+        <div class="dp-mid"><span class="dp-mid-label">most likely <b data-bind="mid">10</b> kg<span class="delta"></span></span></div>
+        <div class="dp-dots"></div>
+      </div>
+      <div class="axis"></div>
+      <div class="dp-foot"><div class="dp-bracket"><span class="dp-bracket-ghost"></span><span class="dp-bracket-line"></span><span class="dp-bracket-label">90 of 100 land here: <b data-bind="p5">4</b>–<b data-bind="p95">34</b> kg</span></div></div>`;
+    const area = $('.dp-area', el), wrap = $('.dp-dots', el), mid = $('.dp-mid', el), ghost = $('.dp-ghost', el), label = $('.dp-mid-label', el);
+    const line = $('.dp-bracket-line', el), bghost = $('.dp-bracket-ghost', el), blabel = $('.dp-bracket-label', el), delta = $('.delta', el);
+    drawAxis($('.axis', el));
+    $('.dp-grid', el).innerHTML = [10, 20, 30, 40].map(k => `<span style="left:${pct(k)}"></span>`).join('');
+    const dots = Array.from({ length: N }, (_, i) => {
+      const d = document.createElement('span');
+      d.className = `dp-dot${i < 5 || i >= 95 ? ' tail' : ''}`;
+      d.style.transitionDelay = `${Math.round(i * 2.4)}ms`;
+      wrap.appendChild(d);
+      return d;
+    });
+    let W = 0, D = 12, S = 15, G = 24, last = BASE;
+    // Outcomes above the end of the scale stack in a gutter past it, so they never pile up on 50.
+    function stacks(v) {
+      const binKg = S / (W / XMAX), cols = new Map(), pos = [];
+      let max = 0, over = 0;
+      for (let i = 0; i < N; i++) {
+        const q = Math.max(0, quantile(v, (i + 0.5) / N));
+        if (q > XMAX) { pos.push([W + G / 2, over * S]); over += 1; max = Math.max(max, over); continue; }
+        const c = Math.round(q / binKg), s = cols.get(c) || 0;
+        cols.set(c, s + 1); max = Math.max(max, s + 1);
+        pos.push([c * S, s * S]);
+      }
+      return { pos, max };
+    }
+    function measure() {
+      const outer = el.clientWidth || 600;
+      D = outer < 480 ? 8 : outer < 760 ? 10 : 12;
+      S = D + (outer < 480 ? 2 : 3);
+      G = D + 14;
+      el.style.setProperty('--gutter', `${G}px`);
+      W = area.clientWidth || 600;
+      const max = Math.max(stacks(EXTREME).max, stacks(BASE).max);
+      area.style.height = `${max * S + 26}px`;
+      dots.forEach(d => { d.style.width = d.style.height = `${D}px`; });
+    }
+    function place(v, prev, base) {
+      last = v;
+      const { pos } = stacks(v), k = W / XMAX;
+      dots.forEach((d, i) => { d.style.transform = `translate3d(${(pos[i][0] - D / 2).toFixed(1)}px,${(-pos[i][1]).toFixed(1)}px,0)`; });
+      const mx = v.mid * k;
+      mid.style.transform = `translateX(${mx.toFixed(1)}px)`;
+      // The label sits right of the line, flips left when it would run off the end, and never leaves the chart.
+      const lw = label.offsetWidth;
+      let off = 10;
+      if (mx + off + lw > W + G) off = -(10 + lw);
+      if (mx + off < 0) off = -mx;
+      label.style.left = `${off}px`;
+      line.style.left = pct(v.p5); line.style.width = span(v);
+      blabel.style.left = pct((v.p5 + v.p95) / 2);
+      const was = base || (moved(prev, v) ? prev : null);
+      setGhost(ghost, was, !!base, (g, at) => { g.style.transform = `translateX(${(at.mid * k).toFixed(1)}px)`; });
+      setGhost(bghost, was, !!base, (g, at) => { g.style.left = pct(at.p5); g.style.width = span(at); });
+      if (prev) showDelta(delta, v.mid - prev.mid);
+    }
+    measure(); place(BASE);
+    new ResizeObserver(() => {
+      if (Math.abs(area.clientWidth - W) < 1) return;
+      el.classList.add('no-anim'); measure(); place(last); void el.offsetWidth; el.classList.remove('no-anim');
+    }).observe(area);
+    return { el, update: place };
+  }
+
+  function Band(el, o) {
+    el.classList.add('bb');
+    if (o.mini) el.classList.add('bb--mini');
+    if (o.paper) el.classList.add('bb--paper');
+    if (o.accent) el.classList.add('bb--accent');
+    if (o.m) el.classList.add('bb--m');
+    const labels = !o.mini;
+    el.innerHTML = `<div class="bb-area">
+        ${labels ? '<span class="bb-mid">most likely <b data-bind="mid">10</b> kg<span class="delta"></span></span><span class="bb-lab bb-lab--lo" data-bind="p5">4</span><span class="bb-lab bb-lab--hi" data-bind="p95">34</span>' : ''}
+        <div class="bb-track"><span class="bb-ghost"></span><span class="bb-band"></span><span class="bb-pin"></span></div>
+      </div>${labels && !o.noaxis ? '<div class="axis"></div>' : ''}`;
+    if (labels && !o.noaxis) drawAxis($('.axis', el));
+    const band = $('.bb-band', el), pin = $('.bb-pin', el), ghost = $('.bb-ghost', el);
+    const lo = $('.bb-lab--lo', el), hi = $('.bb-lab--hi', el), midL = $('.bb-mid', el), delta = $('.delta', el);
+    const put = (node, v) => { node.style.left = pct(v.p5); node.style.width = span(v); };
+    function place(v, prev, base) {
+      put(band, v); pin.style.left = pct(v.mid);
+      if (labels) {
+        lo.style.left = pct(v.p5); hi.style.left = pct(v.p95); midL.style.left = pct(v.mid);
+        midL.classList.toggle('anchor-l', v.mid / XMAX < 0.3);
+      }
+      setGhost(ghost, base || (moved(prev, v) ? prev : null), !!base, put);
+      if (prev && delta) showDelta(delta, v.mid - prev.mid);
+    }
+    place(o.src === 'after' ? scale(BASE, TIP) : BASE);
+    return { el, update: place, src: o.src };
+  }
+
+  const KS = 200, KX = 140;
+  function densities(v) {
+    const h = 0.045 * (v.p95 - v.p5) + 0.3, qs = new Float64Array(KS), ys = new Float64Array(KX + 1);
+    for (let i = 0; i < KS; i++) qs[i] = quantile(v, (i + 0.5) / KS);
+    const norm = 1 / (KS * h * Math.sqrt(2 * Math.PI));
+    for (let j = 0; j <= KX; j++) {
+      const x = j / KX * XMAX; let s = 0;
+      for (let i = 0; i < KS; i++) { const z = (x - qs[i]) / h; if (z > -6 && z < 6) s += Math.exp(-0.5 * z * z); }
+      ys[j] = s * norm;
+    }
+    return ys;
+  }
+  const YMAX = Math.max(...densities(EXTREME)) * 1.06;
+  let cvId = 0;
+  function Curve(el) {
+    const id = `cv-clip-${++cvId}`;
+    el.classList.add('cv');
+    el.innerHTML = `<div class="cv-area">
+        <span class="cv-mid-label">most likely <b data-bind="mid">10</b> kg<span class="delta"></span></span>
+        <svg class="cv-svg" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
+          <defs><clipPath id="${id}"><rect class="cv-clip" x="0" y="-10" width="0" height="220"/></clipPath></defs>
+          <path class="cv-out"/><path class="cv-in" clip-path="url(#${id})"/><path class="cv-ghost"/><path class="cv-line"/>
+          <line class="cv-mid" x1="0" x2="0" y1="0" y2="200"/>
+        </svg></div><div class="axis"></div>`;
+    drawAxis($('.axis', el));
+    const out = $('.cv-out', el), inn = $('.cv-in', el), stroke = $('.cv-line', el), ghost = $('.cv-ghost', el);
+    const clip = $('.cv-clip', el), midLine = $('.cv-mid', el), label = $('.cv-mid-label', el), delta = $('.delta', el);
+    function path(v) {
+      const ys = densities(v);
+      let d = '';
+      for (let j = 0; j <= KX; j++) d += `${j ? 'L' : 'M'}${(j / KX * 1000).toFixed(1)},${(200 - Math.min(1, ys[j] / YMAX) * 192).toFixed(1)}`;
+      return d;
+    }
+    function draw(v) {
+      const d = path(v), area = `M0,200 ${d.replace(/^M/, 'L')} L1000,200 Z`;
+      out.setAttribute('d', area); inn.setAttribute('d', area); stroke.setAttribute('d', d);
+      clip.setAttribute('x', (v.p5 / XMAX * 1000).toFixed(1));
+      clip.setAttribute('width', ((v.p95 - v.p5) / XMAX * 1000).toFixed(1));
+      const mx = (v.mid / XMAX * 1000).toFixed(1);
+      midLine.setAttribute('x1', mx); midLine.setAttribute('x2', mx);
+      label.style.left = pct(v.mid);
+    }
+    let cur = BASE, raf = 0;
+    function place(v, prev, base) {
+      const from = cur, g = base || (moved(prev, v) ? prev : null);
+      cancelAnimationFrame(raf); clearTimeout(ghost._t);
+      if (g) {
+        ghost.setAttribute('d', path(g)); ghost.classList.add('is-on');
+        if (!base) ghost._t = setTimeout(() => ghost.classList.remove('is-on'), reduced() ? 2600 : 1400);
+      } else ghost.classList.remove('is-on');
+      if (prev) showDelta(delta, v.mid - prev.mid);
+      if (!prev || reduced()) { cur = v; draw(v); return; }
+      const t0 = performance.now();
+      const tick = now => {
+        const t = Math.min(1, (now - t0) / 750), e = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        cur = { p5: from.p5 + (v.p5 - from.p5) * e, mid: from.mid + (v.mid - from.mid) * e, p95: from.p95 + (v.p95 - from.p95) * e };
+        draw(cur);
+        if (t < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }
+    draw(BASE);
+    return { el, update: place };
+  }
+
+  const widgets = $$('[data-widget]').map(el => {
+    const opts = (el.dataset.opts || '').split(/\s+/);
+    const kind = el.dataset.widget;
+    if (kind === 'dots') return Dots(el);
+    if (kind === 'curve') return Curve(el);
+    return Band(el, { mini: opts.includes('mini'), m: opts.includes('m'), paper: opts.includes('paper'), accent: opts.includes('accent'), noaxis: opts.includes('noaxis'), src: el.dataset.src });
+  });
+  $$('[data-axis]').forEach(a => drawAxis(a, a.dataset.axis === 'sparse' ? [0, 25, 50] : undefined));
+  const described = widgets.filter(w => !w.el.classList.contains('bb--mini'));
+  described.forEach(w => w.el.setAttribute('role', 'img'));
+
+  /* ---------- numbers in the text ---------- */
+  const kg = x => String(Math.round(x));
+  const km = x => String(Math.round(x / KG_PER_KM / 10) * 10);
+  const eur = x => (x < 1 ? x.toFixed(2) : String(Math.round(x)));
+  function texts(v, now) {
+    const save = scale(now, 1 - TIP), after = scale(now, TIP);
+    return {
+      p5: kg(v.p5), mid: kg(v.mid), p95: kg(v.p95),
+      carLo: km(v.p5), carMid: km(v.mid), carHi: km(v.p95),
+      saveLo: String(Math.max(1, Math.round(save.p5))), saveHi: String(Math.max(1, Math.round(save.p95))),
+      nowLo: kg(now.p5), nowHi: kg(now.p95), afterLo: kg(after.p5), afterHi: kg(after.p95),
+      eurLo: eur(v.p5 * 0.1), eurHi: eur(v.p95 * 0.48),
+    };
+  }
+  const binds = $$('[data-bind]');
+  function writeTexts(v, now) {
+    const t = texts(v, now);
+    for (const el of binds) { const s = t[el.dataset.bind]; if (s !== undefined && el.textContent !== s) el.textContent = s; }
+  }
+  let raf = 0;
+  function tweenTexts(fromV, toV, fromN, toN) {
+    cancelAnimationFrame(raf);
+    if (reduced()) { writeTexts(toV, toN); return; }
+    const t0 = performance.now();
+    const mix = (a, b, e) => ({ p5: a.p5 + (b.p5 - a.p5) * e, mid: a.mid + (b.mid - a.mid) * e, p95: a.p95 + (b.p95 - a.p95) * e });
+    const tick = now => {
+      const t = Math.min(1, (now - t0) / 700), e = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      writeTexts(mix(fromV, toV, e), mix(fromN, toN, e));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+  }
+  const describe = v => `Likely range ${kg(v.p5)} to ${kg(v.p95)} kilograms of CO2e, most likely around ${kg(v.mid)}.`;
+
+  /* ---------- one change moves everything ---------- */
+  let last = snapshot();
+  function commit() {
+    const next = snapshot(), prev = last;
+    last = next;
+    for (const w of widgets) {
+      const key = w.src || 'shown';
+      w.update(next[key], prev[key], key === 'shown' && state.preview ? next.now : null);
+    }
+    tweenTexts(prev.shown, next.shown, prev.now, next.now);
+    $$('[data-toggle]').forEach(b => b.setAttribute('aria-checked', String(state.on[b.dataset.toggle])));
+    $$('[data-preview]').forEach(b => b.setAttribute('aria-checked', String(state.preview)));
+    document.body.classList.toggle('is-preview', state.preview);
+    described.forEach(w => w.el.setAttribute('aria-label', describe(w.src === 'now' ? next.now : w.src === 'after' ? next.after : next.shown)));
+    $$('.pill, .strip').forEach(p => {
+      showDelta($('.pin-delta', p), next.shown.mid - prev.shown.mid);
+      p.classList.remove('flash'); void p.offsetWidth; p.classList.add('flash');
+      clearTimeout(p._t); p._t = setTimeout(() => p.classList.remove('flash'), 1100);
+    });
+    $('#live').textContent = `Estimate updated. ${describe(next.shown)}`;
+  }
+  writeTexts(last.shown, last.now);
+  described.forEach(w => w.el.setAttribute('aria-label', describe(w.src === 'now' ? last.now : w.src === 'after' ? last.after : last.shown)));
+
+  /* ---------- pinned bars ---------- */
+  $$('[data-frame]').forEach(fr => {
+    const scroller = $('.fr-scroll', fr);
+    if (fr.dataset.kind === 'side') {
+      if (fr.classList.contains('frame--phone')) scroller.addEventListener('scroll', () => fr.classList.toggle('is-compact', scroller.scrollTop > 24), { passive: true });
+      return;
+    }
+    const pin = $('.pin', fr), btn = $('[data-top]', fr);
+    new IntersectionObserver(([e]) => {
+      const past = !e.isIntersecting && e.boundingClientRect.top < e.rootBounds.top;
+      fr.classList.toggle('is-pinned', past);
+      pin.setAttribute('aria-hidden', String(!past));
+      btn.tabIndex = past ? 0 : -1;
+    }, { root: scroller, threshold: 0 }).observe($('[data-sentinel]', fr));
+  });
+  const pagePill = $('#page-pill'), pageBtn = $('[data-top]', pagePill);
+  // The page pill steps aside over the frames (they have their own) and over the card, so it never covers a message.
+  let leadOut = false, pinnedIn = false, cardIn = false;
+  const syncPagePill = () => {
+    const on = leadOut && !pinnedIn && !cardIn;
+    pagePill.classList.toggle('is-on', on);
+    pagePill.setAttribute('aria-hidden', String(!on));
+    pageBtn.tabIndex = on ? 0 : -1;
+  };
+  new IntersectionObserver(([e]) => { leadOut = !e.isIntersecting && e.boundingClientRect.top < 0; syncPagePill(); }).observe($('#lead-plate'));
+  new IntersectionObserver(([e]) => { pinnedIn = e.isIntersecting; syncPagePill(); }).observe($('#pinned'));
+  new IntersectionObserver(([e]) => { cardIn = e.isIntersecting; syncPagePill(); }).observe($('#card'));
+
+  /* ---------- Claude Code card ---------- */
+  const SAMPLE = [
+    'ai-co2 v1 | 2026-08-30 to 2026-09-29',
+    'claude-opus-5-5 | in 2184390 | cache_write 21662104 | cache_read 548310227 | out 4106552',
+    'claude-sonnet-5-5 | in 911204 | cache_write 8904117 | cache_read 172556093 | out 1380961',
+    'claude-haiku-4-5 | in 1002387 | cache_write 1240008 | cache_read 18771460 | out 402113',
+  ].join('\n');
+  const PROSE = 'Here’s your Claude Code usage for the last 30 days:\n\n- Opus 5.5: about 576 million tokens, mostly cache reads\n- Sonnet 5.5: about 184 million tokens\n- Haiku 4.5: about 21 million tokens\n\nWant a breakdown by project?';
+  const cc = $('#cc'), ta = $('#answer'), msg = $('#answer-msg'), chip = $('#cc-chip'), sum = $('#cc-sum');
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const day = s => { const [, m, d] = s.split('-').map(Number); return `${d} ${MONTHS[m - 1]}`; };
+  const bigTokens = n => (n >= 1e9 ? `${(n / 1e9).toFixed(2)} billion` : n >= 1e6 ? `${Math.round(n / 1e6)} million` : n.toLocaleString('en'));
+  const niceModel = m => { const x = m.match(/^claude-([a-z]+)-(\d+)-(\d+)/); return x ? `${x[1][0].toUpperCase()}${x[1].slice(1)} ${x[2]}.${x[3]}` : m; };
+  const classWeight = m => (/opus|fable/i.test(m) ? 1 : /haiku|mini|nano|lite/i.test(m) ? 0.1 : 0.6);
+
+  function parse(text) {
+    const lines = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    if (!lines.length) return { state: 'waiting' };
+    const head = lines[0].match(/^ai-co2 v1 \| (\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2})$/);
+    if (!head) return { state: 'problem', text: /token/i.test(text) ? 'This looks like Claude’s own summary, not the answer block. Ask Claude to “reply with the result block only”, then paste that.' : 'This doesn’t look like the ai-co2 answer, which starts with “ai-co2 v1”. Copy Claude’s whole reply and paste it again.' };
+    const rows = [];
+    for (let i = 1; i < lines.length; i++) {
+      const m = lines[i].match(/^([\w.-]+) \| in (\d+) \| cache_write (\d+) \| cache_read (\d+) \| out (\d+)$/);
+      if (!m) return { state: 'problem', text: `Line ${i + 1} doesn’t match the format. Each model line looks like “model | in … | cache_write … | cache_read … | out …”.` };
+      rows.push({ model: m[1], in: +m[2], cw: +m[3], cr: +m[4], out: +m[5] });
+    }
+    if (!rows.length) return { state: 'problem', text: 'The answer has no model lines. Run the prompt again and paste the whole reply.' };
+    const days = Math.round((Date.parse(head[2]) - Date.parse(head[1])) / 864e5);
+    if (!(days >= 28 && days <= 31)) return { state: 'problem', text: `These dates cover ${days} days. Run the prompt again so the count covers the last 30 days.` };
+    const big = rows.find(r => r.in + r.cw + r.cr + r.out > 2e10);
+    if (big) return { state: 'problem', text: `The numbers for ${niceModel(big.model)} are too large for one person’s 30 days. Run the prompt again and paste the answer unchanged.` };
+    return { state: 'checked', from: head[1], to: head[2], rows };
+  }
+  function summary(r) {
+    const rows = r.rows.map(x => ({ ...x, tok: x.in + x.cw + x.cr + x.out, w: (x.out + (x.in + x.cw) * 0.15 + x.cr * 0.015) * classWeight(x.model) })).sort((a, b) => b.w - a.w);
+    const W = rows.reduce((s, x) => s + x.w, 0), T = rows.reduce((s, x) => s + x.tok, 0);
+    return `<p class="sum-line">${icon('check', 'i-s')}<span>${rows.length} ${rows.length === 1 ? 'model' : 'models'} · ${day(r.from)} – ${day(r.to)} · ${bigTokens(T)} tokens. The numbers look plausible.</span></p>
+      <table class="models"><thead><tr><th scope="col">Model</th><th scope="col" class="r">Tokens</th><th scope="col">Share of the estimate</th></tr></thead><tbody>${rows.map(x => {
+        const share = x.w / W * 100;
+        return `<tr><td>${niceModel(x.model)}</td><td class="r num">${(x.tok / 1e6).toFixed(1)}M</td><td><span class="share"><span class="share-bar"><i style="width:${Math.max(1, share).toFixed(1)}%"></i></span><span class="num">${share < 1 ? '&lt;1' : Math.round(share)}%</span></span></td></tr>`;
+      }).join('')}</tbody></table>`;
+  }
+  const CHIPS = {
+    waiting: `${icon('wait', 'i-s')}Waiting for the answer`,
+    checked: `${icon('check', 'i-s')}Counted`,
+    problem: `${icon('alert', 'i-s')}Needs a look`,
+  };
+  function evaluate() {
+    const r = parse(ta.value);
+    cc.dataset.state = r.state;
+    chip.className = `chip chip--${r.state}`;
+    chip.innerHTML = CHIPS[r.state];
+    msg.innerHTML = r.state === 'problem' ? `${icon('alert', 'i-s')}<span>${r.text}</span>` : r.state === 'waiting' ? '<span>The page reads the answer here in your browser. Nothing is uploaded.</span>' : '';
+    sum.innerHTML = r.state === 'checked' ? summary(r) : '';
+    $$('[data-state-set]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.stateSet === r.state)));
+  }
+  ta.addEventListener('input', () => { clearTimeout(ta._t); ta._t = setTimeout(evaluate, 120); });
+  ta.value = SAMPLE; evaluate();
+
+  const promptText = $('#prompt-text').textContent;
+  async function copyPrompt(btn) {
+    let ok = false;
+    try { await navigator.clipboard.writeText(promptText); ok = true; } catch (_) {
+      const t = document.createElement('textarea');
+      t.value = promptText; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { ok = document.execCommand('copy'); } catch (__) { ok = false; }
+      t.remove();
+    }
+    const label = $('span', btn), use = $('use', btn);
+    label.textContent = ok ? 'Copied' : 'Couldn’t copy. Select the text above instead';
+    use.setAttribute('href', ok ? '#i-check' : '#i-alert');
+    clearTimeout(btn._t);
+    btn._t = setTimeout(() => { label.textContent = 'Copy prompt'; use.setAttribute('href', '#i-copy'); }, 2200);
+  }
+
+  /* ---------- accent ---------- */
+  function setAccent(name) {
+    document.documentElement.dataset.accent = name;
+    $$('[data-accent-set]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.accentSet === name)));
+    $$('[data-accent-name]').forEach(n => { n.textContent = name === 'aqua' ? 'Aqua' : 'Lime'; });
+    $$('[data-accent-hex]').forEach(n => { n.textContent = name === 'aqua' ? '#5EE6C8' : '#C8F04B'; });
+    try { localStorage.setItem('ai-co2-board-accent', name); } catch (_) { /* storage can be blocked */ }
+  }
+  try { const saved = localStorage.getItem('ai-co2-board-accent'); if (saved === 'aqua') setAccent('aqua'); } catch (_) { /* storage can be blocked */ }
+
+  /* ---------- input ---------- */
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-toggle]');
+    if (t) { state.on[t.dataset.toggle] = !state.on[t.dataset.toggle]; commit(); return; }
+    if (e.target.closest('[data-preview]')) { state.preview = !state.preview; commit(); return; }
+    const up = e.target.closest('[data-top]');
+    if (up) {
+      const behavior = reduced() ? 'auto' : 'smooth';
+      const sc = up.closest('.frame') && $('.fr-scroll', up.closest('.frame'));
+      if (sc) sc.scrollTo({ top: 0, behavior }); else $('#lead-plate').scrollIntoView({ behavior, block: 'center' });
+      return;
+    }
+    const a = e.target.closest('[data-accent-set]');
+    if (a) { setAccent(a.dataset.accentSet); return; }
+    const s = e.target.closest('[data-state-set]');
+    if (s) { ta.value = s.dataset.stateSet === 'checked' ? SAMPLE : s.dataset.stateSet === 'problem' ? PROSE : ''; evaluate(); return; }
+    const c = e.target.closest('[data-copy]');
+    if (c) { copyPrompt(c); return; }
+    const x = e.target.closest('[data-expand]');
+    if (x) {
+      const open = x.closest('.prompt').classList.toggle('is-open');
+      x.setAttribute('aria-expanded', String(open));
+      $('span', x).textContent = open ? 'Show less' : 'Show all';
+    }
+  });
+  // Arrow keys move through the small segmented controls.
+  document.addEventListener('keydown', e => {
+    const g = e.target.closest('[role="radiogroup"]');
+    if (!g || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+    const items = $$('[role="radio"]', g), i = items.indexOf(e.target.closest('[role="radio"]'));
+    if (i < 0) return;
+    e.preventDefault();
+    const n = items[(i + (e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 1) + items.length) % items.length];
+    n.focus(); n.click();
+  });
+})();
+</script>
+</body>
+</html>

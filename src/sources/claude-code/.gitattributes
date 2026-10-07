@@ -1,0 +1,4 @@
+# The prompt carries count-tokens.py byte for byte, so its line ends must not change on checkout.
+count-tokens.py text eol=lf
+count-tokens.mjs text eol=lf
+fixtures/*.json text eol=lf

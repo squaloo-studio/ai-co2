@@ -1,0 +1,535 @@
+/* ---------- ways to cut ---------- */
+.tips {
+  padding: 4px 32px;
+}
+.tip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 40px;
+  align-items: start;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+.tip:first-child {
+  border-top: 0;
+}
+.tip > div {
+  min-width: 0;
+}
+.tip h3 {
+  font-size: 24px;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.tip p {
+  margin-top: 10px;
+  max-width: 62ch;
+  color: var(--ink-2);
+}
+.tip .how {
+  font-size: 15.5px;
+}
+.tip .how b {
+  color: var(--ink);
+}
+.tip-side {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  justify-items: end;
+  min-width: 320px;
+  padding-top: 4px;
+}
+.pv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+/* The two small bars: the range now, and with this tip alone.
+   The label and the value each have a fixed column, wide enough for the longest label ("Shorter answers")
+   and for a value like "0.57–6.2 kg". So every tip draws its bars on the same track: same start, same
+   end, same length, and the same range stands at the same place from tip to tip. */
+.tv {
+  --tv-label: 104px;
+  --tv-value: 92px;
+  display: grid;
+  grid-template-columns: var(--tv-label) minmax(0, 1fr) minmax(var(--tv-value), max-content);
+  gap: 4px 10px;
+  align-items: center;
+  width: 320px;
+  max-width: 100%;
+}
+.tv-row {
+  display: contents;
+}
+.tv-label {
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.tv-val {
+  color: var(--ink-2);
+  font: 500 12.5px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+.tips-none {
+  padding: 28px 0;
+  max-width: 62ch;
+  color: var(--ink-2);
+}
+
+/* ---------- three ways to contribute ---------- */
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.opt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  min-width: 0;
+  padding: 28px;
+  border-left: 1px solid var(--line);
+}
+.opt:nth-child(3n + 1) {
+  border-left: 0;
+}
+.opt:nth-child(n + 4) {
+  border-top: 1px solid var(--line);
+}
+.opt h3 {
+  font-size: 24px;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.opt-kind {
+  margin-top: 6px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.4;
+}
+.opt dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+}
+.opt dt {
+  color: var(--ink-3);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.opt dd {
+  margin: 2px 0 0;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.opt dd.num {
+  color: var(--ink);
+  font-size: 14px;
+}
+.opt .btn {
+  justify-self: start;
+  max-width: 100%;
+  padding-block: 8px;
+  white-space: normal;
+}
+
+/* ---------- how it's calculated ---------- */
+.method summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 30px;
+  border-radius: var(--r-card);
+  font-size: 16px;
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+}
+.method summary::-webkit-details-marker {
+  display: none;
+}
+.method .when-open,
+.method[open] .when-closed {
+  display: none;
+}
+.method[open] .when-open {
+  display: inline;
+}
+.method summary .i {
+  transition: transform 0.3s var(--ease);
+}
+.method[open] summary .i {
+  transform: rotate(180deg);
+}
+.method-body {
+  padding: 0 30px 28px;
+  border-top: 1px solid var(--line);
+}
+.formula {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: var(--r-sm);
+  background: var(--paper-2);
+  color: var(--ink);
+  font: 500 13.5px/1.5 var(--mono);
+  overflow-wrap: anywhere;
+}
+/* The method in words. Two columns where the card is wide, so the sliders are not pushed far down. */
+.method-text {
+  margin-top: 22px;
+  columns: 2;
+  column-gap: 48px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.method-text p,
+.method-text ul {
+  margin: 0 0 12px;
+  break-inside: avoid;
+}
+.method-text ul {
+  padding-left: 1.2em;
+}
+.method-text li + li {
+  margin-top: 6px;
+}
+.method-src {
+  margin-top: 4px;
+  max-width: 78ch;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.method-notes .method-src {
+  margin-top: 10px;
+}
+.counted {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 48px;
+  margin-top: 22px;
+}
+.method-notes {
+  margin-top: 28px;
+}
+.assume {
+  margin-top: 28px;
+}
+.assume p {
+  margin-top: 6px;
+  max-width: 78ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.sliders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 32px;
+  margin-top: 6px;
+}
+.sl-group {
+  grid-column: 1 / -1;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.sl {
+  min-width: 0;
+}
+/* The sliders of one row share their lines: name, track, scale, text, source. A name that runs to
+   two lines then moves its neighbours' tracks down with its own. */
+@supports (grid-template-rows: subgrid) {
+  .sl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    grid-row: span 5;
+    row-gap: 0;
+  }
+  .sl-top {
+    grid-row: 1;
+    align-self: start;
+  }
+  .sl input[type='range'] {
+    grid-row: 2;
+  }
+  .sl-scale {
+    grid-row: 3;
+  }
+  .sl-words {
+    grid-row: 4;
+  }
+  .sl-src {
+    grid-row: 5;
+  }
+}
+/* The value always stands under the name, whatever their lengths, so every slider reads the same way. */
+.sl-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+}
+/* The energy slider prints one value per model size. A line breaks between two sizes, never inside one. */
+.sl-part {
+  white-space: nowrap;
+}
+.sl-top label {
+  min-width: 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.sl-top output {
+  max-width: 100%;
+  font: 600 14px/1.3 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.sl input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  margin: 10px 0 0;
+  background: transparent;
+  cursor: pointer;
+}
+/* Not moved yet: the assumption still varies, so the track is hollow and the thumb's ring is dashed. */
+.sl input[type='range']::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-control);
+}
+.sl input[type='range']::-moz-range-track {
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-control);
+}
+.sl input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  margin-top: -10px;
+  border: 2px dashed var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+}
+.sl input[type='range']::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  border: 2px dashed var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+}
+/* Set by the person: a solid ring, and the track fills up to the thumb. */
+.sl.is-set input[type='range']::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, var(--ink) 0 var(--p, 50%), transparent var(--p, 50%) 100%);
+}
+.sl.is-set input[type='range']::-moz-range-progress {
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+}
+.sl.is-set input[type='range']::-webkit-slider-thumb {
+  border-style: solid;
+  box-shadow: 0 2px 6px rgba(11, 18, 34, 0.25);
+}
+.sl.is-set input[type='range']::-moz-range-thumb {
+  border-style: solid;
+  box-shadow: 0 2px 6px rgba(11, 18, 34, 0.25);
+}
+/* The focus ring goes round the thumb. Round the whole track it would run through the scale's labels. */
+.sl input[type='range']:focus-visible {
+  outline: none;
+}
+.sl input[type='range']:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.sl input[type='range']:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+/* Three columns, so "typical" stays under the middle of the track whatever the two ends say. */
+.sl-scale {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--ink-3);
+  font: 500 11.5px/1 var(--mono);
+}
+.sl-scale span:last-child {
+  text-align: right;
+}
+.sl-what {
+  margin-top: 10px;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.sl-note {
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: 13.5px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.sl-src {
+  margin-top: 6px;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.method-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+.method-foot b {
+  font-weight: 600;
+}
+.method-foot .btn {
+  margin-left: auto;
+}
+
+/* The only slider of its group takes the whole row, on the columns of the rows around it: its name and
+   values on one line across, the track in the first column, and its text beside the track. */
+@media (min-width: 701px) {
+  @supports (grid-template-columns: subgrid) {
+    .sl.is-lone {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-row: auto;
+      grid-template-columns: subgrid;
+      grid-template-rows: auto auto auto 1fr;
+    }
+    .sl.is-lone .sl-top {
+      grid-area: 1 / 1 / auto / -1;
+    }
+    .sl.is-lone input[type='range'] {
+      grid-area: 2 / 1;
+    }
+    .sl.is-lone .sl-scale {
+      grid-area: 3 / 1;
+    }
+    .sl.is-lone .sl-words {
+      grid-area: 2 / 2 / span 3 / auto;
+    }
+    .sl.is-lone .sl-src {
+      grid-area: 2 / 3 / span 3 / auto;
+      margin-top: 10px;
+    }
+  }
+}
+@media (max-width: 1100px) {
+  .sliders {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* Two columns: the source goes under the track. */
+@media (min-width: 701px) and (max-width: 1100px) {
+  @supports (grid-template-columns: subgrid) {
+    .sl.is-lone .sl-src {
+      grid-area: 4 / 1;
+      margin-top: 14px;
+    }
+  }
+}
+@media (max-width: 900px) {
+  .counted {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .method-text {
+    columns: 1;
+    max-width: 72ch;
+  }
+  .options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .opt,
+  .opt:nth-child(n + 4) {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+  .opt:first-child {
+    border-top: 0;
+  }
+  .tip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tip-side {
+    justify-items: start;
+    min-width: 0;
+  }
+}
+/* A narrow phone: both fixed columns give a little, and the track keeps what is left. */
+@media (max-width: 400px) {
+  .tv {
+    --tv-label: 100px;
+    --tv-value: 84px;
+    column-gap: 8px;
+  }
+}
+@media (max-width: 700px) {
+  .sliders {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .tips {
+    padding: 4px 20px;
+  }
+  .opt {
+    padding: 24px 20px;
+  }
+  .method summary {
+    padding: 20px;
+  }
+  .method-body {
+    padding: 0 20px 24px;
+  }
+  .method-foot .btn {
+    margin-left: 0;
+  }
+}
+@media (pointer: coarse), (max-width: 640px) {
+  .sl input[type='range'] {
+    height: 44px;
+    margin-top: 2px;
+  }
+  /* The taller slider already leaves room under its thumb. */
+  .sl-scale {
+    margin-top: 0;
+  }
+}

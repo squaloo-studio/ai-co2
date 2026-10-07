@@ -1,0 +1,1461 @@
+[
+  {
+    "async_status": null,
+    "atlas_mode_enabled": null,
+    "blocked_urls": [],
+    "context_scopes": null,
+    "conversation_id": "7b293843-3f06-4355-8a6b-f70a81611210",
+    "conversation_origin": null,
+    "conversation_template_id": null,
+    "create_time": 1774188131.062,
+    "current_node": "90f55cc0-c3dd-466b-8893-ca1d098b327a",
+    "default_model_slug": "auto",
+    "disabled_tool_ids": [],
+    "gizmo_id": null,
+    "gizmo_type": null,
+    "id": "7b293843-3f06-4355-8a6b-f70a81611210",
+    "is_archived": false,
+    "is_do_not_remember": false,
+    "is_read_only": null,
+    "is_starred": null,
+    "is_study_mode": false,
+    "mapping": {
+      "10e391a1-1e6c-4c47-b42b-1e8be1dbb7ef": {
+        "children": [
+          "69cd2d10-4a2f-4136-ab08-9143145adcb0"
+        ],
+        "id": "10e391a1-1e6c-4c47-b42b-1e8be1dbb7ef",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "system"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              ""
+            ]
+          },
+          "create_time": null,
+          "end_turn": true,
+          "id": "10e391a1-1e6c-4c47-b42b-1e8be1dbb7ef",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": true
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 0.0
+        },
+        "parent": "client-created-root"
+      },
+      "5feff9e7-14cd-4d41-bd9c-23c5873823ac": {
+        "children": [
+          "90f55cc0-c3dd-466b-8893-ca1d098b327a"
+        ],
+        "id": "5feff9e7-14cd-4d41-bd9c-23c5873823ac",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "How often should I feed it at 20 \u00b0C, and how many grams each time?"
+            ]
+          },
+          "create_time": 1774188422412.0,
+          "end_turn": null,
+          "id": "5feff9e7-14cd-4d41-bd9c-23c5873823ac",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "46204bf9-fbb3-4a94-a50c-8101436454ed",
+            "turn_exchange_id": "2c43e925-6ba7-45f3-93ad-8f1cbab23ebb"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "e20668cd-8bfc-4b48-b24b-65e1f240f995"
+      },
+      "69cd2d10-4a2f-4136-ab08-9143145adcb0": {
+        "children": [
+          "95d01587-23c4-49ec-9611-b38ce549d791"
+        ],
+        "id": "69cd2d10-4a2f-4136-ab08-9143145adcb0",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "user_editable_context",
+            "user_instructions": "The user provided the additional info about how they would like you to respond:\n```Keep answers short and practical.```",
+            "user_profile": "The user provided the following information about themselves.\nUser profile:\n```I bake bread at home and use metric units.```"
+          },
+          "create_time": null,
+          "end_turn": null,
+          "id": "69cd2d10-4a2f-4136-ab08-9143145adcb0",
+          "metadata": {
+            "can_save": false,
+            "is_user_system_message": true,
+            "is_visually_hidden_from_conversation": true,
+            "user_context_message_data": {
+              "about_model_message": "Keep answers short and practical.",
+              "about_user_message": "I bake bread at home and use metric units."
+            }
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "10e391a1-1e6c-4c47-b42b-1e8be1dbb7ef"
+      },
+      "7f509096-0c86-4a5e-b9f6-3517f5a79336": {
+        "children": [
+          "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe"
+        ],
+        "id": "7f509096-0c86-4a5e-b9f6-3517f5a79336",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "How often should I feed it at 24 \u00b0C?"
+            ]
+          },
+          "create_time": 1774188340.512,
+          "end_turn": null,
+          "id": "7f509096-0c86-4a5e-b9f6-3517f5a79336",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "10106692-18fb-4fbe-a942-918ee8bc5697",
+            "turn_exchange_id": "177cd3c1-2f18-4279-b84e-e2499e2a9e65"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "e20668cd-8bfc-4b48-b24b-65e1f240f995"
+      },
+      "90f55cc0-c3dd-466b-8893-ca1d098b327a": {
+        "children": [],
+        "id": "90f55cc0-c3dd-466b-8893-ca1d098b327a",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "At 20 \u00b0C, once a day is enough.\n\n- Keep 20 g of starter.\n- Add 40 g flour and 40 g water.\n\nIf it peaks in under 8 hours, feed twice a day."
+            ]
+          },
+          "create_time": 1774188432.712,
+          "end_turn": true,
+          "id": "90f55cc0-c3dd-466b-8893-ca1d098b327a",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-3",
+            "parent_id": "5feff9e7-14cd-4d41-bd9c-23c5873823ac",
+            "request_id": "daaedbe5-669e-483e-bf69-39656a42cb75",
+            "turn_exchange_id": "91e14c8f-717a-4a7f-831e-ab3ebacfb3b3"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "5feff9e7-14cd-4d41-bd9c-23c5873823ac"
+      },
+      "95d01587-23c4-49ec-9611-b38ce549d791": {
+        "children": [
+          "e20668cd-8bfc-4b48-b24b-65e1f240f995"
+        ],
+        "id": "95d01587-23c4-49ec-9611-b38ce549d791",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "My sourdough starter smells like nail polish remover. Is it dead?"
+            ]
+          },
+          "create_time": 1774188131.412,
+          "end_turn": null,
+          "id": "95d01587-23c4-49ec-9611-b38ce549d791",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "c7b25999-3db9-4dc8-8fcf-0197630b713b",
+            "turn_exchange_id": "4c9af066-6ecd-4f8a-aa67-2765d4798c17"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "69cd2d10-4a2f-4136-ab08-9143145adcb0"
+      },
+      "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe": {
+        "children": [],
+        "id": "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "At 24 \u00b0C, feed it twice a day, about every 12 hours."
+            ]
+          },
+          "create_time": 1774188349.101,
+          "end_turn": true,
+          "id": "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-3",
+            "parent_id": "7f509096-0c86-4a5e-b9f6-3517f5a79336",
+            "request_id": "a84a1b1d-3b62-44a7-a16d-bf335f1d04a3",
+            "turn_exchange_id": "8aa52fe5-8bfb-4bc7-b2e8-df7dbf22e88c"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "7f509096-0c86-4a5e-b9f6-3517f5a79336"
+      },
+      "client-created-root": {
+        "children": [
+          "10e391a1-1e6c-4c47-b42b-1e8be1dbb7ef"
+        ],
+        "id": "client-created-root",
+        "message": null,
+        "parent": null
+      },
+      "e20668cd-8bfc-4b48-b24b-65e1f240f995": {
+        "children": [
+          "7f509096-0c86-4a5e-b9f6-3517f5a79336",
+          "5feff9e7-14cd-4d41-bd9c-23c5873823ac"
+        ],
+        "id": "e20668cd-8bfc-4b48-b24b-65e1f240f995",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "No, it is not dead. That sharp smell means the starter is hungry. Feed it and the smell should fade within a day."
+            ]
+          },
+          "create_time": 1774188139.63,
+          "end_turn": true,
+          "id": "e20668cd-8bfc-4b48-b24b-65e1f240f995",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-3",
+            "parent_id": "95d01587-23c4-49ec-9611-b38ce549d791",
+            "request_id": "18fc7ea9-3011-4892-8c06-e598816efd36",
+            "turn_exchange_id": "293b408b-06b6-48bb-939d-b671022009b2"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "95d01587-23c4-49ec-9611-b38ce549d791"
+      }
+    },
+    "memory_scope": "global_enabled",
+    "moderation_results": [],
+    "owner": null,
+    "pinned_time": null,
+    "plugin_ids": null,
+    "safe_urls": [],
+    "sugar_item_id": null,
+    "sugar_item_visible": false,
+    "title": "Sourdough starter smell",
+    "update_time": 1774188434.512,
+    "voice": null
+  },
+  {
+    "async_status": null,
+    "atlas_mode_enabled": null,
+    "blocked_urls": [],
+    "context_scopes": null,
+    "conversation_id": "c6a500e0-bf85-4c0c-80c1-4dc53bc5920e",
+    "conversation_origin": null,
+    "conversation_template_id": "g-p-47c580fe828df7dd7b2bf8307433e43c",
+    "create_time": 1772270129.705,
+    "current_node": "5149fa63-70fd-4f8a-8c82-c645396d35ba",
+    "default_model_slug": "auto",
+    "disabled_tool_ids": [],
+    "gizmo_id": "g-p-47c580fe828df7dd7b2bf8307433e43c",
+    "gizmo_type": "snorlax",
+    "id": "c6a500e0-bf85-4c0c-80c1-4dc53bc5920e",
+    "is_archived": false,
+    "is_do_not_remember": false,
+    "is_read_only": null,
+    "is_starred": true,
+    "is_study_mode": false,
+    "mapping": {
+      "02c19f67-96d6-4f95-8514-c7e67cb1927e": {
+        "children": [
+          "bc1070cd-eb2c-455c-8784-27a2bf7620de"
+        ],
+        "id": "02c19f67-96d6-4f95-8514-c7e67cb1927e",
+        "message": null,
+        "parent": null
+      },
+      "151e2c22-8763-4b6e-9fd3-ddba94dde343": {
+        "children": [],
+        "id": "151e2c22-8763-4b6e-9fd3-ddba94dde343",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "I can't say for certain without looking it up. Subsidy rules change often."
+            ]
+          },
+          "create_time": 1774116073.4,
+          "end_turn": true,
+          "id": "151e2c22-8763-4b6e-9fd3-ddba94dde343",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-3",
+            "parent_id": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5",
+            "request_id": "4fa75bab-95d2-4d20-bb8d-9e075b3afaba",
+            "turn_exchange_id": "7aa391f0-2cc3-4954-aaf9-84471ec0f4a2"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5"
+      },
+      "462a1ccc-1929-4771-99b1-300106866057": {
+        "children": [
+          "937fc30d-c774-4f1b-a61a-e729ec4bbce9"
+        ],
+        "id": "462a1ccc-1929-4771-99b1-300106866057",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "thoughts",
+            "source_analysis_msg_id": "d97a9d77-0edf-42c0-880c-a654d9ae7057",
+            "thoughts": [
+              {
+                "chunks": [],
+                "content": "A 9 kW air-to-water unit with installation usually lands between 12,000 and 18,000 euros, so 14,800 looks plausible.",
+                "finished": true,
+                "summary": "Checking the price range"
+              },
+              {
+                "chunks": [],
+                "content": "",
+                "finished": true,
+                "summary": "Listing what a quote often leaves out"
+              }
+            ]
+          },
+          "create_time": 1772270133.2,
+          "end_turn": false,
+          "id": "462a1ccc-1929-4771-99b1-300106866057",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "gpt-5-2-thinking",
+            "message_type": "next",
+            "model_slug": "gpt-5-2-thinking",
+            "parent_id": "b436802d-88b8-410e-b770-1a65d2d3cbd2",
+            "reasoning_status": "is_reasoning",
+            "request_id": "50475986-81ee-4fd4-94d4-1fbf3b91ed32",
+            "turn_exchange_id": "98bcfb54-ee14-4784-a621-8dec2b4be28f"
+          },
+          "recipient": "all",
+          "status": "in_progress",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "b436802d-88b8-410e-b770-1a65d2d3cbd2"
+      },
+      "5149fa63-70fd-4f8a-8c82-c645396d35ba": {
+        "children": [],
+        "id": "5149fa63-70fd-4f8a-8c82-c645396d35ba",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Yes. The plate shows a gas boiler built in 2003, so it counts. \ud83d\udc4d"
+            ]
+          },
+          "create_time": 1775115861.33,
+          "end_turn": true,
+          "id": "5149fa63-70fd-4f8a-8c82-c645396d35ba",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-t-mini",
+            "parent_id": "e66a9a66-106c-4630-a37c-bd9c32a4b11c",
+            "request_id": "6ec1f82d-3fb7-4a13-885d-88cbb2873508",
+            "turn_exchange_id": "1e9a4867-c638-4b30-b86c-167df334fa05"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "e66a9a66-106c-4630-a37c-bd9c32a4b11c"
+      },
+      "67f13e7a-453d-4b9c-953f-9d8567a0544f": {
+        "children": [
+          "c106c708-bbad-4e03-aa2f-aa2f93ccf578"
+        ],
+        "id": "67f13e7a-453d-4b9c-953f-9d8567a0544f",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": "final",
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "This year the basic subsidy covers 30 % of the eligible cost, with bonuses on top for replacing an old fossil boiler. \ue200cite\ue202turn0search0\ue201\n\nFor your quote that is at least 4,440 euros."
+            ]
+          },
+          "create_time": null,
+          "end_turn": true,
+          "id": "67f13e7a-453d-4b9c-953f-9d8567a0544f",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [
+              {
+                "alt": "([energy-agency.example](https://energy-agency.example/heat-pump-subsidy))",
+                "end_idx": 137,
+                "error": null,
+                "fallback_items": null,
+                "items": [
+                  {
+                    "attribution": "energy-agency.example",
+                    "attribution_segments": null,
+                    "attributions": null,
+                    "hue": null,
+                    "pub_date": null,
+                    "refs": [
+                      {
+                        "ref_index": 0,
+                        "ref_type": "search",
+                        "turn_index": 0
+                      }
+                    ],
+                    "snippet": "",
+                    "supporting_websites": [],
+                    "title": "Heat pump subsidies this year",
+                    "url": "https://energy-agency.example/heat-pump-subsidy"
+                  }
+                ],
+                "matched_text": "\ue200cite\ue202turn0search0\ue201",
+                "prefix": null,
+                "prompt_text": null,
+                "refs": [],
+                "safe_urls": [],
+                "start_idx": 118,
+                "status": "done",
+                "style": null,
+                "type": "grouped_webpages"
+              },
+              {
+                "alt": "",
+                "end_idx": 137,
+                "error": null,
+                "has_images": false,
+                "matched_text": "\ue200cite\ue202turn0search0\ue201",
+                "prefix": null,
+                "prompt_text": null,
+                "refs": [],
+                "safe_urls": [],
+                "sources": [
+                  {
+                    "attribution": "energy-agency.example",
+                    "title": "Heat pump subsidies this year",
+                    "url": "https://energy-agency.example/heat-pump-subsidy"
+                  }
+                ],
+                "start_idx": 118,
+                "status": "done",
+                "style": null,
+                "type": "sources_footnote"
+              }
+            ],
+            "default_model_slug": "auto",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "variant",
+            "model_slug": "gpt-5-3",
+            "parent_id": "ebfd1d1b-be24-4e71-be55-e6efb6751551",
+            "request_id": "9dac3814-a5f9-4ed2-8a7f-2bade6fba37e",
+            "search_result_groups": [
+              {
+                "domain": "energy-agency.example",
+                "entries": [
+                  {
+                    "attribution": "energy-agency.example",
+                    "snippet": "The basic subsidy for a heat pump is 30 % of the eligible cost.",
+                    "title": "Heat pump subsidies this year",
+                    "url": "https://energy-agency.example/heat-pump-subsidy"
+                  }
+                ]
+              }
+            ],
+            "search_source": "composer_auto",
+            "search_turns_count": 1,
+            "turn_exchange_id": "a3652cbe-5f4c-4482-9fc9-5634d467ce19"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "ebfd1d1b-be24-4e71-be55-e6efb6751551"
+      },
+      "6b8b696a-2f3c-42b1-8d75-36fe6170deae": {
+        "children": [
+          "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5"
+        ],
+        "id": "6b8b696a-2f3c-42b1-8d75-36fe6170deae",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": "final",
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "The quote is within the usual range. Three things to check:\n\n1. Is the hydraulic balancing included?\n2. Which buffer tank size is planned?\n3. Does the price include removing the old boiler?"
+            ]
+          },
+          "create_time": 1772270148.3,
+          "end_turn": true,
+          "id": "6b8b696a-2f3c-42b1-8d75-36fe6170deae",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "gpt-5-2-thinking",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-2-thinking",
+            "parent_id": "937fc30d-c774-4f1b-a61a-e729ec4bbce9",
+            "request_id": "fee6fbc8-7c1d-48db-ba78-b520d1262b7e",
+            "turn_exchange_id": "33aa93f0-df30-4e67-9e3f-25dc62a3d1e3"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "937fc30d-c774-4f1b-a61a-e729ec4bbce9"
+      },
+      "83bda9b2-756c-4280-bb33-eff16df1ee4b": {
+        "children": [
+          "e66a9a66-106c-4630-a37c-bd9c32a4b11c"
+        ],
+        "id": "83bda9b2-756c-4280-bb33-eff16df1ee4b",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "The user heats with a gas boiler from 2003."
+            ]
+          },
+          "create_time": 1775115853.1,
+          "end_turn": false,
+          "id": "83bda9b2-756c-4280-bb33-eff16df1ee4b",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "message_type": "next",
+            "model_slug": "gpt-5-t-mini",
+            "parent_id": "c106c708-bbad-4e03-aa2f-aa2f93ccf578",
+            "request_id": "aa03e28e-a7b7-40e1-af92-164c273d37a7",
+            "turn_exchange_id": "968e2c1f-2986-4e1c-bb4e-fb309990f2f5"
+          },
+          "recipient": "bio",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "c106c708-bbad-4e03-aa2f-aa2f93ccf578"
+      },
+      "937fc30d-c774-4f1b-a61a-e729ec4bbce9": {
+        "children": [
+          "6b8b696a-2f3c-42b1-8d75-36fe6170deae"
+        ],
+        "id": "937fc30d-c774-4f1b-a61a-e729ec4bbce9",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content": "Thought for 14s",
+            "content_type": "reasoning_recap"
+          },
+          "create_time": 1772270147.9,
+          "end_turn": false,
+          "id": "937fc30d-c774-4f1b-a61a-e729ec4bbce9",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "gpt-5-2-thinking",
+            "finished_duration_sec": 14,
+            "message_type": "next",
+            "model_slug": "gpt-5-2-thinking",
+            "parent_id": "462a1ccc-1929-4771-99b1-300106866057",
+            "reasoning_status": "reasoning_ended",
+            "request_id": "1f93238b-5fe5-46b1-85c5-97bd6caa7a72",
+            "turn_exchange_id": "5011e1b9-79b7-4800-ac27-e313dd87fbf6"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "462a1ccc-1929-4771-99b1-300106866057"
+      },
+      "b436802d-88b8-410e-b770-1a65d2d3cbd2": {
+        "children": [
+          "462a1ccc-1929-4771-99b1-300106866057"
+        ],
+        "id": "b436802d-88b8-410e-b770-1a65d2d3cbd2",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here is the quote from the installer. Is 14,800 euros fair for a 9 kW air-to-water heat pump?"
+            ]
+          },
+          "create_time": 1772270130.105,
+          "end_turn": null,
+          "id": "b436802d-88b8-410e-b770-1a65d2d3cbd2",
+          "metadata": {
+            "attachments": [
+              {
+                "file_token_size": 2310,
+                "id": "file_f93d634c9fe4774f084acbc7ad1f49e5",
+                "is_big_paste": false,
+                "library_file_id": "libfile_1d67ea4c800b6470b2232cb2b18adae6",
+                "mime_type": "application/pdf",
+                "name": "heat-pump-quote.pdf",
+                "size": 184322,
+                "source": "local"
+              }
+            ],
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "73f5d5bc-cbe8-4ed7-8302-a4d4915d4375",
+            "turn_exchange_id": "0feee97b-2122-4bb5-b31d-b08c3e4723a7"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "bc1070cd-eb2c-455c-8784-27a2bf7620de"
+      },
+      "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5": {
+        "children": [
+          "151e2c22-8763-4b6e-9fd3-ddba94dde343",
+          "baea3d8e-627c-49e2-9db3-23dea07e516d"
+        ],
+        "id": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "What subsidy can I get for it this year?"
+            ]
+          },
+          "create_time": 1774116065.25,
+          "end_turn": null,
+          "id": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "2d83ce46-3e71-4361-b424-3179167d47f0",
+            "turn_exchange_id": "c908baee-d35e-4f1f-bcff-8df58b3e1b4d"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "6b8b696a-2f3c-42b1-8d75-36fe6170deae"
+      },
+      "baea3d8e-627c-49e2-9db3-23dea07e516d": {
+        "children": [
+          "ddc0c6bf-0715-43c5-a684-23a2dd55fe3e"
+        ],
+        "id": "baea3d8e-627c-49e2-9db3-23dea07e516d",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "code",
+            "language": "unknown",
+            "response_format_name": null,
+            "text": "{\"search_query\":[{\"q\":\"heat pump subsidy this year\"}],\"response_length\":\"short\"}"
+          },
+          "create_time": 1774116203.0,
+          "end_turn": false,
+          "id": "baea3d8e-627c-49e2-9db3-23dea07e516d",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "message_type": "variant",
+            "model_slug": "gpt-5-3",
+            "parent_id": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5",
+            "reasoning_status": "is_reasoning",
+            "request_id": "5148447b-6637-4ca3-ba87-7e322998e30e",
+            "search_display_string": "Searching the web",
+            "search_queries": [
+              {
+                "q": "heat pump subsidy this year",
+                "type": "search"
+              }
+            ],
+            "searched_display_string": "Searched the web",
+            "turn_exchange_id": "9dafd14d-134a-4a8c-a291-0774732a6250"
+          },
+          "recipient": "web.run",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5"
+      },
+      "bc1070cd-eb2c-455c-8784-27a2bf7620de": {
+        "children": [
+          "b436802d-88b8-410e-b770-1a65d2d3cbd2"
+        ],
+        "id": "bc1070cd-eb2c-455c-8784-27a2bf7620de",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "system"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              ""
+            ]
+          },
+          "create_time": null,
+          "end_turn": true,
+          "id": "bc1070cd-eb2c-455c-8784-27a2bf7620de",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": true
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 0.0
+        },
+        "parent": "02c19f67-96d6-4f95-8514-c7e67cb1927e"
+      },
+      "c106c708-bbad-4e03-aa2f-aa2f93ccf578": {
+        "children": [
+          "83bda9b2-756c-4280-bb33-eff16df1ee4b"
+        ],
+        "id": "c106c708-bbad-4e03-aa2f-aa2f93ccf578",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "multimodal_text",
+            "parts": [
+              {
+                "asset_pointer": "sediment://file_e2870c85e687d6a1bda345f5cda25d55",
+                "content_type": "image_asset_pointer",
+                "fovea": null,
+                "height": 1536,
+                "metadata": {
+                  "asset_pointer_link": null,
+                  "container_pixel_height": null,
+                  "container_pixel_width": null,
+                  "dalle": null,
+                  "emu_omit_glimpse_image": null,
+                  "emu_patches_override": null,
+                  "generation": null,
+                  "gizmo": null,
+                  "is_no_auth_placeholder": null,
+                  "lpe_delta_encoding_channel": null,
+                  "lpe_keep_patch_ijhw": null,
+                  "sanitized": true,
+                  "watermarked_asset_pointer": null
+                },
+                "size_bytes": 412877,
+                "width": 2048
+              },
+              "This is the type plate of the old boiler. Does it count as an old fossil boiler?"
+            ]
+          },
+          "create_time": 1775115850.9,
+          "end_turn": null,
+          "id": "c106c708-bbad-4e03-aa2f-aa2f93ccf578",
+          "metadata": {
+            "attachments": [
+              {
+                "height": 1536,
+                "id": "file_e2870c85e687d6a1bda345f5cda25d55",
+                "mime_type": "image/jpeg",
+                "name": "type-plate.jpg",
+                "size": 412877,
+                "source": "local",
+                "width": 2048
+              }
+            ],
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "2a9eb8cb-b6bc-4783-8839-9f875f834420",
+            "turn_exchange_id": "49083bba-4244-4e6b-9f46-0d5f8018a000"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "67f13e7a-453d-4b9c-953f-9d8567a0544f"
+      },
+      "ddc0c6bf-0715-43c5-a684-23a2dd55fe3e": {
+        "children": [
+          "ebfd1d1b-be24-4e71-be55-e6efb6751551"
+        ],
+        "id": "ddc0c6bf-0715-43c5-a684-23a2dd55fe3e",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": "web.run",
+            "role": "tool"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              ""
+            ]
+          },
+          "create_time": 1774116205.5,
+          "end_turn": false,
+          "id": "ddc0c6bf-0715-43c5-a684-23a2dd55fe3e",
+          "metadata": {
+            "can_save": false,
+            "default_model_slug": "auto",
+            "message_type": "variant",
+            "model_slug": "gpt-5-3",
+            "parent_id": "baea3d8e-627c-49e2-9db3-23dea07e516d",
+            "reasoning_status": "is_reasoning",
+            "request_id": "204a8181-0b96-492e-addc-8d7f029c20b3",
+            "search_result_groups": [
+              {
+                "domain": "energy-agency.example",
+                "entries": [
+                  {
+                    "attribution": "energy-agency.example",
+                    "pub_date": null,
+                    "ref_id": {
+                      "ref_index": 0,
+                      "ref_type": "search",
+                      "turn_index": 0
+                    },
+                    "snippet": "The basic subsidy for a heat pump is 30 % of the eligible cost.",
+                    "title": "Heat pump subsidies this year",
+                    "type": "search_result",
+                    "url": "https://energy-agency.example/heat-pump-subsidy"
+                  }
+                ],
+                "type": "search_result_group"
+              }
+            ],
+            "search_source": "composer_auto",
+            "search_turns_count": 1,
+            "turn_exchange_id": "ebab28b5-5095-436c-9496-d3015b29c504"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "baea3d8e-627c-49e2-9db3-23dea07e516d"
+      },
+      "e66a9a66-106c-4630-a37c-bd9c32a4b11c": {
+        "children": [
+          "5149fa63-70fd-4f8a-8c82-c645396d35ba"
+        ],
+        "id": "e66a9a66-106c-4630-a37c-bd9c32a4b11c",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": "bio",
+            "role": "tool"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Model set context updated."
+            ]
+          },
+          "create_time": 1775115853.6,
+          "end_turn": null,
+          "id": "e66a9a66-106c-4630-a37c-bd9c32a4b11c",
+          "metadata": {
+            "can_save": false,
+            "default_model_slug": "auto",
+            "message_type": "next",
+            "model_slug": "gpt-5-t-mini",
+            "parent_id": "83bda9b2-756c-4280-bb33-eff16df1ee4b",
+            "request_id": "f8484521-f42f-45d3-929d-b3f667c7eb47",
+            "turn_exchange_id": "db971c4a-69fd-4029-841c-98bdba73bd2c"
+          },
+          "recipient": "assistant",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "83bda9b2-756c-4280-bb33-eff16df1ee4b"
+      },
+      "ebfd1d1b-be24-4e71-be55-e6efb6751551": {
+        "children": [
+          "67f13e7a-453d-4b9c-953f-9d8567a0544f"
+        ],
+        "id": "ebfd1d1b-be24-4e71-be55-e6efb6751551",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content": "Thought for 2m 9s",
+            "content_type": "reasoning_recap"
+          },
+          "create_time": 1774116208.0,
+          "end_turn": false,
+          "id": "ebfd1d1b-be24-4e71-be55-e6efb6751551",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "auto",
+            "finished_duration_sec": 129,
+            "message_type": "variant",
+            "model_slug": "gpt-5-3",
+            "parent_id": "ddc0c6bf-0715-43c5-a684-23a2dd55fe3e",
+            "reasoning_status": "reasoning_ended",
+            "request_id": "1538eab3-98fa-4970-a693-db00f1921d49",
+            "turn_exchange_id": "a1bf0892-c979-4ea2-883a-a3a6f2451ab1"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "ddc0c6bf-0715-43c5-a684-23a2dd55fe3e"
+      }
+    },
+    "memory_scope": "global_enabled",
+    "moderation_results": [],
+    "owner": null,
+    "pinned_time": null,
+    "plugin_ids": null,
+    "safe_urls": [],
+    "sugar_item_id": null,
+    "sugar_item_visible": false,
+    "title": "Heat pump quote check",
+    "update_time": 1775115863.53,
+    "voice": null
+  },
+  {
+    "async_status": null,
+    "atlas_mode_enabled": null,
+    "blocked_urls": [],
+    "context_scopes": null,
+    "conversation_id": "f5871820-a54e-4ea9-9976-079db1e23652",
+    "conversation_origin": null,
+    "conversation_template_id": null,
+    "create_time": 1768243202.43,
+    "current_node": "e53802e3-1192-4ef1-bdfb-fe18bb9071f6",
+    "default_model_slug": "gpt-5-2",
+    "disabled_tool_ids": [],
+    "gizmo_id": null,
+    "gizmo_type": null,
+    "id": "f5871820-a54e-4ea9-9976-079db1e23652",
+    "is_archived": true,
+    "is_do_not_remember": false,
+    "is_read_only": null,
+    "is_starred": null,
+    "is_study_mode": false,
+    "mapping": {
+      "3293ffb7-c28b-4a24-8dfb-6d3168882f52": {
+        "children": [
+          "b19bca63-bd28-44df-81b6-e9e138ba7d87"
+        ],
+        "id": "3293ffb7-c28b-4a24-8dfb-6d3168882f52",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Add things for a day at the beach."
+            ]
+          },
+          "create_time": 1768243371.0,
+          "end_turn": null,
+          "id": "3293ffb7-c28b-4a24-8dfb-6d3168882f52",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "50d4035d-bbdc-41b7-aed4-f96d907fdbb2",
+            "turn_exchange_id": "ec74cd05-b664-4f22-a31c-57072c93c1be"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "f46db30f-83c8-4620-a291-e2f6a9d07d72"
+      },
+      "3726f2be-d227-467b-b8dc-fd171cd6f913": {
+        "children": [
+          "f46db30f-83c8-4620-a291-e2f6a9d07d72"
+        ],
+        "id": "3726f2be-d227-467b-b8dc-fd171cd6f913",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Make me a packing list for four days in Lisbon in July."
+            ]
+          },
+          "create_time": 1768243202.73,
+          "end_turn": null,
+          "id": "3726f2be-d227-467b-b8dc-fd171cd6f913",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "38cf92a7-1835-4f34-a7c6-d5bbb3637e40",
+            "turn_exchange_id": "65c5a15b-090d-469e-8910-d5bb4020ea80"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "458d0043-294d-4e0c-ba32-37a9cf74058e"
+      },
+      "458d0043-294d-4e0c-ba32-37a9cf74058e": {
+        "children": [
+          "3726f2be-d227-467b-b8dc-fd171cd6f913"
+        ],
+        "id": "458d0043-294d-4e0c-ba32-37a9cf74058e",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "system"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              ""
+            ]
+          },
+          "create_time": null,
+          "end_turn": true,
+          "id": "458d0043-294d-4e0c-ba32-37a9cf74058e",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": true
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 0.0
+        },
+        "parent": "8bad837e-23c2-460b-8c02-77f2bedadf06"
+      },
+      "87f57998-a2b4-416a-bbf0-a807bf62d511": {
+        "children": [
+          "e53802e3-1192-4ef1-bdfb-fe18bb9071f6"
+        ],
+        "id": "87f57998-a2b4-416a-bbf0-a807bf62d511",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "user"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Add things for a day at the beach, please."
+            ]
+          },
+          "create_time": 1768243410.5,
+          "end_turn": null,
+          "id": "87f57998-a2b4-416a-bbf0-a807bf62d511",
+          "metadata": {
+            "can_save": false,
+            "is_visually_hidden_from_conversation": false,
+            "message_source": null,
+            "request_id": "275f3c97-9053-4116-b912-bf8b45f90e66",
+            "turn_exchange_id": "67e028d6-feef-4421-a8d6-743359cdb785"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "b19bca63-bd28-44df-81b6-e9e138ba7d87"
+      },
+      "8bad837e-23c2-460b-8c02-77f2bedadf06": {
+        "children": [
+          "458d0043-294d-4e0c-ba32-37a9cf74058e"
+        ],
+        "id": "8bad837e-23c2-460b-8c02-77f2bedadf06",
+        "message": null,
+        "parent": null
+      },
+      "b19bca63-bd28-44df-81b6-e9e138ba7d87": {
+        "children": [
+          "87f57998-a2b4-416a-bbf0-a807bf62d511"
+        ],
+        "id": "b19bca63-bd28-44df-81b6-e9e138ba7d87",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              ""
+            ]
+          },
+          "create_time": 1768243372.8,
+          "end_turn": true,
+          "id": "b19bca63-bd28-44df-81b6-e9e138ba7d87",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "gpt-5-2",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-2",
+            "parent_id": "3293ffb7-c28b-4a24-8dfb-6d3168882f52",
+            "request_id": "427c9025-d962-4118-8583-0eeeae728680",
+            "turn_exchange_id": "815b7733-b2fe-4a4c-a6be-57f0d2352564"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "3293ffb7-c28b-4a24-8dfb-6d3168882f52"
+      },
+      "e53802e3-1192-4ef1-bdfb-fe18bb9071f6": {
+        "children": [],
+        "id": "e53802e3-1192-4ef1-bdfb-fe18bb9071f6",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "For the beach day add:\n\n- Swimwear and a towel\n- Flip-flops\n- A dry bag for your phone"
+            ]
+          },
+          "create_time": 1768243421.9,
+          "end_turn": true,
+          "id": "e53802e3-1192-4ef1-bdfb-fe18bb9071f6",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "gpt-5-2",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-2",
+            "parent_id": "87f57998-a2b4-416a-bbf0-a807bf62d511",
+            "request_id": "769d30d9-509d-4c47-ba4b-2ecb9d11fbef",
+            "turn_exchange_id": "8633d6e5-c74a-42ff-94df-7e364b45dce0"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "87f57998-a2b4-416a-bbf0-a807bf62d511"
+      },
+      "f46db30f-83c8-4620-a291-e2f6a9d07d72": {
+        "children": [
+          "3293ffb7-c28b-4a24-8dfb-6d3168882f52"
+        ],
+        "id": "f46db30f-83c8-4620-a291-e2f6a9d07d72",
+        "message": {
+          "author": {
+            "metadata": {},
+            "name": null,
+            "role": "assistant"
+          },
+          "channel": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here is a short list:\n\n- 4 T-shirts, 2 shorts, 1 light jacket\n- Comfortable walking shoes\n- Sun cream and a hat\n- Plug adapter (not needed from the EU)"
+            ]
+          },
+          "create_time": 1768243209.2,
+          "end_turn": true,
+          "id": "f46db30f-83c8-4620-a291-e2f6a9d07d72",
+          "metadata": {
+            "can_save": true,
+            "citations": [],
+            "content_references": [],
+            "default_model_slug": "gpt-5-2",
+            "finish_details": {
+              "stop_tokens": [
+                200002
+              ],
+              "type": "stop"
+            },
+            "is_complete": true,
+            "message_type": "next",
+            "model_slug": "gpt-5-2",
+            "parent_id": "3726f2be-d227-467b-b8dc-fd171cd6f913",
+            "request_id": "e2e76af1-ae13-4bbc-a905-ec0f7196ce9c",
+            "turn_exchange_id": "dee234e9-924b-4df8-ab81-94767fabe3dc"
+          },
+          "recipient": "all",
+          "status": "finished_successfully",
+          "update_time": null,
+          "weight": 1.0
+        },
+        "parent": "3726f2be-d227-467b-b8dc-fd171cd6f913"
+      }
+    },
+    "memory_scope": "global_enabled",
+    "moderation_results": [],
+    "owner": null,
+    "pinned_time": null,
+    "plugin_ids": null,
+    "safe_urls": [],
+    "sugar_item_id": null,
+    "sugar_item_visible": false,
+    "title": "Packing list for Lisbon",
+    "update_time": 1768243423.0,
+    "voice": null
+  }
+]

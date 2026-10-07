@@ -1,0 +1,177 @@
+{
+  "_about": "Counts a correct reader must produce for export.older-shape.json. Worked out by hand and confirmed by two independent scripts. All content is invented.",
+  "fixture": "export.older-shape.json",
+  "shape": "older (children lists, system and tool messages)",
+  "now": "2026-04-07T00:00:00Z",
+  "window_days": 30,
+  "cutoff": "2026-03-08T00:00:00Z",
+  "rules": {
+    "message": "A node of `mapping` whose `message` is an object. The root node (message null) is not a message.",
+    "roles": "Count by `message.author.role`.",
+    "tree": "Build the tree from each node's `parent`. Never read `children` (absent or empty in exports made since July 2026) and never read `metadata.parent_id` (in current exports it often names a node that is not in the file).",
+    "current_path": "Start at `current_node` and follow `parent` to the root. Everything else is off the current path (edits and regenerated answers).",
+    "time_unit": "`create_time` is Unix seconds, UTC. A number above 1e11 is milliseconds: divide it by 1000. Anything that is not a positive number counts as missing.",
+    "effective_time": "Use the message's own `create_time`. If it is missing, use the nearest ancestor that has one. If none has one, use the conversation's `create_time`.",
+    "window": "A message is inside the window when cutoff <= effective_time <= now + 86400. cutoff = now - 30 * 86400 seconds. The extra day absorbs clock and time-zone differences; later times count as outside.",
+    "hidden_context": "role `system`, or content_type `user_editable_context` / `model_editable_context` / `app_pairing_content`, or `metadata.is_visually_hidden_from_conversation` true. These are not prompts and not answers.",
+    "user_prompt": "role `user` and not hidden context.",
+    "answer": "One generated reply. Group every `assistant` and `tool` node under the node you reach by walking up through parents until the parent is a `user` message or the root. Each group that holds at least one assistant message is one answer. Every node of the file is visited once, so branches are counted once each.",
+    "answer_model": "`metadata.model_slug` of the answer's visible text message (assistant, content_type text or multimodal_text, recipient absent or `all`); with several, the one with the latest effective time. If none has a slug: the latest assistant message of the group that has one. If none: the conversation's `default_model_slug`, unless it is null or `auto`. Otherwise `(unknown)`.",
+    "answer_time": "The effective time of the answer's first node.",
+    "thinking_by_evidence": "The answer's group holds a `thoughts` or `reasoning_recap` message, or a message with `metadata.reasoning_status` or `metadata.finished_duration_sec`.",
+    "thinking_by_slug_only": "No such evidence, but the model slug contains `thinking`, ends in `-t-mini` or `-pro`, or starts with `o` and a digit.",
+    "thinking_seconds": "Per `reasoning_recap` message: `metadata.finished_duration_sec` if present, else parse `content.content` (`Thought for 14s`, `Worked for 2m 9s`, `Thought for 12 seconds`, `a second` = 1, `a couple of seconds` = 2, `a few seconds` = 4). Add up hours, minutes and seconds.",
+    "search": "The answer's group holds a non-empty `metadata.search_result_groups` or `metadata.search_queries`, or a tool author name or assistant recipient that is `web`, starts with `web.` or is `browser`, or a `content_references` item with a ref of `ref_type` `search`. Citations alone (`grouped_webpages`, `sources_footnote`) are not proof of a search.",
+    "attachments": "Sum of the lengths of `metadata.attachments` on user prompts. Token size: `file_token_size`, or `fileSizeTokens` in old messages. Type: `mime_type`, or `mimeType` in old messages.",
+    "empty_answer": "An answer whose visible assistant text is empty after trimming.",
+    "text_chars": "JavaScript string length (UTF-16 units) of string parts plus `text` of audio_transcription parts, after removing the private-use citation markers: everything from U+E200 to the next U+E201, then any character left in U+E200..U+E20F.",
+    "duplicates": "When the same conversation id arrives twice (two exports dropped together), keep the one with the later `update_time`."
+  },
+  "conversations": {
+    "total": 3,
+    "archived": 1,
+    "in_a_project": 1,
+    "with_custom_instructions_visible": 1,
+    "inside_30_days_by_any_message": 2,
+    "titles": [
+      "Sourdough starter smell",
+      "Heat pump quote check",
+      "Packing list for Lisbon"
+    ]
+  },
+  "messages": {
+    "total": 30,
+    "by_role": {
+      "system": 3,
+      "user": 10,
+      "assistant": 15,
+      "tool": 2
+    },
+    "on_current_path": 27,
+    "off_current_path": 3,
+    "with_null_create_time": 5,
+    "inside_30_days": 18,
+    "outside_30_days": 12,
+    "hidden_context": 4,
+    "per_conversation": {
+      "Sourdough starter smell": {
+        "total": 8,
+        "inside_30_days": 8
+      },
+      "Heat pump quote check": {
+        "total": 15,
+        "inside_30_days": 10
+      },
+      "Packing list for Lisbon": {
+        "total": 7,
+        "inside_30_days": 0
+      }
+    },
+    "with_millisecond_create_time": 1,
+    "parent_id_naming_a_node_not_in_the_file": 0,
+    "dated_in_the_future": 0
+  },
+  "user_prompts": {
+    "total": 9,
+    "inside_30_days": 5,
+    "outside_30_days": 4
+  },
+  "answers": {
+    "total": 10,
+    "inside_30_days": 6,
+    "outside_30_days": 4,
+    "empty": 1,
+    "on_current_path": 8,
+    "off_current_path": 2,
+    "by_model": {
+      "gpt-5-3": 5,
+      "gpt-5-2-thinking": 1,
+      "gpt-5-t-mini": 1,
+      "gpt-5-2": 3
+    },
+    "by_model_inside_30_days": {
+      "gpt-5-3": 5,
+      "gpt-5-t-mini": 1
+    },
+    "by_model_outside_30_days": {
+      "gpt-5-2-thinking": 1,
+      "gpt-5-2": 3
+    },
+    "thinking_by_evidence": {
+      "count": 2,
+      "inside_30_days": 1,
+      "answer_text_message_ids": [
+        "6b8b696a-2f3c-42b1-8d75-36fe6170deae",
+        "67f13e7a-453d-4b9c-953f-9d8567a0544f"
+      ],
+      "seconds_from_export": 143,
+      "seconds_inside_30_days": 129
+    },
+    "thinking_by_slug_only": {
+      "count": 1,
+      "inside_30_days": 1,
+      "answer_text_message_ids": [
+        "5149fa63-70fd-4f8a-8c82-c645396d35ba"
+      ]
+    },
+    "with_web_search": {
+      "count": 1,
+      "inside_30_days": 1,
+      "answer_text_message_ids": [
+        "67f13e7a-453d-4b9c-953f-9d8567a0544f"
+      ],
+      "search_queries_visible": 1
+    },
+    "citing_memory": {
+      "count": 0,
+      "memory_writes_visible": 1
+    },
+    "with_unknown_thinking_time": 0
+  },
+  "assistant_messages_by_model": {
+    "gpt-5-3": 7,
+    "gpt-5-2-thinking": 3,
+    "gpt-5-t-mini": 2,
+    "gpt-5-2": 3
+  },
+  "attachments": {
+    "total": 2,
+    "user_prompts_with_attachments": 2,
+    "inside_30_days": 1,
+    "with_token_size": 1,
+    "token_sizes_sum": 2310,
+    "by_mime_type": {
+      "application/pdf": 1,
+      "image/jpeg": 1
+    }
+  },
+  "text_chars": {
+    "user_prompts": 511,
+    "assistant_visible": 1032,
+    "reasoning_summaries": 177
+  },
+  "ids": {
+    "edit_branch_abandoned_prompt": "7f509096-0c86-4a5e-b9f6-3517f5a79336",
+    "edit_branch_abandoned_answer": "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe",
+    "edit_branch_current_prompt": "5feff9e7-14cd-4d41-bd9c-23c5873823ac",
+    "regenerated_from_prompt": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5",
+    "regenerated_first_answer_abandoned": "151e2c22-8763-4b6e-9fd3-ddba94dde343",
+    "regenerated_second_answer_current": "67f13e7a-453d-4b9c-953f-9d8567a0544f",
+    "null_create_time_messages": [
+      "10e391a1-1e6c-4c47-b42b-1e8be1dbb7ef",
+      "69cd2d10-4a2f-4136-ab08-9143145adcb0",
+      "67f13e7a-453d-4b9c-953f-9d8567a0544f",
+      "bc1070cd-eb2c-455c-8784-27a2bf7620de",
+      "458d0043-294d-4e0c-ba32-37a9cf74058e"
+    ],
+    "thinking_answer_text": "6b8b696a-2f3c-42b1-8d75-36fe6170deae",
+    "file_upload_prompt": "b436802d-88b8-410e-b770-1a65d2d3cbd2",
+    "image_upload_prompt": "c106c708-bbad-4e03-aa2f-aa2f93ccf578",
+    "empty_answer": "b19bca63-bd28-44df-81b6-e9e138ba7d87",
+    "memory_cited_answer": "5149fa63-70fd-4f8a-8c82-c645396d35ba"
+  },
+  "same_counts_required_for": [
+    "this file with `\"children\": []` added to every node",
+    "this file loaded twice (every conversation is then a duplicate and is counted once)"
+  ]
+}

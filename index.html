@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ai-co2 · The CO₂ of your AI use</title>
+    <meta
+      name="description"
+      content="ai-co2 turns your use of Claude Code or ChatGPT into a CO₂ range, then looks for ways to cut it. It runs in your browser. Nothing is uploaded."
+    />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#data">Skip to your data</a>
+
+    <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2.2" /><path d="M15.5 8.5V6.2A2.2 2.2 0 0 0 13.3 4H6.2A2.2 2.2 0 0 0 4 6.2v7.1a2.2 2.2 0 0 0 2.2 2.2h2.3" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.2 2.9 19.5h18.2L12 4.2Z" /><path d="M12 10v4.4" /><path d="M12 17.3v.1" /></symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.6" /><path d="m7.5 9.8 3 2.6-3 2.6" /><path d="M13 15h4" /></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M5.2 5h13.6A1.7 1.7 0 0 1 20.5 6.7v8.6a1.7 1.7 0 0 1-1.7 1.7H11l-4.6 3.5V17H5.2a1.7 1.7 0 0 1-1.7-1.7V6.7A1.7 1.7 0 0 1 5.2 5Z" /><path d="M8 10h8" /><path d="M8 13h5" /></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5.5 12h12.7" /><path d="m12.8 6.5 5.5 5.5-5.5 5.5" /></symbol>
+      <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 18.5V5.8" /><path d="m6.5 11.2 5.5-5.5 5.5 5.5" /></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6.5 9.5 5.5 5.5 5.5-5.5" /></symbol>
+      <symbol id="i-typical" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" stroke-dasharray="3.2 2.8" /></symbol>
+      <symbol id="i-export" viewBox="0 0 24 24"><path d="M7 3.8h6.8l4.2 4.2v11.5a.7.7 0 0 1-.7.7H7a.7.7 0 0 1-.7-.7V4.5a.7.7 0 0 1 .7-.7Z" /><path d="M13.6 3.8v4.4H18" /></symbol>
+      <symbol id="i-wait" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" /><path d="M12 8v4.3l2.8 1.7" /></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12s3.4-6.3 9.2-6.3 9.2 6.3 9.2 6.3-3.4 6.3-9.2 6.3S2.8 12 2.8 12Z" /><circle cx="12" cy="12" r="2.8" /></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15.5V4.5" /><path d="m7.5 9 4.5-4.5L16.5 9" /><path d="M4.5 15v3.3a1.7 1.7 0 0 0 1.7 1.7h11.6a1.7 1.7 0 0 0 1.7-1.7V15" /></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2" /><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" /></symbol>
+      <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 5h5v5" /><path d="M19 5l-8 8" /><path d="M17.5 13.5v4.3a1.7 1.7 0 0 1-1.7 1.7H6.2a1.7 1.7 0 0 1-1.7-1.7V8.2a1.7 1.7 0 0 1 1.7-1.7h4.3" /></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M5 7h9" /><path d="M18 7h1" /><circle cx="16" cy="7" r="2" /><path d="M5 17h3" /><path d="M12 17h7" /><circle cx="10" cy="17" r="2" /></symbol>
+    </svg>
+
+    <noscript>
+      <p class="wrap noscript">ai-co2 does all its counting in your browser, so it needs JavaScript. Switch it on and load the page again.</p>
+    </noscript>
+
+    <div class="wrap">
+      <header class="site">
+        <a class="wordmark" href="#top">ai-co2</a>
+        <nav class="site-nav" aria-label="Page">
+          <a href="#how">How it’s calculated</a>
+          <a href="https://github.com/squaloo-studio/ai-co2" rel="noopener noreferrer">Source on GitHub</a>
+        </nav>
+      </header>
+    </div>
+
+    <main class="wrap" id="top">
+      <div class="intro">
+        <h1>The <span class="title-mark">CO₂</span> of your AI use</h1>
+        <p class="lede">ai-co2 turns your use of Claude Code or ChatGPT into a CO₂ range, then looks for ways to cut it.</p>
+        <p class="meta"><svg class="i i-s" aria-hidden="true"><use href="#i-lock" /></svg>Runs in your browser. Nothing is uploaded.</p>
+      </div>
+
+      <!-- ---------- your data ---------- -->
+      <section class="sec sec--first" id="data" aria-labelledby="h-data" data-chapter="data" data-picked="false">
+        <div class="sec-head">
+          <h2 id="h-data">Your data</h2>
+          <p>Choose Claude Code or ChatGPT. The page then works with the one you pick.</p>
+          <p class="sec-aside">A token is a piece of a word. AI tools count their work in tokens.</p>
+        </div>
+        <div class="data-card">
+          <div class="choose" role="group" aria-label="Claude Code or ChatGPT" data-choose>
+            <button type="button" class="choice" data-choose-source="claude-code">
+              <span class="choice-scene on-navy" aria-hidden="true">
+                <span class="scene-line"><i>›</i> Please count my Claude Code token use…</span>
+                <span class="scene-line scene-out">ai-co2 v1 | 2026-09-08 to 2026-10-07 | data 2026-09-26 to 2026-10-07</span>
+                <span class="scene-line scene-out">claude-opus-5-5 | in 1204551 | cache_write 48211973 | cache_read 912340118 | out 6120447</span>
+                <span class="scene-line scene-out">claude-haiku-4-5-20251001 | in 80112 | cache_write 2400310 | cache_read 31200455 | out 410220</span>
+                <span class="scene-line scene-out">total | 1001968186</span>
+              </span>
+              <span class="choice-text"><b>Claude Code</b><span>Copy a prompt into Claude Code, and paste its short answer back here.</span></span>
+              <span class="choice-go">Use Claude Code<svg class="i" aria-hidden="true"><use href="#i-arrow" /></svg></span>
+            </button>
+            <button type="button" class="choice" data-choose-source="chatgpt">
+              <span class="choice-scene on-navy" aria-hidden="true">
+                <span class="scene-drop"><svg class="i" aria-hidden="true"><use href="#i-export" /></svg>chatgpt-export.zip</span>
+              </span>
+              <span class="choice-text"><b>ChatGPT</b><span>Ask ChatGPT for your data export, and drop the ZIP file here.</span></span>
+              <span class="choice-go">Use ChatGPT<svg class="i" aria-hidden="true"><use href="#i-arrow" /></svg></span>
+            </button>
+          </div>
+
+          <div class="chosen" data-chosen hidden>
+            <span class="tool-icon">
+              <svg class="i" aria-hidden="true" data-icon-for="claude-code"><use href="#i-terminal" /></svg>
+              <svg class="i" aria-hidden="true" data-icon-for="chatgpt" hidden><use href="#i-chat" /></svg>
+            </span>
+            <h3 id="chosen-name" tabindex="-1" data-chosen-name>Claude Code</h3>
+            <button type="button" class="btn btn--line" data-switch-source>Switch to ChatGPT</button>
+          </div>
+
+          <div class="data-body">
+            <div class="tool-stack" data-tool-stack hidden>
+              <!-- Claude Code -->
+              <div class="tool" data-tool="claude-code" hidden>
+                <div class="tool-head">
+                  <p class="tool-status" data-status></p>
+                  <button type="button" class="btn btn--line" data-redo aria-expanded="false" aria-controls="cc-steps" hidden>Paste a new answer</button>
+                </div>
+                <div data-read hidden></div>
+                <div class="tool-body" id="cc-steps" data-steps>
+                  <ol class="steps">
+                    <li class="step">
+                      <span class="step-n" aria-hidden="true">1</span>
+                      <div class="step-body">
+                        <h4>Copy this prompt into Claude Code</h4>
+                        <p>Paste it into Claude Code, in the terminal, your IDE or the desktop app. Start a fresh conversation first, so a long one is not read again. Claude runs a short script that reads Claude Code’s own log files on this computer and replies with a few lines of totals.</p>
+                        <div class="prompt" data-prompt>
+                          <div class="prompt-body">
+                            <pre id="prompt-text" data-prompt-text></pre>
+                            <span class="prompt-fade" aria-hidden="true"></span>
+                          </div>
+                          <div class="prompt-actions">
+                            <button type="button" class="btn btn--primary" data-copy><svg class="i" aria-hidden="true"><use href="#i-copy" /></svg><span data-copy-label>Copy prompt</span></button>
+                            <button type="button" class="btn btn--quiet" data-expand aria-expanded="false" aria-controls="prompt-text">Show all</button>
+                            <p class="prompt-msg" role="status" data-copy-msg></p>
+                          </div>
+                        </div>
+                        <h5 class="before-h" id="h-before">Before you paste</h5>
+                        <ul class="list before" aria-labelledby="h-before">
+                          <li>The script is 120 lines. It reads log files and prints totals. It has no network code and writes no file. Read it before you paste it.</li>
+                          <li>The log files hold your conversations. The script keeps only token counts and model names. No conversation text is printed.</li>
+                          <li>Want to see and approve the command yourself? Switch Claude Code to Manual mode first: Shift+Tab in the terminal, the mode indicator in VS Code, the mode selector in the desktop app. Then choose plain Yes.</li>
+                          <li>It counts all projects on this computer, in any folder you run it from. It does not count other computers, cloud sessions or SSH sessions.</li>
+                          <li>The run itself uses tokens too: about 7,000 for the prompt and the script, and more for Claude Code’s own instructions.</li>
+                          <li>If your Mac offers to install developer tools, you can cancel. Claude can then write the count in another language.</li>
+                        </ul>
+                      </div>
+                    </li>
+                    <li class="step">
+                      <span class="step-n" aria-hidden="true">2</span>
+                      <div class="step-body">
+                        <h4><label for="answer">Paste Claude’s answer here</label></h4>
+                        <p id="answer-hint">Copy Claude’s whole reply. The page reads it here in your browser and checks that the numbers add up. Nothing is uploaded.</p>
+                        <textarea class="answer" id="answer" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste the answer from Claude Code here." aria-describedby="answer-hint answer-msg" data-answer></textarea>
+                        <p class="field-msg is-empty" id="answer-msg" aria-live="polite" data-answer-msg>
+                          <svg class="i i-s" aria-hidden="true" hidden><use href="#i-alert" /></svg><span></span>
+                        </p>
+                      </div>
+                    </li>
+                  </ol>
+                  <ul class="list after-steps">
+                    <li>Menu names and commands as they were on 7 Oct 2026.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- ChatGPT -->
+              <div class="tool" data-tool="chatgpt" hidden>
+                <div class="tool-head">
+                  <p class="tool-status" data-status></p>
+                  <button type="button" class="btn btn--line" data-redo aria-expanded="false" aria-controls="gpt-steps" hidden>Drop a new export</button>
+                </div>
+                <div data-read hidden></div>
+                <div class="tool-body" id="gpt-steps" data-steps>
+                  <div class="progress" data-progress hidden>
+                    <div class="progress-bar" role="progressbar" aria-label="Reading your export" aria-valuemin="0" aria-valuemax="100" tabindex="-1" data-progress-bar><i data-progress-fill></i></div>
+                    <p data-progress-text></p>
+                    <button type="button" class="btn btn--line" data-cancel-read>Stop reading</button>
+                  </div>
+                  <ol class="steps" data-step-list>
+                    <li class="step">
+                      <span class="step-n" aria-hidden="true">1</span>
+                      <div class="step-body">
+                        <h4>Ask ChatGPT for your data export</h4>
+                        <p>In ChatGPT, open <b>Settings › Data controls › Export data</b> and choose <b>Export</b>.</p>
+                      </div>
+                    </li>
+                    <li class="step">
+                      <span class="step-n" aria-hidden="true">2</span>
+                      <div class="step-body">
+                        <h4>Wait for the message</h4>
+                        <p>ChatGPT sends an email or a text message when the export is ready. That can take up to 7 days. The download link works for 24 hours.</p>
+                      </div>
+                    </li>
+                    <li class="step">
+                      <span class="step-n" aria-hidden="true">3</span>
+                      <div class="step-body">
+                        <h4>Drop the ZIP here</h4>
+                        <p>It’s read in your browser, and nothing is uploaded. If your export came as several files, drop them together.</p>
+                        <label class="drop" data-drop>
+                          <input type="file" class="sr" accept=".zip,.json,application/zip,application/json" multiple aria-describedby="drop-msg" data-file />
+                          <svg class="i" aria-hidden="true"><use href="#i-upload" /></svg>
+                          <b>Drop your ChatGPT ZIP here</b>
+                          <span>or choose the file or files</span>
+                        </label>
+                        <p class="field-msg is-empty" id="drop-msg" data-drop-msg>
+                          <svg class="i i-s" aria-hidden="true" hidden><use href="#i-alert" /></svg><span></span>
+                        </p>
+                      </div>
+                    </li>
+                  </ol>
+                  <ul class="list after-steps" data-step-notes>
+                    <li>Business, Enterprise and Healthcare workspaces can’t make this export.</li>
+                    <li>If the export never arrives, OpenAI’s Privacy Portal can send it too. That download is a ZIP with the export inside. Drop it as it is.</li>
+                    <li>Menu names and commands as they were on 7 Oct 2026.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <aside class="notes" aria-labelledby="h-leaves">
+              <h3 id="h-leaves">What leaves your computer</h3>
+              <ul>
+                <li data-note-for="chatgpt"><b>From ChatGPT:</b> nothing. The export is read in this browser tab.</li>
+                <li data-note-for="claude-code"><b>From Claude Code:</b> only the totals. Your own Claude Code does the counting, so they pass through Claude like any other message.</li>
+                <li><b>Afterwards:</b> nothing is kept. Closing the tab clears everything.</li>
+              </ul>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- your result ---------- -->
+      <section class="sec" id="result-chapter" aria-labelledby="h-result" data-chapter="result">
+        <div class="sec-head">
+          <h2 id="h-result">Your result</h2>
+          <p>Your result, as a range. It moves whenever you change anything on this page, and a small copy stays on screen while you scroll.</p>
+        </div>
+        <div class="fig">
+          <div class="result on-navy" id="result" role="group" aria-label="Your estimate" tabindex="-1" data-result>
+            <div class="result-empty" data-result-empty>
+              <h3>Your range will land here</h3>
+              <p data-empty-text></p>
+              <div class="axis" aria-hidden="true" data-empty-axis></div>
+            </div>
+
+            <div class="result-top" data-result-top hidden>
+              <div class="readout">
+                <p class="range" data-range>
+                  <!-- Spoken as "3.7 to 34", seen as "3.7–34". The seen part is one unbroken run of text, so the dash keeps its kerning. -->
+                  <span class="sr" data-range-word>Likely range: <span data-num="m:p5"></span> to <span data-num="m:p95"></span> </span><span data-range-seen><span class="about" data-range-about hidden>about </span><span data-num="m:p5"></span><span data-range-rest>–<span data-num="m:p95"></span></span></span><wbr /><span class="unit" data-unit data-range-unit></span><span class="under" data-range-under hidden>under 1 mg</span>
+                </p>
+                <p class="range-sub" data-summary-line></p>
+                <div class="tags is-empty" data-tags>
+                  <p class="tag" data-tag-applied hidden><svg class="i i-s" aria-hidden="true"><use href="#i-eye" /></svg><span></span></p>
+                  <p class="tag" data-tag-set hidden><svg class="i i-s" aria-hidden="true"><use href="#i-sliders" /></svg><span></span></p>
+                </div>
+                <p class="likely" data-likely>Middle estimate: <span class="hl"><span data-num="m:mid"></span> <span data-unit></span></span></p>
+                <p class="one-note" data-one-note hidden>You have set every assumption that changes your result, so there is one outcome and no range. Reset the sliders to see the range again.</p>
+                <div class="car" data-car>
+                  <p class="car-lead">Like driving a new petrol car <span class="km"><span data-num="d:mid"></span> <span data-car-unit></span></span></p>
+                  <p class="car-place" data-car-place hidden></p>
+                  <p class="car-range" data-car-range>Likely <span data-num="d:p5"></span><span aria-hidden="true">–</span><span class="sr"> to </span><span data-num="d:p95"></span> <span data-car-unit></span>.</p>
+                  <!-- The road is a picture of the sentence above it, so it is hidden from screen readers. -->
+                  <div class="road" data-road aria-hidden="true" hidden>
+                    <div class="road-line"></div>
+                    <div class="road-done" data-road-done></div>
+                    <div class="road-end road-end--start"></div>
+                    <div class="road-end" data-road-end></div>
+                    <span class="road-lbl road-lbl--start" data-road-from></span>
+                    <span class="road-lbl" data-road-to></span>
+                    <div class="road-car" data-road-car>
+                      <svg viewBox="0 0 34 28">
+                        <g class="body">
+                          <path d="M3.5 19.5v-3.6c0-1 .7-1.9 1.7-2.1l4.1-.9 3.4-4.4a3 3 0 0 1 2.4-1.2h5.6a3 3 0 0 1 2.3 1.1l3.6 4.4 2.6.6c1 .2 1.8 1.1 1.8 2.2v3.9" />
+                          <path d="M13.7 19.5h6.6" /><path d="M3.5 19.5h2" /><path d="M28.5 19.5h2" />
+                          <path d="M10.6 12.9h16" /><path d="M17.6 7.6v5.3" />
+                        </g>
+                        <circle cx="9.6" cy="19.8" r="2.6" /><circle cx="24.4" cy="19.8" r="2.6" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <p class="history" data-history hidden><span data-history-lead></span> <span data-history-value></span><span class="sr" data-history-word hidden></span>.</p>
+              </div>
+              <div class="habits" data-switches>
+                <h3 data-switches-title></h3>
+                <p class="habits-note" data-switches-note></p>
+                <ul class="toggles" data-switches-list></ul>
+              </div>
+            </div>
+
+            <div class="chart-slot" data-chart hidden></div>
+          </div>
+          <p class="fig-cap" data-chart-caption hidden>
+            <b>How to read it.</b>
+            <span data-caption-range>Each dot is one possible outcome out of 100, and each stands for the same chance. Where the dots pile up is where your footprint most likely sits. The 5 lowest and the 5 highest are drawn hollow: 90 of 100 land between them. The line marks the middle estimate: half of the dots are below it, half above.</span>
+            <span data-caption-one hidden>Each dot is one possible outcome out of 100. Nothing in your estimate varies any more, so all 100 land on the same value. The line marks it.</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- ways to cut ---------- -->
+      <section class="sec" id="tips" aria-labelledby="h-tips" data-chapter="tips" hidden>
+        <div class="sec-head">
+          <h2 id="h-tips">Ways to cut</h2>
+          <p>Picked from your own numbers, ordered by their middle saving.</p>
+        </div>
+        <div class="fig">
+          <div class="card tips" data-tips-list></div>
+          <p class="fig-cap" data-tips-caption>
+            <span data-tips-range><b>Each saving is a range too.</b> It is worked out for that tip on its own. Apply a tip and your range for these days changes on the page.</span>
+            <span data-tips-one hidden><b>Each saving is worked out for that tip on its own.</b> Apply a tip and your result changes on the page.</span>
+            Switch it off to go back. Menu names and commands as they were on 7 Oct 2026.
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- three ways to contribute ---------- -->
+      <section class="sec" id="contribute" aria-labelledby="h-contribute" data-chapter="contribute" hidden>
+        <div class="sec-head">
+          <h2 id="h-contribute">Three ways to contribute</h2>
+          <p>Cutting comes first. If you also want to give money, here are three different ways. None of them undoes your emissions. <span data-cost></span></p>
+        </div>
+        <div class="fig">
+          <div class="card options" data-options></div>
+          <p class="fig-cap" data-footnote></p>
+        </div>
+      </section>
+
+      <!-- ---------- how it's calculated ---------- -->
+      <section class="sec" id="how" aria-labelledby="h-how" data-chapter="method">
+        <div class="sec-head">
+          <h2 id="h-how">How it’s calculated</h2>
+          <p>The assumptions behind the estimate, where each comes from, and a slider for every number in the list. The model sizes share one slider.</p>
+        </div>
+        <div class="fig">
+          <details class="card method" data-method>
+            <summary><span class="when-closed">Show every assumption</span><span class="when-open">Hide the assumptions</span><svg class="i" aria-hidden="true"><use href="#i-chevron" /></svg></summary>
+            <div class="method-body">
+              <p class="formula" data-formula></p>
+              <div class="method-text">
+                <p>Your footprint is worked out with one formula: tokens × weight × energy per token × data-centre overhead × grid × hardware. Weight says how much energy reading a token takes compared with writing one. The result is in CO₂e: CO₂ and the other greenhouse gases, counted as CO₂.</p>
+                <p><span data-counted-words="claude-code">Your tokens are counted.</span><span data-counted-words="chatgpt" hidden>The tokens in your export are counted. Hidden work is estimated on top.</span> The other numbers are not known exactly. For each of them, the list of assumptions below gives a low, a typical and a high value.</p>
+                <ul>
+                  <li>Low and high are the lowest and the highest value we take seriously. The page never uses a value outside them.</li>
+                  <li>Typical is the middle. We treat a lower value and a higher value as equally likely.</li>
+                </ul>
+                <p>The page works out your footprint 10,000 times. Each time it uses a different combination of values, taken from a fixed pattern that spreads the combinations evenly. For every assumption you have not set yourself, half of the 10,000 runs use a value below typical and half a value above it. Positions near the middle of each slider are used most often. Positions near the two ends are used least often. That shape is our choice. No data can settle it.</p>
+                <p>The energy values for the model sizes move together: a run that is high for one size is high for all. Every other assumption varies on its own.</p>
+                <p>The page sorts the 10,000 results and cuts the list into 100 groups of 100. Each dot in the chart is the middle of one group. The middle estimate lies between group 50 and group 51, so half of the results are below it and half above. The likely range leaves out the 5 lowest and the 5 highest groups, so 90 of 100 results land inside it.</p>
+                <p>The extreme range is the formula with every assumption you have not set at its low value, and again with each at its high value. No result can fall outside it.</p>
+                <p>Nothing here is random. The same data always gives the same result.</p>
+                <p>The range is only as good as that list. If a real value lies below our low or above our high, your real footprint can lie outside the range too.</p>
+                <p>“Saves roughly A to B” under a tip means this. If the days counted here had been the same except for this one change, your footprint would have been A to B lower in 90 of 100 possible outcomes. The tips are ordered by the middle of each saving, which can differ from the order of the ranges.</p>
+                <p>The car figure counts only what leaves the exhaust: about 160 g of CO₂ per km for a new petrol car in Europe in real driving.</p>
+                <p>Giving money does not undo emissions. We follow the idea of a contribution claim from a 2024 paper by the University of Oxford: what you give is a contribution to climate work, and your estimate stays what it is.</p>
+                <p>A cost range under “Three ways to contribute” means this. In at least 90 of 100 possible outcomes, funding that many kilograms with this provider would cost between the two figures.</p>
+              </div>
+              <p class="method-src">Source for the car figure: <a href="https://www.eea.europa.eu/en/datahub/datahubitem-view/fa8b1229-3db6-495d-b18e-9c9b3267c02b" target="_blank" rel="noopener noreferrer">EEA provisional 2025 data<span class="sr"> (opens in a new tab)</span></a>, new petrol cars without hybrid drive (136.6 g/km, our own average of the EEA’s table), times <a href="https://theicct.org/publication/real-world-co2-emission-values-vehicles-europe-jun26/" target="_blank" rel="noopener noreferrer">the ICCT’s 19% real-world gap<span class="sr"> (opens in a new tab)</span></a> for cars registered in 2023. Checked 7 Oct 2026.</p>
+              <p class="method-src">Source for the places beside the car figure: drives by the fastest route on <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap<span class="sr"> (opens in a new tab)</span></a> (© OpenStreetMap contributors), between main stations or city centres; courts, pools, pitches, tracks, bridges and avenues by their official lengths; the Moon at 384,400 km on average, from <a href="https://science.nasa.gov/moon/facts/" target="_blank" rel="noopener noreferrer">NASA<span class="sr"> (opens in a new tab)</span></a>. Checked 7 Oct 2026.</p>
+              <div class="counted">
+                <div>
+                  <h3>Counted</h3>
+                  <ul class="list" data-counted></ul>
+                </div>
+                <div>
+                  <h3>Left out</h3>
+                  <ul class="list" data-left-out></ul>
+                </div>
+              </div>
+              <div class="method-notes" data-method-notes hidden>
+                <h3>For your result</h3>
+                <ul class="list" data-method-notes-list></ul>
+                <p class="method-src">Source for the clean-power figure: Worked out from Google’s and Microsoft’s 2026 environmental reports (65 and 73). The figure swings from year to year: one year earlier it was 91 and 9. Checked 7 Oct 2026.</p>
+              </div>
+              <div class="assume">
+                <h3>The assumptions</h3>
+                <p data-slider-note></p>
+              </div>
+              <div class="sliders" data-sliders></div>
+              <div class="method-foot">
+                <p data-extreme hidden><span data-extreme-label></span>: <b class="num" data-extreme-value></b></p>
+                <button type="button" class="btn btn--line" data-reset>Reset sliders</button>
+              </div>
+            </div>
+          </details>
+          <p class="fig-cap"><b>Estimates, not measurements.</b> Every CO₂ figure on this page is an estimate. The extreme range is what the formula gives with every assumption that still varies at its low value, and again with each at its high value.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wrap foot">
+      <p>ai-co2 is free and open source (MIT), a Squaloo Studio project.</p>
+      <!-- The header's two links again: on phones and at high zoom the header shows the wordmark only. -->
+      <nav class="foot-nav" aria-label="More">
+        <a href="#how">How it’s calculated</a>
+        <a href="https://github.com/squaloo-studio/ai-co2" rel="noopener noreferrer">Source on GitHub</a>
+      </nav>
+    </footer>
+
+    <!-- The pinned copy of the result. It shows once the result has scrolled away. -->
+    <aside class="pin" aria-label="Your result, pinned" data-pill inert>
+      <div class="pill">
+        <span class="pill-range"><span data-pill-numbers><span class="about" data-pill-about hidden>about </span><span data-num="m:p5"></span><span data-pill-rest><span aria-hidden="true">–</span><span class="sr"> to </span><span data-num="m:p95"></span></span><small data-unit></small></span><span data-pill-under hidden>under 1 mg</span></span>
+        <span class="sr" data-pill-applied hidden></span>
+        <span class="pill-mid" data-pill-mid><span class="long">middle estimate&nbsp;</span><b data-num="m:mid"></b></span>
+        <div class="band band--mini on-navy" data-pill-band></div>
+        <button type="button" class="round-btn" aria-label="Back to the result" data-to-result><svg class="i" aria-hidden="true"><use href="#i-up" /></svg></button>
+        <span class="delta pin-delta" aria-hidden="true" data-pill-chip></span>
+      </div>
+    </aside>
+
+    <p class="sr" aria-live="polite" data-live></p>
+  </body>
+</html>

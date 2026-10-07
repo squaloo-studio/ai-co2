@@ -1,0 +1,220 @@
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--r-pill);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, transform 0.1s;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.btn--primary:hover {
+  background: var(--accent-press);
+}
+.btn--quiet {
+  background: transparent;
+  color: var(--on-navy-2);
+}
+.btn--quiet:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--on-navy);
+}
+.btn--line {
+  min-height: 38px;
+  padding: 0 16px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--line-control);
+  color: var(--ink);
+  font-size: 14.5px;
+}
+.btn--line:hover {
+  background: var(--paper-2);
+}
+.btn[aria-disabled='true'] {
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  color: var(--ink-3);
+  cursor: default;
+}
+.btn[aria-disabled='true']:hover {
+  background: var(--card);
+}
+.btn[aria-disabled='true']:active {
+  transform: none;
+}
+
+/* ---------- switches ---------- */
+.switch {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 26px;
+  padding: 0;
+  border: 1.5px solid color-mix(in srgb, var(--c) 54%, transparent);
+  border-radius: var(--r-pill);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+/* A taller target than the drawn pill, for fingers. */
+.switch::after {
+  content: '';
+  position: absolute;
+  inset: -10px -4px;
+}
+.switch .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 62%, transparent);
+  transition: transform 0.25s var(--ease), background-color 0.2s;
+}
+.switch:hover {
+  border-color: color-mix(in srgb, var(--c) 78%, transparent);
+}
+.switch[aria-checked='true'] {
+  border-color: var(--c);
+  background: var(--c);
+}
+.switch[aria-checked='true'] .knob {
+  transform: translateX(18px);
+  background: var(--knob-on);
+}
+
+/* ---------- chips, tags and marks ---------- */
+.chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip--checked {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+.chip--problem {
+  background: var(--bad-soft);
+  color: var(--bad);
+}
+.chip--waiting {
+  border: 1.5px dashed var(--line-control);
+  color: var(--ink-2);
+}
+mark {
+  padding: 0.06em 0.3em;
+  border-radius: var(--r-xs);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  /* A long saving ("roughly 0.32–11 kg over these 12 days") wraps like the sentence around it, so it
+     never pushes a narrow page sideways. Each line of it keeps its own rounded ends. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* Its numbers are one thing: "0.32–11 kg" moves to the next line whole, and never splits at its dash. */
+mark .nowrap {
+  white-space: nowrap;
+}
+/* The change chip: how far the middle estimate just moved. */
+.delta {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 5px 8px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 600 12px/1 var(--mono);
+  white-space: nowrap;
+  vertical-align: 1px;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.2s, transform 0.35s var(--ease);
+  pointer-events: none;
+}
+.delta.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- the small range bar ---------- */
+.band {
+  min-width: 0;
+}
+.band-area {
+  position: relative;
+  height: 14px;
+}
+.band-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--trk);
+}
+.band-fill,
+.band-ghost {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--r-pill);
+  transition: left var(--move) var(--ease), width var(--move) var(--ease), opacity 0.6s;
+}
+.band-fill {
+  background: var(--data-soft);
+  box-shadow: inset 0 0 0 1.5px var(--data-line);
+}
+.band-ghost {
+  top: -3px;
+  bottom: -3px;
+  border: 1.5px dashed var(--ghost);
+  opacity: 0;
+}
+.band-ghost.is-on {
+  opacity: 1;
+}
+.band-pin {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--pin-ring);
+  transition: left var(--move) var(--ease);
+}
+.band--accent .band-fill {
+  background: var(--accent);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+@media (pointer: coarse), (max-width: 640px) {
+  .btn,
+  .btn--line {
+    min-height: 44px;
+  }
+}

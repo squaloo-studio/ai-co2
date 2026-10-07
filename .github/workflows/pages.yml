@@ -1,0 +1,356 @@
+# Publishes the built site to GitHub Pages.
+#
+# It runs only when a person starts it by hand: Actions > "Publish to GitHub Pages" > Run workflow.
+# There is no push, schedule or pull-request trigger, so a pull request or a fork cannot start it here.
+#
+# THE COLLISION RULE
+# The organisation's website repository (WEBSITE_REPO below) has had its own page under /ai-co2/.
+# A project site from this repository is served at the same address. Two repositories must never
+# answer for one address, so the tool must not go live while that page still exists.
+# This workflow therefore refuses to deploy unless both of these hold:
+#   (a) the person starting it types the confirmation sentence exactly, and
+#   (b) an automatic check finds no "ai-co2" page in the website repository.
+# If the check cannot run, or cannot be sure, the workflow stops and says why.
+#
+# The automatic check runs twice: before anything is built, and again as the first step of the
+# publishing job. GitHub lets a person run single jobs of an old run again. Because the publishing
+# job checks for itself, that can never publish without a fresh check.
+#
+# WHAT THE AUTOMATIC CHECK LOOKS AT
+# 1. File names. It lists the file names of two branches of the website repository with plain git,
+#    without signing in (the repository is public):
+#      - PUBLISHED_BRANCH, the branch that holds the files the website serves, and
+#      - the default branch, which holds the source the website is built from.
+#    It fails if any file or folder on either branch is named "ai-co2", with or without a file
+#    ending, at any depth and in upper or lower case.
+# 2. Whether those files are what the website serves now. It asks GitHub's API for the website's
+#    newest deployment to GitHub Pages. It fails unless that deployment is of the very commit
+#    whose file names were just read, and has succeeded. So it stops while the website is still
+#    being published, when its last publishing failed, and when its newest deployment is of
+#    some other commit, as it is when the website is published from another branch.
+#
+# HOW THE CHECK CAN BE WRONG
+#   - It does not open the live address. After the page is removed, an old copy can stay
+#     reachable for some minutes.
+#   - It only knows the page by its name. A page under /ai-co2/ that is produced from a
+#     differently named file, or by a redirect rule, is not found.
+#   - It assumes the website is published from PUBLISHED_BRANCH to the environment named
+#     "github-pages". If the website is published in another way, change this check first.
+#     Do not count on it to notice by itself.
+#   - The page can be put back after the last check has passed.
+#   - It can block for no good reason: any file or folder named "ai-co2", an image folder for
+#     example, counts as a page.
+# This is why the typed confirmation is also required: a person has to look.
+#
+# Why the live address is not fetched instead: once the tool is published, that address
+# answers for the tool itself, so a fetch could no longer tell the two apart.
+#
+# The workflow needs no stored secret. The check sends the run's own short-lived token to
+# api.github.com and nowhere else, because requests without a token are limited to 60 an hour
+# for each network address, and runners share addresses.
+#
+# The action versions and their commit hashes were read on 2026-10-07 from each action's
+# "releases/latest" page and tag list on github.com. Each "uses:" line names its version.
+
+name: Publish to GitHub Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type exactly: The website no longer has its own ai-co2 page'
+        required: true
+        type: string
+
+# No job gets any permission unless it asks for it below.
+permissions: {}
+
+# One deployment at a time. A second run waits; a running deployment is never cut off.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  THIS_REPO: squaloo-studio/ai-co2
+  WEBSITE_REPO: squaloo-studio/squaloo-studio.github.io
+  PUBLISHED_BRANCH: gh-pages
+  CONFIRM_SENTENCE: The website no longer has its own ai-co2 page
+  SITE_URL: https://squaloo-studio.github.io/ai-co2/
+
+jobs:
+  preflight:
+    name: Checks before anything is built
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Started from the right place
+        run: |
+          stop() {
+            echo "::error::$1"
+            printf '### Not published\n\n%s\n' "$1" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          }
+          if [ "$GITHUB_REPOSITORY" != "$THIS_REPO" ]; then
+            stop "This workflow publishes only from $THIS_REPO. It was started in $GITHUB_REPOSITORY."
+          fi
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            stop "This workflow publishes only from the main branch. It was started from $GITHUB_REF."
+          fi
+
+      - name: Confirmation sentence
+        env:
+          # Passed as an environment variable and only ever compared as text.
+          # It is never placed inside a command, and the script never prints it.
+          TYPED: ${{ inputs.confirm }}
+        run: |
+          if [ "$TYPED" != "$CONFIRM_SENTENCE" ]; then
+            msg="The confirmation sentence does not match. Type it exactly, with no full stop at the end: $CONFIRM_SENTENCE"
+            echo "::error::$msg"
+            printf '### Not published\n\n%s\n' "$msg" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      # The "&collision_check" mark lets the publishing job run this same step again
+      # (see "*collision_check" below), so the two can never drift apart.
+      - &collision_check
+        name: The website repository no longer has an ai-co2 page
+        env:
+          GIT_TERMINAL_PROMPT: '0'
+          # Give up on a download that stalls, so the check fails and does not hang.
+          GIT_HTTP_LOW_SPEED_LIMIT: '1000'
+          GIT_HTTP_LOW_SPEED_TIME: '30'
+          # The run's own short-lived token. It is only ever sent to api.github.com.
+          RUN_TOKEN: ${{ github.token }}
+        run: |
+          stop() {
+            echo "::error::$1"
+            printf '### Not published\n\n%s\n' "$1" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          }
+
+          for tool in git curl jq; do
+            if ! command -v "$tool" > /dev/null; then
+              stop "The check could not run: the runner has no $tool. Nothing was published."
+            fi
+          done
+
+          url="https://github.com/${WEBSITE_REPO}.git"
+          api="https://api.github.com/repos/${WEBSITE_REPO}"
+          work="$RUNNER_TEMP/website-check"
+          rm -rf "$work"
+          git init --quiet "$work"
+
+          # ---- 1. File names ----
+
+          # Find the default branch.
+          if ! head_info="$(git ls-remote --symref "$url" HEAD)"; then
+            stop "The check could not run: $WEBSITE_REPO could not be read. Nothing was published."
+          fi
+          default_branch="$(printf '%s\n' "$head_info" | sed -n 's|^ref: refs/heads/\([^[:space:]]*\)[[:space:]]*HEAD$|\1|p')"
+          if [ -z "$default_branch" ]; then
+            stop "The check could not run: the default branch of $WEBSITE_REPO could not be found. Nothing was published."
+          fi
+
+          # The branch with the served files must exist, or we cannot tell what is served.
+          if ! published_info="$(git ls-remote --heads "$url" "refs/heads/$PUBLISHED_BRANCH")"; then
+            stop "The check could not run: the branches of $WEBSITE_REPO could not be listed. Nothing was published."
+          fi
+          if [ -z "$published_info" ]; then
+            stop "The check could not run: $WEBSITE_REPO has no branch named $PUBLISHED_BRANCH, so the served files cannot be listed. If the website is now published another way, update this workflow. Nothing was published."
+          fi
+
+          found=""
+          published_commit=""
+          for branch in "$PUBLISHED_BRANCH" "$default_branch"; do
+            # File names only: no file contents are downloaded, and no file is checked out or run.
+            if ! git -C "$work" fetch --quiet --depth=1 --filter=blob:none "$url" "refs/heads/$branch"; then
+              stop "The check could not run: branch $branch of $WEBSITE_REPO could not be fetched. Nothing was published."
+            fi
+            if [ "$branch" = "$PUBLISHED_BRANCH" ]; then
+              published_commit="$(git -C "$work" rev-parse --verify --quiet 'FETCH_HEAD^{commit}')" || published_commit=""
+            fi
+            if ! git -C "$work" ls-tree -r -t -z --name-only FETCH_HEAD | tr '\0' '\n' > "$work/names.txt"; then
+              stop "The check could not run: the files on branch $branch of $WEBSITE_REPO could not be listed. Nothing was published."
+            fi
+            if [ ! -s "$work/names.txt" ]; then
+              stop "The check could not run: branch $branch of $WEBSITE_REPO lists no files. Nothing was published."
+            fi
+            hits="$(grep -i -E '(^|/)ai-co2(\.[^/]*)?$' "$work/names.txt" || true)"
+            if [ -n "$hits" ]; then
+              # Names come from another repository. Only plain characters reach the summary.
+              hits="$(printf '%s\n' "$hits" | LC_ALL=C tr -c 'A-Za-z0-9._/ \n-' '?')"
+              found="${found}Branch ${branch}:"$'\n'"${hits}"$'\n'
+            fi
+            echo "Branch $branch: $(wc -l < "$work/names.txt" | tr -d ' ') names read."
+          done
+
+          if [ -n "$found" ]; then
+            echo "::error::$WEBSITE_REPO still has an ai-co2 page. Remove it there first. Nothing was published."
+            {
+              echo '### Not published'
+              echo
+              echo "The website repository \`$WEBSITE_REPO\` still has an ai-co2 page. Remove it there, wait until the website has been published again, then start this workflow again."
+              echo
+              echo '```'
+              printf '%s' "$found"
+              echo '```'
+              echo
+              echo 'If a name in this list is not a page under /ai-co2/ (an image, for example), rename it in the website repository.'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          # ---- 2. Are those files what the website serves now? ----
+
+          case "$published_commit" in
+            '' | *[!0-9a-f]*)
+              stop "The check could not run: the newest commit on branch $PUBLISHED_BRANCH of $WEBSITE_REPO could not be read. Nothing was published."
+              ;;
+          esac
+
+          # ask <address> <file>: saves the API's answer in the file. It succeeds only for a
+          # complete answer with status 200. It tries with the run's token first.
+          ask() {
+            local code
+            if [ -n "${RUN_TOKEN:-}" ]; then
+              code="$(curl --silent --show-error --proto '=https' --max-time 30 --output "$2" --write-out '%{http_code}' \
+                --header 'Accept: application/vnd.github+json' --header "Authorization: Bearer ${RUN_TOKEN}" "$1")" || code="none"
+              if [ "$code" = "200" ]; then
+                return 0
+              fi
+              echo "The API's answer with the run's token: $code. Trying once without a token."
+            fi
+            code="$(curl --silent --show-error --proto '=https' --max-time 30 --output "$2" --write-out '%{http_code}' \
+              --header 'Accept: application/vnd.github+json' "$1")" || code="none"
+            if [ "$code" = "200" ]; then
+              return 0
+            fi
+            echo "The API's answer: $code."
+            return 1
+          }
+
+          # The newest entry of a list from the API. GitHub's documentation does not promise an order.
+          newest='if type == "array" and length > 0 then (sort_by(.created_at, .id) | last) else empty end'
+
+          if ! ask "$api/deployments?environment=github-pages&per_page=100" "$work/deployments.json"; then
+            stop "The check could not run: GitHub's API did not list the deployments of $WEBSITE_REPO. It may be unreachable or over its request limit. Try again later. Nothing was published."
+          fi
+          deployment_id="$(jq -r "$newest | .id" "$work/deployments.json")" || deployment_id=""
+          deployment_commit="$(jq -r "$newest | .sha" "$work/deployments.json")" || deployment_commit=""
+          case "$deployment_id" in
+            '' | *[!0-9]*)
+              stop "The check could not run: GitHub's API named no deployment of $WEBSITE_REPO to GitHub Pages, or its answer could not be read. If the website is now published another way, update this workflow. Nothing was published."
+              ;;
+          esac
+          if [ "$deployment_commit" != "$published_commit" ]; then
+            stop "The newest deployment of $WEBSITE_REPO is not of the newest commit on its branch $PUBLISHED_BRANCH, so the check cannot tell what the website serves. If the website is being published right now, wait a few minutes and start again. If it is no longer published from that branch, update this workflow. Nothing was published."
+          fi
+
+          if ! ask "$api/deployments/$deployment_id/statuses?per_page=100" "$work/statuses.json"; then
+            stop "The check could not run: GitHub's API did not say whether the newest deployment of $WEBSITE_REPO has finished. It may be unreachable or over its request limit. Try again later. Nothing was published."
+          fi
+          state="$(jq -r "$newest | .state" "$work/statuses.json")" || state=""
+          case "$state" in
+            success) ;;
+            '' | *[!a-z_]*)
+              stop "The check could not run: the state of the newest deployment of $WEBSITE_REPO could not be read. Nothing was published."
+              ;;
+            *)
+              stop "The newest deployment of $WEBSITE_REPO has not succeeded (its state is \"$state\"). Wait until the website has been published, or repair it, then start again. Nothing was published."
+              ;;
+          esac
+
+          echo "No ai-co2 page found in $WEBSITE_REPO (branches $PUBLISHED_BRANCH and $default_branch)."
+          echo "The website's newest deployment is of that $PUBLISHED_BRANCH commit, and it succeeded."
+
+  build:
+    name: Install, check, test and build
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Node 22: Vitest 5 needs 22.12 or later, and Vite 8 needs 20.19 or 22.12 or later.
+      # The project's own checks were run on Node 22. Node 22 is supported until 2027-04-30.
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      # Exactly the versions in package-lock.json. Packages may not run their own
+      # install scripts; none of the packages used on Linux needs one.
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Type check
+        run: npm run typecheck
+
+      # Some tests run the Python counting script. Without Python 3 they would skip it and
+      # still pass, so the step asks for Python first. No test needs a browser.
+      - name: Tests
+        run: |
+          python3 --version
+          npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: The built site is complete and uses relative paths
+        run: |
+          if [ ! -s dist/index.html ]; then
+            echo "::error::The build made no dist/index.html."
+            exit 1
+          fi
+          # The site is served from a folder, so a path that starts with "/" would break it.
+          if grep -n -E '(src|href)="/' dist/index.html; then
+            echo "::error::dist/index.html has a path that starts with \"/\". All paths must be relative."
+            exit 1
+          fi
+
+      - name: Hand the built site to the deploy job
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  deploy:
+    name: Publish
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # The two permissions GitHub's deploy action needs, and nothing else.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: https://squaloo-studio.github.io/ai-co2/
+    steps:
+      # The same check as in the first job, run again right before publishing.
+      - *collision_check
+
+      - name: Publish to GitHub Pages
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+      - name: Summary
+        run: |
+          {
+            echo '### Published'
+            echo
+            echo "Address: $SITE_URL"
+            echo
+            echo "Built from commit \`$GITHUB_SHA\` on the main branch."
+            echo
+            echo 'It can take a few minutes until the new version shows. Open the address and check that it is the tool, not the old page.'
+          } >> "$GITHUB_STEP_SUMMARY"

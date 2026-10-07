@@ -1,0 +1,6131 @@
+{
+ "about": "ai-co2 tips: test cases. Written by \"node tips.check.verified.mjs --write\". Do not edit by hand. Each case is one made-up person: \"input\" is what pickTips gets, \"expect\" holds what the page must show with no tip applied and, where there are tips, with the first one applied. Texts only, so a port passes when its printed sentences are the same.",
+ "rules": {
+  "maxShown": 3,
+  "floorKg": 0.01,
+  "floorOn": "mid",
+  "minMiddleDrop": 0.05,
+  "monthDays": [
+   28,
+   31
+  ],
+  "noise": 1e-9
+ },
+ "cases": [
+  {
+   "name": "Heavy Opus user (the statistics fixture A)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 2184390,
+      "cacheWrite": 21662104,
+      "cacheRead": 548310227,
+      "output": 4106552
+     },
+     {
+      "model": "claude-sonnet-5",
+      "display": "Sonnet 5",
+      "sizeClass": "medium",
+      "freshInput": 911204,
+      "cacheWrite": 8904117,
+      "cacheRead": 172556093,
+      "output": 1380961
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "display": "Haiku 4.5",
+      "sizeClass": "small",
+      "freshInput": 1002387,
+      "cacheWrite": 1240008,
+      "cacheRead": 18771460,
+      "output": 402113
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "About 85% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.75–7.6 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.75–7.6 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.23–8 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.23–8 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 0.26–1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.26–1.4 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-opus-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Opus work",
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": true,
+       "title": "About 85% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.75–7.6 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.75–7.6 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.23–8 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.23–8 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 0.26–1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.26–1.4 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Light Haiku user",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-haiku-4-5",
+      "display": "Haiku 4.5",
+      "sizeClass": "small",
+      "freshInput": 300000,
+      "cacheWrite": 900000,
+      "cacheRead": 14000000,
+      "output": 260000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "g",
+     "noTipsNote": "We tried 1 change on your Claude Code numbers and do not suggest it: it would save less than 10 g a month in at least half of the possible outcomes.",
+     "appliedLabel": null,
+     "tips": [],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Sonnet user with enormous cache reads (long sessions, never cleared)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-sonnet-5-5",
+      "display": "Sonnet 5.5",
+      "sizeClass": "medium",
+      "freshInput": 400000,
+      "cacheWrite": 9000000,
+      "cacheRead": 2400000000,
+      "output": 2100000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "Almost all of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.44–15 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.44–15 kg a month"
+      },
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Sonnet 5.5",
+       "body": [
+        "Moving a quarter of your Sonnet 5.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.41–9.8 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.41–9.8 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-sonnet-to-haiku"
+     ]
+    },
+    {
+     "applied": [
+      "cc-clear"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: A third less re-reading",
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": true,
+       "title": "Almost all of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.44–15 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.44–15 kg a month"
+      },
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Sonnet 5.5",
+       "body": [
+        "Moving a quarter of your Sonnet 5.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.41–9.8 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.41–9.8 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-sonnet-to-haiku"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fable user (the statistics fixture D)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-fable-5-1",
+      "display": "Fable 5.1",
+      "sizeClass": "fable",
+      "freshInput": 500000,
+      "cacheWrite": 5000000,
+      "cacheRead": 120000000,
+      "output": 1000000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-fable-to-sonnet",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Fable 5.1",
+       "body": [
+        "Moving half of your Fable 5.1 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.17–3.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model fable"
+        },
+        " for your hardest tasks. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Fable work",
+       "switchNote": "Saves roughly 0.17–3.4 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.04–2.1 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.04–2.1 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Fable wrote 1 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Fable would save ",
+        {
+         "mark": "roughly 0.05–0.46 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.05–0.46 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-fable-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-fable-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Fable work",
+     "tips": [
+      {
+       "id": "cc-fable-to-sonnet",
+       "applied": true,
+       "title": "Almost all of your estimate comes from Fable 5.1",
+       "body": [
+        "Moving half of your Fable 5.1 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.17–3.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model fable"
+        },
+        " for your hardest tasks. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Fable work",
+       "switchNote": "Saves roughly 0.17–3.4 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.04–2.1 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.04–2.1 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Fable wrote 1 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Fable would save ",
+        {
+         "mark": "roughly 0.05–0.46 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.05–0.46 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-fable-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fable and Opus together, with Haiku subagents",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-fable-5-1",
+      "display": "Fable 5.1",
+      "sizeClass": "fable",
+      "freshInput": 300000,
+      "cacheWrite": 4000000,
+      "cacheRead": 90000000,
+      "output": 900000
+     },
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 900000,
+      "cacheWrite": 9000000,
+      "cacheRead": 210000000,
+      "output": 1700000
+     },
+     {
+      "model": "claude-haiku-4-5",
+      "display": "Haiku 4.5",
+      "sizeClass": "small",
+      "freshInput": 600000,
+      "cacheWrite": 800000,
+      "cacheRead": 9000000,
+      "output": 300000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.11–4.2 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.11–4.2 kg a month"
+      },
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "About 70% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.3–3 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.3–3 kg a month"
+      },
+      {
+       "id": "cc-fable-to-sonnet",
+       "applied": false,
+       "title": "About 30% of your estimate comes from Fable 5.1",
+       "body": [
+        "Moving half of your Fable 5.1 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.14–2.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model fable"
+        },
+        " for your hardest tasks. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Fable work",
+       "switchNote": "Saves roughly 0.14–2.7 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-opus-to-sonnet",
+      "cc-fable-to-sonnet"
+     ]
+    },
+    {
+     "applied": [
+      "cc-clear"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: A third less re-reading",
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": true,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.11–4.2 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.11–4.2 kg a month"
+      },
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "About 70% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.3–3 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.3–3 kg a month"
+      },
+      {
+       "id": "cc-fable-to-sonnet",
+       "applied": false,
+       "title": "About 30% of your estimate comes from Fable 5.1",
+       "body": [
+        "Moving half of your Fable 5.1 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.14–2.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model fable"
+        },
+        " for your hardest tasks. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Fable work",
+       "switchNote": "Saves roughly 0.14–2.7 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-opus-to-sonnet",
+      "cc-fable-to-sonnet"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Sonnet only, short sessions, a lot of writing",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-sonnet-5-5",
+      "display": "Sonnet 5.5",
+      "sizeClass": "medium",
+      "freshInput": 2500000,
+      "cacheWrite": 6000000,
+      "cacheRead": 30000000,
+      "output": 3200000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Sonnet 5.5",
+       "body": [
+        "Moving a quarter of your Sonnet 5.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.12–0.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.12–0.7 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Sonnet wrote 3 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Sonnet would save ",
+        {
+         "mark": "roughly 0.08–0.42 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.08–0.42 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-sonnet-to-haiku",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-sonnet-to-haiku"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Haiku for a quarter of your Sonnet work",
+     "tips": [
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": true,
+       "title": "Almost all of your estimate comes from Sonnet 5.5",
+       "body": [
+        "Moving a quarter of your Sonnet 5.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.12–0.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.12–0.7 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Sonnet wrote 3 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Sonnet would save ",
+        {
+         "mark": "roughly 0.08–0.42 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.08–0.42 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-sonnet-to-haiku",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Two Opus versions and Sonnet. The window is 30 days, the logs cover 12",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 12,
+    "rows": [
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 700000,
+      "cacheWrite": 6000000,
+      "cacheRead": 150000000,
+      "output": 1200000
+     },
+     {
+      "model": "claude-opus-5",
+      "display": "Opus 5",
+      "sizeClass": "large",
+      "freshInput": 200000,
+      "cacheWrite": 2000000,
+      "cacheRead": 40000000,
+      "output": 300000
+     },
+     {
+      "model": "claude-sonnet-5-5",
+      "display": "Sonnet 5.5",
+      "sizeClass": "medium",
+      "freshInput": 150000,
+      "cacheWrite": 1500000,
+      "cacheRead": 20000000,
+      "output": 200000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Opus models",
+       "body": [
+        "Moving half of your Opus work to Sonnet would save ",
+        {
+         "mark": "roughly 0.27–2.7 kg over these 12 days"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.27–2.7 kg over these 12 days"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.07–2.5 kg over these 12 days"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.07–2.5 kg over these 12 days"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 2 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 0.09–0.45 kg over these 12 days"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.09–0.45 kg over these 12 days"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-opus-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Opus work",
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": true,
+       "title": "Almost all of your estimate comes from Opus models",
+       "body": [
+        "Moving half of your Opus work to Sonnet would save ",
+        {
+         "mark": "roughly 0.27–2.7 kg over these 12 days"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.27–2.7 kg over these 12 days"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.07–2.5 kg over these 12 days"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.07–2.5 kg over these 12 days"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 2 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 0.09–0.45 kg over these 12 days"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.09–0.45 kg over these 12 days"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Tried it once (tiny)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-haiku-4-5",
+      "display": "Haiku 4.5",
+      "sizeClass": "small",
+      "freshInput": 12000,
+      "cacheWrite": 30000,
+      "cacheRead": 400000,
+      "output": 9000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "g",
+     "noTipsNote": "We tried 1 change on your Claude Code numbers and do not suggest it: it would save less than 10 g a month in at least half of the possible outcomes.",
+     "appliedLabel": null,
+     "tips": [],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "A model the page does not know, through a gateway",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "table": {
+     "energy": {
+      "small": [
+       0.05,
+       0.1,
+       0.4
+      ],
+      "medium": [
+       0.2,
+       0.6,
+       2.2
+      ],
+      "large": [
+       0.5,
+       1,
+       5.4
+      ],
+      "fable": [
+       0.5,
+       1,
+       10.8
+      ],
+      "unknown": [
+       0.05,
+       0.6,
+       5.4
+      ]
+     },
+     "freshInput": [
+      0.03,
+      0.15,
+      0.35
+     ],
+     "cacheWrite": [
+      0.03,
+      0.15,
+      0.45
+     ],
+     "cacheRead": [
+      0.001,
+      0.015,
+      0.1
+     ],
+     "pue": [
+      1.09,
+      1.14,
+      1.17
+     ],
+     "grid": [
+      270,
+      350,
+      460
+     ],
+     "hardware": [
+      1.1,
+      1.115,
+      1.13
+     ]
+    },
+    "rows": [
+     {
+      "model": "glm-4.6",
+      "display": "glm-4.6",
+      "sizeClass": "unknown",
+      "freshInput": 800000,
+      "cacheWrite": 2000000,
+      "cacheRead": 60000000,
+      "output": 700000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.01–0.57 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.01–0.57 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear"
+     ]
+    },
+    {
+     "applied": [
+      "cc-clear"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: A third less re-reading",
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": true,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.01–0.57 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.01–0.57 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Heavy Opus user who has set the cache-read slider to low and the energy slider to high",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "pins": {
+     "cacheRead": 0,
+     "energy": 1
+    },
+    "rows": [
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 2184390,
+      "cacheWrite": 21662104,
+      "cacheRead": 548310227,
+      "output": 4106552
+     },
+     {
+      "model": "claude-sonnet-5",
+      "display": "Sonnet 5",
+      "sizeClass": "medium",
+      "freshInput": 911204,
+      "cacheWrite": 8904117,
+      "cacheRead": 172556093,
+      "output": 1380961
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "About 85% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 4.1–8.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 4.1–8.7 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 1.9–2.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 1.9–2.7 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-opus-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Opus work",
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": true,
+       "title": "About 85% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 4.1–8.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 4.1–8.7 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 1.9–2.7 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 1.9–2.7 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Opus and Sonnet in equal parts (two model tips at once)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 600000,
+      "cacheWrite": 5000000,
+      "cacheRead": 60000000,
+      "output": 1500000
+     },
+     {
+      "model": "claude-sonnet-5-5",
+      "display": "Sonnet 5.5",
+      "sizeClass": "medium",
+      "freshInput": 1200000,
+      "cacheWrite": 9000000,
+      "cacheRead": 110000000,
+      "output": 3200000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "About 45% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.19–1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.19–1.4 kg a month"
+      },
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": false,
+       "title": "About 55% of your estimate comes from Sonnet 5.5",
+       "body": [
+        "Moving a quarter of your Sonnet 5.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.15–0.99 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.15–0.99 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 0.16–0.85 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.16–0.85 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-sonnet-to-haiku",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-opus-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Opus work",
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": true,
+       "title": "About 45% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.19–1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.19–1.4 kg a month"
+      },
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": false,
+       "title": "About 55% of your estimate comes from Sonnet 5.5",
+       "body": [
+        "Moving a quarter of your Sonnet 5.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.15–0.99 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.15–0.99 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "roughly 0.16–0.85 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.16–0.85 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-sonnet-to-haiku",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "A gateway that strips caching: everything is fresh input",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 180000000,
+      "cacheWrite": 0,
+      "cacheRead": 0,
+      "output": 1400000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.99–12 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.99–12 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet"
+     ]
+    },
+    {
+     "applied": [
+      "cc-opus-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Opus work",
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": true,
+       "title": "Almost all of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.99–12 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.99–12 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "GPT-5 through a gateway, next to Sonnet 4.5 on a cloud provider",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5",
+      "display": "GPT-5",
+      "sizeClass": "medium",
+      "freshInput": 900000,
+      "cacheWrite": 0,
+      "cacheRead": 40000000,
+      "output": 2600000
+     },
+     {
+      "model": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "display": "Sonnet 4.5",
+      "sizeClass": "medium",
+      "freshInput": 700000,
+      "cacheWrite": 5000000,
+      "cacheRead": 90000000,
+      "output": 2400000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": false,
+       "title": "About 60% of your estimate comes from Sonnet 4.5",
+       "body": [
+        "Moving a quarter of your Sonnet 4.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.1–0.73 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.1–0.73 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "92% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.02–0.82 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.02–0.82 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-sonnet-to-haiku",
+      "cc-clear"
+     ]
+    },
+    {
+     "applied": [
+      "cc-sonnet-to-haiku"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Haiku for a quarter of your Sonnet work",
+     "tips": [
+      {
+       "id": "cc-sonnet-to-haiku",
+       "applied": true,
+       "title": "About 60% of your estimate comes from Sonnet 4.5",
+       "body": [
+        "Moving a quarter of your Sonnet 4.5 work to Haiku would save ",
+        {
+         "mark": "roughly 0.1–0.73 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For simple jobs that Claude hands to a subagent, put ",
+        {
+         "code": "model: haiku"
+        },
+        " in that subagent’s file. For a small task of your own, type ",
+        {
+         "code": "/model haiku"
+        },
+        " at the start and ",
+        {
+         "code": "/model sonnet"
+        },
+        " when you are done. Each choice also becomes your default for new sessions."
+       ],
+       "afterLabel": "Haiku",
+       "switchLabel": "Haiku for a quarter of your Sonnet work",
+       "switchNote": "Saves roughly 0.1–0.73 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "92% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.02–0.82 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.02–0.82 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-sonnet-to-haiku",
+      "cc-clear"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Mythos next to Fable",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "claude-mythos-5-1",
+      "display": "Mythos 5.1",
+      "sizeClass": "fable",
+      "freshInput": 200000,
+      "cacheWrite": 2000000,
+      "cacheRead": 50000000,
+      "output": 500000
+     },
+     {
+      "model": "claude-fable-5-1",
+      "display": "Fable 5.1",
+      "sizeClass": "fable",
+      "freshInput": 300000,
+      "cacheWrite": 3000000,
+      "cacheRead": 60000000,
+      "output": 600000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.04–1.9 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.04–1.9 kg a month"
+      },
+      {
+       "id": "cc-fable-to-sonnet",
+       "applied": false,
+       "title": "About 55% of your estimate comes from Fable 5.1",
+       "body": [
+        "Moving half of your Fable 5.1 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.1–1.9 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model fable"
+        },
+        " for your hardest tasks. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Fable work",
+       "switchNote": "Saves roughly 0.1–1.9 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-fable-to-sonnet"
+     ]
+    },
+    {
+     "applied": [
+      "cc-clear"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: A third less re-reading",
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": true,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.04–1.9 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.04–1.9 kg a month"
+      },
+      {
+       "id": "cc-fable-to-sonnet",
+       "applied": false,
+       "title": "About 55% of your estimate comes from Fable 5.1",
+       "body": [
+        "Moving half of your Fable 5.1 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.1–1.9 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model fable"
+        },
+        " for your hardest tasks. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Fable work",
+       "switchNote": "Saves roughly 0.1–1.9 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-fable-to-sonnet"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Heavy Opus user who has set every slider (one outcome, no range)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "pins": {
+     "energy": 0.5,
+     "freshInput": 0.5,
+     "cacheWrite": 0.5,
+     "cacheRead": 0.5,
+     "pue": 0.5,
+     "grid": 0.5,
+     "hardware": 0.5
+    },
+    "rows": [
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 2184390,
+      "cacheWrite": 21662104,
+      "cacheRead": 548310227,
+      "output": 4106552
+     },
+     {
+      "model": "claude-sonnet-5",
+      "display": "Sonnet 5",
+      "sizeClass": "medium",
+      "freshInput": 911204,
+      "cacheWrite": 8904117,
+      "cacheRead": 172556093,
+      "output": 1380961
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "about 1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves about 1.4 kg a month"
+      },
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "About 85% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "about 1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves about 1.4 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "about 0.44 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves about 0.44 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-opus-to-sonnet",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-clear"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: A third less re-reading",
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": true,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "about 1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves about 1.4 kg a month"
+      },
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "About 85% of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "about 1.4 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves about 1.4 kg a month"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus and Sonnet wrote 5 million tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus and Sonnet would save ",
+        {
+         "mark": "about 0.44 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves about 0.44 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear",
+      "cc-opus-to-sonnet",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "One long day of work, logs cover one day",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 1,
+    "rows": [
+     {
+      "model": "claude-opus-5-5",
+      "display": "Opus 5.5",
+      "sizeClass": "large",
+      "freshInput": 90000,
+      "cacheWrite": 900000,
+      "cacheRead": 26000000,
+      "output": 210000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.04–0.36 kg in this one day"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.04–0.36 kg in this one day"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "96% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.01–0.33 kg in this one day"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.01–0.33 kg in this one day"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus wrote 210,000 tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus would save ",
+        {
+         "mark": "roughly 0.01–0.06 kg in this one day"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.01–0.06 kg in this one day"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    },
+    {
+     "applied": [
+      "cc-opus-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Opus work",
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": true,
+       "title": "Almost all of your estimate comes from Opus 5.5",
+       "body": [
+        "Moving half of your Opus 5.5 work to Sonnet would save ",
+        {
+         "mark": "roughly 0.04–0.36 kg in this one day"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.04–0.36 kg in this one day"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "96% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.01–0.33 kg in this one day"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.01–0.33 kg in this one day"
+      },
+      {
+       "id": "cc-effort",
+       "applied": false,
+       "title": "Opus wrote 210,000 tokens for you, thinking included",
+       "body": [
+        "A fifth less writing and thinking on Opus would save ",
+        {
+         "mark": "roughly 0.01–0.06 kg in this one day"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/effort low"
+        },
+        " at the start of a simple task: Claude then thinks and writes less. How much less depends on the task. The level stays, also in later sessions, until you change it. ",
+        {
+         "code": "/effort auto"
+        },
+        " goes back to the model’s own level."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "A fifth less writing and thinking",
+       "switchNote": "Saves roughly 0.01–0.06 kg in this one day"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear",
+      "cc-effort"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "A custom model name that only says \"opus\" (no version)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "my-opus-deploy",
+      "display": "Opus",
+      "sizeClass": "large",
+      "freshInput": 400000,
+      "cacheWrite": 4000000,
+      "cacheRead": 80000000,
+      "output": 900000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": false,
+       "title": "Almost all of your estimate comes from Opus",
+       "body": [
+        "Moving half of your Opus work to Sonnet would save ",
+        {
+         "mark": "roughly 0.14–1.3 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.14–1.3 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.03–1 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.03–1 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear"
+     ]
+    },
+    {
+     "applied": [
+      "cc-opus-to-sonnet"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Sonnet for half of your Opus work",
+     "tips": [
+      {
+       "id": "cc-opus-to-sonnet",
+       "applied": true,
+       "title": "Almost all of your estimate comes from Opus",
+       "body": [
+        "Moving half of your Opus work to Sonnet would save ",
+        {
+         "mark": "roughly 0.14–1.3 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/model sonnet"
+        },
+        " for routine work and ",
+        {
+         "code": "/model opus"
+        },
+        " for a hard problem. Each choice also becomes your default for new sessions. Switch at the start of a task: after a switch, Claude reads the whole conversation again without its cache."
+       ],
+       "afterLabel": "Sonnet",
+       "switchLabel": "Sonnet for half of your Opus work",
+       "switchNote": "Saves roughly 0.14–1.3 kg a month"
+      },
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "94% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 0.03–1 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 0.03–1 kg a month"
+      }
+     ],
+     "switchIds": [
+      "cc-opus-to-sonnet",
+      "cc-clear"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Just over one kilogram at the high end (a saving whose low end prints as 0 kg)",
+   "input": {
+    "source": "claude-code",
+    "coveredDays": 30,
+    "table": {
+     "energy": {
+      "small": [
+       0.05,
+       0.1,
+       0.4
+      ],
+      "medium": [
+       0.2,
+       0.6,
+       2.2
+      ],
+      "large": [
+       0.5,
+       1,
+       5.4
+      ],
+      "fable": [
+       0.5,
+       1,
+       10.8
+      ],
+      "unknown": [
+       0.05,
+       0.6,
+       5.4
+      ]
+     },
+     "freshInput": [
+      0.03,
+      0.15,
+      0.35
+     ],
+     "cacheWrite": [
+      0.03,
+      0.15,
+      0.45
+     ],
+     "cacheRead": [
+      0.001,
+      0.015,
+      0.1
+     ],
+     "pue": [
+      1.09,
+      1.14,
+      1.17
+     ],
+     "grid": [
+      270,
+      350,
+      460
+     ],
+     "hardware": [
+      1.1,
+      1.115,
+      1.13
+     ]
+    },
+    "rows": [
+     {
+      "model": "glm-4.6",
+      "display": "glm-4.6",
+      "sizeClass": "unknown",
+      "freshInput": 300000,
+      "cacheWrite": 800000,
+      "cacheRead": 24000000,
+      "output": 250000
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": false,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 2.7–228 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 2.7–228 g a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear"
+     ]
+    },
+    {
+     "applied": [
+      "cc-clear"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: A third less re-reading",
+     "tips": [
+      {
+       "id": "cc-clear",
+       "applied": true,
+       "title": "95% of your tokens are earlier text being read again",
+       "body": [
+        "A third less re-reading would save ",
+        {
+         "mark": "roughly 2.7–228 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "Type ",
+        {
+         "code": "/clear"
+        },
+        " when you switch to an unrelated task. Claude Code then starts a new conversation, so there is less to read again at every step. To stay on the same task with a shorter history, type ",
+        {
+         "code": "/compact"
+        },
+        " at a natural break in your work."
+       ],
+       "afterLabel": "Less re-reading",
+       "switchLabel": "A third less re-reading",
+       "switchNote": "Saves roughly 2.7–228 g a month"
+      }
+     ],
+     "switchIds": [
+      "cc-clear"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Plus user who always picks a thinking level (High)",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6-thinking",
+      "display": "GPT-5.6 Thinking",
+      "sizeClass": "large",
+      "freshInput": 1160000,
+      "cacheWrite": 0,
+      "cacheRead": 4900000,
+      "output": 630000,
+      "rereadFresh": 350000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "output": 40500
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 900
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 700,
+        "freshInput": 200
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 500
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 6
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 4900000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": false,
+       "title": "ChatGPT thought for about 11 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.22–2 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.22–2 kg a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-less-thinking"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Half as much thinking",
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": true,
+       "title": "ChatGPT thought for about 11 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.22–2 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.22–2 kg a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Plus user with very long chats (one chat kept open for weeks)",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 4488000,
+      "cacheWrite": 0,
+      "cacheRead": 33320000,
+      "output": 550000,
+      "rereadFresh": 3740000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 600
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 1100
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 980,
+        "freshInput": 120
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 300
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 2
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 33320000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-new-chat",
+       "applied": false,
+       "title": "By our count, ChatGPT re-read 4 million tokens of old messages after a break",
+       "body": [
+        "Half as much re-reading after a break would save ",
+        {
+         "mark": "roughly 0.04–0.45 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "When you come back after more than half an hour, open a ",
+        {
+         "strong": "new chat"
+        },
+        " unless you need the old one. In an old chat, ChatGPT reads the whole conversation so far again with every message. After a break we count that as a full fresh reading."
+       ],
+       "afterLabel": "New chats",
+       "switchLabel": "Half as much re-reading after breaks",
+       "switchNote": "Saves roughly 0.04–0.45 kg a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-new-chat"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Half as much re-reading after breaks",
+     "tips": [
+      {
+       "id": "gpt-new-chat",
+       "applied": true,
+       "title": "By our count, ChatGPT re-read 4 million tokens of old messages after a break",
+       "body": [
+        "Half as much re-reading after a break would save ",
+        {
+         "mark": "roughly 0.04–0.45 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "When you come back after more than half an hour, open a ",
+        {
+         "strong": "new chat"
+        },
+        " unless you need the old one. In an old chat, ChatGPT reads the whole conversation so far again with every message. After a break we count that as a full fresh reading."
+       ],
+       "afterLabel": "New chats",
+       "switchLabel": "Half as much re-reading after breaks",
+       "switchNote": "Saves roughly 0.04–0.45 kg a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Barely uses it (a dozen questions on the free plan)",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "small",
+      "freshInput": 4020,
+      "cacheWrite": 0,
+      "cacheRead": 900,
+      "output": 3000,
+      "rereadFresh": 300
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "output": 0
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "cacheRead": 12
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "cacheRead": 3,
+        "freshInput": 9
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "freshInput": 900
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "g",
+     "noTipsNote": "We tried 2 changes on your ChatGPT numbers and suggest none: each would save less than 10 g a month in at least half of the possible outcomes.",
+     "appliedLabel": null,
+     "tips": [],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Free plan, daily short questions",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "small",
+      "freshInput": 202000,
+      "cacheWrite": 0,
+      "cacheRead": 270000,
+      "output": 140000,
+      "rereadFresh": 30000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "output": 300
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "cacheRead": 400
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "cacheRead": 180,
+        "freshInput": 220
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "freshInput": 250
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "small",
+        "freshInput": 270000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "g",
+     "noTipsNote": "We tried 3 changes on your ChatGPT numbers and suggest none: each would save less than 10 g a month in at least half of the possible outcomes.",
+     "appliedLabel": null,
+     "tips": [],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Plus user, ordinary mix of Instant and some thinking",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 271000,
+      "cacheWrite": 0,
+      "cacheRead": 1100000,
+      "output": 126000,
+      "rereadFresh": 100000
+     },
+     {
+      "model": "gpt-5-6-t-mini",
+      "display": "GPT-5.6 Thinking mini",
+      "sizeClass": "small",
+      "freshInput": 40500,
+      "cacheWrite": 0,
+      "cacheRead": 152000,
+      "output": 25000,
+      "rereadFresh": 8000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 500
+       },
+       {
+        "model": "gpt-5-6-t-mini",
+        "sizeClass": "small",
+        "output": 400
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 300
+       },
+       {
+        "model": "gpt-5-6-t-mini",
+        "sizeClass": "small",
+        "cacheRead": 50
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 220,
+        "freshInput": 80
+       },
+       {
+        "model": "gpt-5-6-t-mini",
+        "sizeClass": "small",
+        "cacheRead": 38,
+        "freshInput": 12
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 280
+       },
+       {
+        "model": "gpt-5-6-t-mini",
+        "sizeClass": "small",
+        "freshInput": 40
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 3
+       },
+       {
+        "model": "gpt-5-6-t-mini",
+        "sizeClass": "small",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 1100000
+       },
+       {
+        "model": "gpt-5-6-t-mini",
+        "sizeClass": "small",
+        "freshInput": 152000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "g",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 151,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 8.6–46 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 8.6–46 g a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-shorter-answers"
+     ],
+     "unit": "g",
+     "noTipsNote": null,
+     "appliedLabel": "With: Answers a quarter shorter",
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": true,
+       "title": "ChatGPT wrote 151,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 8.6–46 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 8.6–46 g a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Writer: long answers, short chats, no thinking, no search",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 555000,
+      "cacheWrite": 0,
+      "cacheRead": 132000,
+      "output": 468000,
+      "rereadFresh": 22000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 0
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 260
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 60,
+        "freshInput": 200
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 132000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 468,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.03–0.17 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.03–0.17 kg a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-shorter-answers"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Answers a quarter shorter",
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": true,
+       "title": "ChatGPT wrote 468,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.03–0.17 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.03–0.17 kg a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "The thinking user again, with the thinking switch off",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "off": [
+     "thinking"
+    ],
+    "rows": [
+     {
+      "model": "gpt-5-6-thinking",
+      "display": "GPT-5.6 Thinking",
+      "sizeClass": "large",
+      "freshInput": 1160000,
+      "cacheWrite": 0,
+      "cacheRead": 4900000,
+      "output": 630000,
+      "rereadFresh": 350000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": false,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "output": 40500
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 900
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 700,
+        "freshInput": 200
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 500
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 6
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 4900000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 630,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.04–0.23 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.04–0.23 kg a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-shorter-answers"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Answers a quarter shorter",
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": true,
+       "title": "ChatGPT wrote 630,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.04–0.23 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.04–0.23 kg a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Pro user on GPT-6 Pro. The export is three weeks old, so the window holds 9 days",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 9,
+    "rows": [
+     {
+      "model": "gpt-6-pro",
+      "display": "GPT-6 Pro",
+      "sizeClass": "large",
+      "freshInput": 424000,
+      "cacheWrite": 0,
+      "cacheRead": 2200000,
+      "output": 168000,
+      "rereadFresh": 200000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-6-pro",
+        "sizeClass": "large",
+        "output": 33600
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-6-pro",
+        "sizeClass": "large",
+        "cacheRead": 140
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-6-pro",
+        "sizeClass": "large",
+        "cacheRead": 110,
+        "freshInput": 30
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-6-pro",
+        "sizeClass": "large",
+        "freshInput": 200
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-6-pro",
+        "sizeClass": "large",
+        "freshInput": 10
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-6-pro",
+        "sizeClass": "large",
+        "freshInput": 2200000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": false,
+       "title": "ChatGPT thought for about 9.5 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.18–1.7 kg over these 9 days"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.18–1.7 kg over these 9 days"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-less-thinking"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Half as much thinking",
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": true,
+       "title": "ChatGPT thought for about 9.5 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.18–1.7 kg over these 9 days"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.18–1.7 kg over these 9 days"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Plus user who has switched off all three hidden-work switches",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "off": [
+     "thinking",
+     "prompt",
+     "personal",
+     "search",
+     "files"
+    ],
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 271000,
+      "cacheWrite": 0,
+      "cacheRead": 1100000,
+      "output": 126000,
+      "rereadFresh": 100000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": false,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 500
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": false,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 300
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": false,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 220,
+        "freshInput": 80
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": false,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 280
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": false,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 3
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 1100000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "g",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 126,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 8.5–45 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 8.5–45 g a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-shorter-answers"
+     ],
+     "unit": "g",
+     "noTipsNote": null,
+     "appliedLabel": "With: Answers a quarter shorter",
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": true,
+       "title": "ChatGPT wrote 126,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 8.5–45 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 8.5–45 g a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Plan not known: “gpt-5-6” counted with the widest energy range",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "table": {
+     "energy": {
+      "small": [
+       0.05,
+       0.1,
+       0.4
+      ],
+      "medium": [
+       0.2,
+       0.6,
+       2.2
+      ],
+      "large": [
+       0.5,
+       1,
+       5.4
+      ],
+      "fable": [
+       0.5,
+       1,
+       10.8
+      ],
+      "unknown": [
+       0.05,
+       0.6,
+       5.4
+      ]
+     },
+     "freshInput": [
+      0.03,
+      0.15,
+      0.35
+     ],
+     "cacheWrite": [
+      0.03,
+      0.15,
+      0.45
+     ],
+     "cacheRead": [
+      0.001,
+      0.015,
+      0.1
+     ],
+     "pue": [
+      1.09,
+      1.14,
+      1.17
+     ],
+     "grid": [
+      270,
+      350,
+      460
+     ],
+     "hardware": [
+      1.1,
+      1.115,
+      1.13
+     ]
+    },
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "unknown",
+      "freshInput": 740000,
+      "cacheWrite": 0,
+      "cacheRead": 3330000,
+      "output": 300000,
+      "rereadFresh": 360000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "unknown",
+        "output": 2400
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "unknown",
+        "cacheRead": 500
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "unknown",
+        "cacheRead": 370,
+        "freshInput": 130
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "unknown",
+        "freshInput": 300
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "unknown",
+        "freshInput": 4
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "unknown",
+        "freshInput": 3330000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": false,
+       "title": "ChatGPT thought for about 40 minutes before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 3–96 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 3–96 g a month"
+      },
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 300,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 3.6–91 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 3.6–91 g a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-less-thinking"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Half as much thinking",
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": true,
+       "title": "ChatGPT thought for about 40 minutes before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 3–96 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 3–96 g a month"
+      },
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 300,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 3.6–91 g a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 3.6–91 g a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Long chats, and a reader that does not hand over rereadFresh",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 4488000,
+      "cacheWrite": 0,
+      "cacheRead": 33320000,
+      "output": 550000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 600
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 1100
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 980,
+        "freshInput": 120
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 300
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 2
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 33320000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": "We tried 2 changes on your ChatGPT numbers and suggest none: each would save less than 10 g a month in at least half of the possible outcomes, or would lower your middle estimate by less than 5%.",
+     "appliedLabel": null,
+     "tips": [],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Heavy user: 4,000 questions, half with thinking, long answers",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6-thinking",
+      "display": "GPT-5.6 Thinking",
+      "sizeClass": "large",
+      "freshInput": 5050000,
+      "cacheWrite": 0,
+      "cacheRead": 22500000,
+      "output": 2200000,
+      "rereadFresh": 2250000
+     },
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 2100000,
+      "cacheWrite": 0,
+      "cacheRead": 9000000,
+      "output": 1200000,
+      "rereadFresh": 600000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "output": 60000
+       },
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 0
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 2000
+       },
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 2000
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 1500,
+        "freshInput": 500
+       },
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 1500,
+        "freshInput": 500
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 1500
+       },
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 400
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 30
+       },
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 22500000
+       },
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 9000000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": false,
+       "title": "ChatGPT thought for about 17 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.33–2.9 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.33–2.9 kg a month"
+      },
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 3 million tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.23–1.2 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.23–1.2 kg a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-less-thinking"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Half as much thinking",
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": true,
+       "title": "ChatGPT thought for about 17 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.33–2.9 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.33–2.9 kg a month"
+      },
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 3 million tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.23–1.2 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.23–1.2 kg a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "One question, in its own chat, one day of data",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 1,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 490,
+      "cacheWrite": 0,
+      "cacheRead": 0,
+      "output": 400,
+      "rereadFresh": 0
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 0
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 1
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 0,
+        "freshInput": 1
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "g",
+     "noTipsNote": "We tried 1 change on your ChatGPT numbers and do not suggest it: it would save less than 10 g in this one day in at least half of the possible outcomes.",
+     "appliedLabel": null,
+     "tips": [],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "Thinking model by name, and no thinking time recorded in the export",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "thinkingRecorded": false,
+    "rows": [
+     {
+      "model": "gpt-5-6-thinking",
+      "display": "GPT-5.6 Thinking",
+      "sizeClass": "large",
+      "freshInput": 340000,
+      "cacheWrite": 0,
+      "cacheRead": 1200000,
+      "output": 200000,
+      "rereadFresh": 80000
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "output": 6000
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 400
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "cacheRead": 300,
+        "freshInput": 100
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6-thinking",
+        "sizeClass": "large",
+        "freshInput": 1200000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": false,
+       "title": "We assume ChatGPT thought for about 1.5 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.03–0.29 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.03–0.29 kg a month"
+      },
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 200,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.01–0.07 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.01–0.07 kg a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-less-thinking"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Half as much thinking",
+     "tips": [
+      {
+       "id": "gpt-less-thinking",
+       "applied": true,
+       "title": "We assume ChatGPT thought for about 1.5 hours before its answers",
+       "body": [
+        "Half as much thinking would save ",
+        {
+         "mark": "roughly 0.03–0.29 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "For everyday questions, pick ",
+        {
+         "strong": "Instant"
+        },
+        ". On paid plans, the ",
+        {
+         "strong": "Thinking"
+        },
+        " slider sets how much ChatGPT thinks. On Free and Go, use ",
+        {
+         "strong": "Think"
+        },
+        " only for harder questions."
+       ],
+       "afterLabel": "Less thinking",
+       "switchLabel": "Half as much thinking",
+       "switchNote": "Saves roughly 0.03–0.29 kg a month"
+      },
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 200,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.01–0.07 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.01–0.07 kg a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  },
+  {
+   "name": "One long chat used all day without a break (always warm, nothing read again after a break)",
+   "input": {
+    "source": "chatgpt",
+    "coveredDays": 30,
+    "rows": [
+     {
+      "model": "gpt-5-6",
+      "display": "GPT-5.6",
+      "sizeClass": "large",
+      "freshInput": 360000,
+      "cacheWrite": 0,
+      "cacheRead": 20332000,
+      "output": 270000,
+      "rereadFresh": 0
+     }
+    ],
+    "hidden": [
+     {
+      "id": "thinking",
+      "slot": 0,
+      "on": true,
+      "amount": [
+       20,
+       60,
+       150
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "output": 0
+       }
+      ]
+     },
+     {
+      "id": "prompt",
+      "slot": 1,
+      "on": true,
+      "amount": [
+       12000,
+       25000,
+       35000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 600
+       }
+      ]
+     },
+     {
+      "id": "personal",
+      "slot": 2,
+      "on": true,
+      "amount": [
+       500,
+       3000,
+       10000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "cacheRead": 598,
+        "freshInput": 2
+       }
+      ]
+     },
+     {
+      "id": "search",
+      "slot": 3,
+      "on": true,
+      "amount": [
+       100,
+       600,
+       2500
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 60
+       }
+      ]
+     },
+     {
+      "id": "files",
+      "slot": 4,
+      "on": true,
+      "amount": [
+       500,
+       5000,
+       40000
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 0
+       }
+      ]
+     },
+     {
+      "id": "misses",
+      "slot": 5,
+      "on": true,
+      "amount": [
+       0.02,
+       0.1,
+       1
+      ],
+      "rows": [
+       {
+        "model": "gpt-5-6",
+        "sizeClass": "large",
+        "freshInput": 20332000
+       }
+      ]
+     }
+    ]
+   },
+   "expect": [
+    {
+     "applied": [],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": null,
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": false,
+       "title": "ChatGPT wrote 270,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.02–0.1 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.02–0.1 kg a month"
+      }
+     ],
+     "switchIds": []
+    },
+    {
+     "applied": [
+      "gpt-shorter-answers"
+     ],
+     "unit": "kg",
+     "noTipsNote": null,
+     "appliedLabel": "With: Answers a quarter shorter",
+     "tips": [
+      {
+       "id": "gpt-shorter-answers",
+       "applied": true,
+       "title": "ChatGPT wrote 270,000 tokens for you",
+       "body": [
+        "Answers a quarter shorter would save ",
+        {
+         "mark": "roughly 0.02–0.1 kg a month"
+        },
+        "."
+       ],
+       "how": [
+        "In ",
+        {
+         "strong": "Settings"
+        },
+        ", select ",
+        {
+         "strong": "Personalization"
+        },
+        " (in the phone app: ",
+        {
+         "strong": "Customize ChatGPT"
+        },
+        "). In the ",
+        {
+         "strong": "Custom Instructions"
+        },
+        " field, add a line such as “Keep answers short unless I ask for detail.”"
+       ],
+       "afterLabel": "Shorter answers",
+       "switchLabel": "Answers a quarter shorter",
+       "switchNote": "Saves roughly 0.02–0.1 kg a month"
+      }
+     ],
+     "switchIds": []
+    }
+   ]
+  }
+ ]
+}

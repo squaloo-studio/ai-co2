@@ -1,0 +1,589 @@
+/* ---------- the either/or choice ---------- */
+.choose {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.choice {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 24px;
+  padding: 16px 16px 30px;
+  border: 0;
+  border-radius: var(--r-panel);
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--line), var(--shadow-card);
+  text-align: left;
+  cursor: pointer;
+  transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.choice:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 0 0 1.5px var(--ink), var(--shadow-lift);
+}
+.choice-scene {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: 9px;
+  height: 170px;
+  padding: 0 28px;
+  border-radius: var(--r-md);
+  background-color: var(--navy);
+  background-image: linear-gradient(var(--pnl-grid) 1px, transparent 1px), linear-gradient(90deg, var(--pnl-grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-position: -1px -1px;
+  overflow: hidden;
+}
+.scene-line {
+  color: var(--on-navy-2);
+  font: 400 13px/1.3 var(--mono);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.scene-line i {
+  color: var(--on-navy-3);
+  font-style: normal;
+}
+/* The sample answer is a picture. Its lines are longer than the card, so they fade out instead of stopping dead. */
+.scene-out {
+  color: var(--accent);
+  -webkit-mask-image: linear-gradient(90deg, #000 78%, transparent);
+  mask-image: linear-gradient(90deg, #000 78%, transparent);
+}
+.scene-drop {
+  display: inline-flex;
+  align-items: center;
+  justify-self: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border: 1.5px dashed var(--accent-line);
+  border-radius: var(--r-md);
+  color: var(--accent);
+  font: 500 14px/1 var(--mono);
+  transition: transform 0.35s var(--ease);
+}
+.choice:hover .scene-drop {
+  transform: translateY(-4px);
+}
+.choice-text {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px;
+}
+.choice-text b {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+.choice-text span {
+  max-width: 40ch;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.5;
+}
+.choice-go {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 10px;
+  height: 46px;
+  margin-left: 14px;
+  padding: 0 22px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.15s, gap 0.25s var(--ease);
+}
+.choice:hover .choice-go {
+  gap: 14px;
+  background: var(--accent-press);
+}
+
+/* ---------- the chosen tool's box ---------- */
+/* Before the choice the box has no surface: the two cards and the note sit straight on the page. */
+[data-picked='true'] .data-card {
+  border-radius: var(--r-card);
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--line), var(--shadow-card);
+}
+[data-picked='true'] .choose {
+  display: none;
+}
+.chosen {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 32px;
+  border-bottom: 1px solid var(--line);
+}
+.chosen h3 {
+  margin-right: auto;
+  font-size: 22px;
+  letter-spacing: -0.025em;
+}
+.tool-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-sm);
+  background: var(--navy);
+  color: var(--on-navy);
+}
+.data-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+[data-picked='true'] .data-body {
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+.data-body .notes {
+  padding: 40px 0 0;
+}
+[data-picked='true'] .data-body .notes {
+  padding: 32px;
+  border-left: 1px solid var(--line);
+}
+.tool-stack {
+  min-width: 0;
+}
+.tool {
+  padding: 30px 32px;
+}
+.tool-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+}
+.tool-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-width: 0;
+  color: var(--ink-2);
+  font-size: 15px;
+}
+.tool-body {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 16px;
+  padding-top: 22px;
+}
+.step-n {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--paper-2);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  font: 600 14px/1 var(--mono);
+}
+.step h4 {
+  margin: 5px 0 6px;
+  font-size: 18px;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+.step-body > p {
+  max-width: 64ch;
+  color: var(--ink-2);
+  font-size: 15.5px;
+}
+.step-body > p b {
+  color: var(--ink);
+}
+/* What to know before the prompt goes into Claude Code: short rows under the prompt. */
+.before-h {
+  margin-top: 22px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.list.before {
+  margin-top: 8px;
+  max-width: 64ch;
+}
+.list.before li,
+.list.after-steps li {
+  padding: 9px 0;
+  font-size: 14.5px;
+}
+.list.after-steps {
+  margin-top: 22px;
+}
+
+/* ---------- the prompt ---------- */
+.prompt {
+  position: relative;
+  margin-top: 14px;
+  border-radius: var(--r-md);
+  background: var(--navy);
+  color: #dce1ee;
+  overflow: hidden;
+  caret-color: var(--accent);
+}
+.prompt-body {
+  position: relative;
+}
+.prompt pre {
+  margin: 0;
+  padding: 16px 20px;
+  max-height: 132px;
+  overflow: hidden;
+  font: 400 12.5px/1.65 var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  transition: max-height 0.45s var(--ease);
+}
+.prompt.is-open pre {
+  /* The script sets the real height, so opening can slide however long the prompt is. */
+  max-height: var(--open-h, none);
+}
+.prompt:not(.is-open) .prompt-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  background: linear-gradient(rgba(10, 16, 32, 0), var(--navy));
+  pointer-events: none;
+}
+.prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--navy-line);
+  background: var(--navy-2);
+}
+.prompt-msg {
+  flex: 1 1 220px;
+  color: var(--on-navy-2);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.prompt-msg:empty {
+  display: none;
+}
+
+/* ---------- the answer field ---------- */
+.answer {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--line-control);
+  border-radius: var(--r-md);
+  background: var(--card);
+  color: var(--ink);
+  font: 400 12.5px/1.65 var(--mono);
+  /* The answer keeps its own line breaks, and a long line wraps instead of scrolling sideways. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  resize: vertical;
+  scrollbar-color: var(--line-control) transparent;
+  scrollbar-width: thin;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.answer::placeholder {
+  color: var(--ink-3);
+  opacity: 1;
+  /* The pasted answer keeps its lines. The hint is a sentence, and wraps like one. */
+  white-space: normal;
+}
+/* The border says whether the answer is good, so it cannot also be the focus mark: the page's usual outline is. */
+.answer:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(11, 18, 34, 0.08);
+}
+.answer[aria-invalid='true'] {
+  border-color: var(--bad-line);
+}
+.field-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--ink-3);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.field-msg .i {
+  flex: none;
+  margin-top: 2px;
+}
+/* The message can quote what was pasted or a file's name. A long run without a space breaks where it must. */
+.field-msg span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.field-msg.is-bad {
+  color: var(--bad);
+}
+/* A message that is always on the page, so its words are heard when they arrive. Empty, it takes no room. */
+.field-msg.is-empty {
+  margin-top: 0;
+}
+
+/* ---------- what was read ---------- */
+.sum-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 16px;
+  color: var(--ok);
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.sum-line .i {
+  margin-top: 2px;
+}
+.models {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  table-layout: fixed;
+}
+.models th {
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-3);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: left;
+}
+.models td {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: baseline;
+}
+.models tbody th {
+  padding: 9px 12px 9px 0;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.models tbody tr:last-child :is(td, th) {
+  border-bottom: 0;
+}
+.models .c-tokens {
+  /* In px: with a fixed layout the width is taken from the header cell, whose font is smaller than the numbers'. */
+  width: 132px;
+  padding-right: 24px;
+  text-align: right;
+  white-space: nowrap;
+}
+.models .c-share {
+  width: 38%;
+}
+.models .short {
+  display: none;
+}
+.share {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.share-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: rgba(11, 18, 34, 0.07);
+}
+.share-bar i {
+  display: block;
+  width: var(--share, 0%);
+  min-width: 2px;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+}
+.share .num {
+  width: 3.2em;
+  font-size: 13px;
+  text-align: right;
+}
+.models .models-more td {
+  color: var(--ink-3);
+}
+.read-notes {
+  margin-top: 4px;
+}
+
+/* ---------- the drop zone and the progress bar ---------- */
+.drop {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  margin-top: 16px;
+  padding: 28px 20px;
+  border: 1.5px dashed var(--line-control);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.drop:hover,
+.drop.is-over {
+  border-color: var(--ink);
+  background: var(--paper-2);
+}
+/* The file input inside is hidden from sight, so the zone shows its focus. */
+.drop:focus-within {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.drop.is-bad {
+  border-color: var(--bad-line);
+}
+.drop .i {
+  width: 26px;
+  height: 26px;
+  margin-bottom: 6px;
+  color: var(--ink-2);
+}
+.drop b {
+  font-size: 16px;
+}
+.drop span {
+  color: var(--ink-3);
+  font-size: 14px;
+}
+.progress {
+  padding-top: 16px;
+}
+.progress-bar {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: rgba(11, 18, 34, 0.08);
+  /* How much is left to read is seen from the track alone, so its edge gets the 3:1 of a control. */
+  box-shadow: inset 0 0 0 1px var(--line-control);
+  overflow: hidden;
+}
+.progress-bar i {
+  display: block;
+  width: var(--done, 0%);
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  transition: width 0.2s linear;
+}
+/* The size is not known yet: a short bar that travels, and stands still with reduced motion. */
+.progress-bar.is-open-ended i {
+  width: 32%;
+  animation: travel 1.6s var(--ease) infinite alternate;
+}
+@keyframes travel {
+  to {
+    transform: translateX(212%);
+  }
+}
+.progress p {
+  margin-top: 8px;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+.progress .btn {
+  margin-top: 14px;
+}
+
+@media (max-width: 900px) {
+  [data-picked='true'] .data-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  [data-picked='true'] .data-body .notes {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+}
+@media (max-width: 640px) {
+  .choose {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .choice-scene {
+    padding: 0 18px;
+  }
+  .chosen {
+    flex-wrap: wrap;
+    padding: 14px 18px;
+  }
+  .tool {
+    padding: 20px 18px;
+  }
+  [data-picked='true'] .data-body .notes {
+    padding: 24px 18px;
+  }
+  .step {
+    gap: 12px;
+  }
+  /* Tokens keeps the width its numbers need, the share shrinks to a short bar, and the name gets the rest. */
+  .models .c-tokens {
+    width: 108px;
+    padding-right: 12px;
+  }
+  .models .c-share {
+    width: 80px;
+  }
+  .share .num {
+    width: 2.7em;
+  }
+  .models thead .c-share .long {
+    display: none;
+  }
+  .models .short {
+    display: inline;
+  }
+}
+/* Phones keep the share as a number and drop its bar, so the model's name has room. */
+@media (max-width: 420px) {
+  .models .c-share {
+    width: 4.2em;
+    text-align: right;
+  }
+  .share {
+    justify-content: flex-end;
+  }
+  .share-bar {
+    display: none;
+  }
+}
+@media (max-width: 360px) {
+  .scene-line {
+    -webkit-mask-image: linear-gradient(90deg, #000 78%, transparent);
+    mask-image: linear-gradient(90deg, #000 78%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar.is-open-ended i {
+    animation: none;
+  }
+  .choice:hover,
+  .choice:hover .scene-drop {
+    transform: none;
+  }
+}

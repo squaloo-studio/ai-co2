@@ -1,0 +1,718 @@
+[
+  {
+    "conversation_id": "7b293843-3f06-4355-8a6b-f70a81611210",
+    "conversation_template_id": null,
+    "create_time": 1789999331.062,
+    "current_node": "90f55cc0-c3dd-466b-8893-ca1d098b327a",
+    "default_model_slug": "auto",
+    "id": "7b293843-3f06-4355-8a6b-f70a81611210",
+    "is_archived": false,
+    "is_do_not_remember": false,
+    "is_read_only": null,
+    "is_starred": null,
+    "is_study_mode": false,
+    "mapping": {
+      "5feff9e7-14cd-4d41-bd9c-23c5873823ac": {
+        "id": "5feff9e7-14cd-4d41-bd9c-23c5873823ac",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "How often should I feed it at 20 \u00b0C, and how many grams each time?"
+            ]
+          },
+          "create_time": 1789999622.412,
+          "id": "5feff9e7-14cd-4d41-bd9c-23c5873823ac",
+          "metadata": {
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "e20668cd-8bfc-4b48-b24b-65e1f240f995"
+      },
+      "7f509096-0c86-4a5e-b9f6-3517f5a79336": {
+        "id": "7f509096-0c86-4a5e-b9f6-3517f5a79336",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "How often should I feed it at 24 \u00b0C?"
+            ]
+          },
+          "create_time": 1789999540.512,
+          "id": "7f509096-0c86-4a5e-b9f6-3517f5a79336",
+          "metadata": {
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "e20668cd-8bfc-4b48-b24b-65e1f240f995"
+      },
+      "90f55cc0-c3dd-466b-8893-ca1d098b327a": {
+        "id": "90f55cc0-c3dd-466b-8893-ca1d098b327a",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "At 20 \u00b0C, once a day is enough.\n\n- Keep 20 g of starter.\n- Add 40 g flour and 40 g water.\n\nIf it peaks in under 8 hours, feed twice a day."
+            ]
+          },
+          "create_time": 1789999632.712,
+          "id": "90f55cc0-c3dd-466b-8893-ca1d098b327a",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-6",
+            "parent_id": "5feff9e7-14cd-4d41-bd9c-23c5873823ac"
+          }
+        },
+        "parent": "5feff9e7-14cd-4d41-bd9c-23c5873823ac"
+      },
+      "95d01587-23c4-49ec-9611-b38ce549d791": {
+        "id": "95d01587-23c4-49ec-9611-b38ce549d791",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "My sourdough starter smells like nail polish remover. Is it dead?"
+            ]
+          },
+          "create_time": 1789999331.412,
+          "id": "95d01587-23c4-49ec-9611-b38ce549d791",
+          "metadata": {
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "client-created-root"
+      },
+      "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe": {
+        "id": "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "At 24 \u00b0C, feed it twice a day, about every 12 hours."
+            ]
+          },
+          "create_time": 1789999549.101,
+          "id": "9c860ed7-8031-4e68-88d6-cf5c2dfd68fe",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-6",
+            "parent_id": "7f509096-0c86-4a5e-b9f6-3517f5a79336"
+          }
+        },
+        "parent": "7f509096-0c86-4a5e-b9f6-3517f5a79336"
+      },
+      "client-created-root": {
+        "id": "client-created-root",
+        "message": null,
+        "parent": null
+      },
+      "e20668cd-8bfc-4b48-b24b-65e1f240f995": {
+        "id": "e20668cd-8bfc-4b48-b24b-65e1f240f995",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "No, it is not dead. That sharp smell means the starter is hungry. Feed it and the smell should fade within a day."
+            ]
+          },
+          "create_time": 1789999339.63,
+          "id": "e20668cd-8bfc-4b48-b24b-65e1f240f995",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-6",
+            "parent_id": "95d01587-23c4-49ec-9611-b38ce549d791"
+          }
+        },
+        "parent": "95d01587-23c4-49ec-9611-b38ce549d791"
+      }
+    },
+    "memory_scope": "global_enabled",
+    "pinned_time": null,
+    "plugin_ids": null,
+    "title": "Sourdough starter smell",
+    "update_time": 1789999634.512,
+    "voice": null
+  },
+  {
+    "conversation_id": "c6a500e0-bf85-4c0c-80c1-4dc53bc5920e",
+    "conversation_template_id": "g-p-47c580fe828df7dd7b2bf8307433e43c",
+    "create_time": 1788081329.705,
+    "current_node": "5149fa63-70fd-4f8a-8c82-c645396d35ba",
+    "default_model_slug": "auto",
+    "id": "c6a500e0-bf85-4c0c-80c1-4dc53bc5920e",
+    "is_archived": false,
+    "is_do_not_remember": false,
+    "is_read_only": null,
+    "is_starred": true,
+    "is_study_mode": false,
+    "mapping": {
+      "02c19f67-96d6-4f95-8514-c7e67cb1927e": {
+        "id": "02c19f67-96d6-4f95-8514-c7e67cb1927e",
+        "message": null,
+        "parent": null
+      },
+      "151e2c22-8763-4b6e-9fd3-ddba94dde343": {
+        "id": "151e2c22-8763-4b6e-9fd3-ddba94dde343",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "I can't say for certain without looking it up. Subsidy rules change often."
+            ]
+          },
+          "create_time": 1789927273.4,
+          "id": "151e2c22-8763-4b6e-9fd3-ddba94dde343",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-6",
+            "parent_id": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5"
+          }
+        },
+        "parent": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5"
+      },
+      "462a1ccc-1929-4771-99b1-300106866057": {
+        "id": "462a1ccc-1929-4771-99b1-300106866057",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "thoughts",
+            "source_analysis_msg_id": "0e6d0f1c-a345-4471-8886-c50e261055a1",
+            "thoughts": [
+              {
+                "chunks": [],
+                "content": "A 9 kW air-to-water unit with installation usually lands between 12,000 and 18,000 euros, so 14,800 looks plausible.",
+                "finished": true,
+                "summary": "Checking the price range"
+              },
+              {
+                "chunks": [],
+                "content": "",
+                "finished": true,
+                "summary": "Listing what a quote often leaves out"
+              }
+            ]
+          },
+          "create_time": 1788081333.2,
+          "id": "462a1ccc-1929-4771-99b1-300106866057",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-5-thinking",
+            "parent_id": "b436802d-88b8-410e-b770-1a65d2d3cbd2"
+          }
+        },
+        "parent": "b436802d-88b8-410e-b770-1a65d2d3cbd2"
+      },
+      "5149fa63-70fd-4f8a-8c82-c645396d35ba": {
+        "id": "5149fa63-70fd-4f8a-8c82-c645396d35ba",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Yes. The plate shows a gas boiler built in 2003, so it counts. \ud83d\udc4d"
+            ]
+          },
+          "create_time": 1790927061.33,
+          "id": "5149fa63-70fd-4f8a-8c82-c645396d35ba",
+          "metadata": {
+            "content_references": [],
+            "conversation_context_citation_metadata": [
+              {
+                "citation": {
+                  "alt": null,
+                  "attribution": "Memory",
+                  "citation_uuid": "4c6a51dc-a58a-4b9f-b482-11d9ce680037",
+                  "conversation_context_type": "user_memory",
+                  "end_idx": 61,
+                  "index": 0,
+                  "matched_text": "",
+                  "memory_id": "1de85fd5-d829-43e5-b778-dad2504af3a0",
+                  "prompt_text": null,
+                  "reason": "The user heats with a gas boiler from 2003.",
+                  "refs": [],
+                  "snippet": "Heats with a gas boiler from 2003.",
+                  "start_idx": 61,
+                  "title": "The user heats with a gas boiler from 2003.",
+                  "type": "conversation_context_citation",
+                  "url": "#settings/Personalization"
+                },
+                "citation_uuid": "4c6a51dc-a58a-4b9f-b482-11d9ce680037",
+                "deleted": false,
+                "feedback": null
+              }
+            ],
+            "model_slug": "gpt-5-6-t-mini",
+            "parent_id": "e66a9a66-106c-4630-a37c-bd9c32a4b11c"
+          }
+        },
+        "parent": "c106c708-bbad-4e03-aa2f-aa2f93ccf578"
+      },
+      "67f13e7a-453d-4b9c-953f-9d8567a0544f": {
+        "id": "67f13e7a-453d-4b9c-953f-9d8567a0544f",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "This year the basic subsidy covers 30 % of the eligible cost, with bonuses on top for replacing an old fossil boiler. \ue200cite\ue202turn0search0\ue201\n\nFor your quote that is at least 4,440 euros."
+            ]
+          },
+          "create_time": null,
+          "id": "67f13e7a-453d-4b9c-953f-9d8567a0544f",
+          "metadata": {
+            "content_references": [
+              {
+                "alt": "([energy-agency.example](https://energy-agency.example/heat-pump-subsidy))",
+                "fallback_items": null,
+                "items": [
+                  {
+                    "attribution": "energy-agency.example",
+                    "attribution_segments": null,
+                    "attributions": null,
+                    "hue": null,
+                    "pub_date": null,
+                    "refs": [
+                      {
+                        "ref_index": 0,
+                        "ref_type": "search",
+                        "turn_index": 0
+                      }
+                    ],
+                    "snippet": "",
+                    "supporting_websites": [],
+                    "title": "Heat pump subsidies this year",
+                    "url": "https://energy-agency.example/heat-pump-subsidy"
+                  }
+                ],
+                "prefix": null,
+                "prompt_text": null,
+                "type": "grouped_webpages"
+              },
+              {
+                "alt": "",
+                "has_images": false,
+                "prefix": null,
+                "prompt_text": null,
+                "sources": [
+                  {
+                    "attribution": "energy-agency.example",
+                    "title": "Heat pump subsidies this year",
+                    "url": "https://energy-agency.example/heat-pump-subsidy"
+                  }
+                ],
+                "type": "sources_footnote"
+              }
+            ],
+            "model_slug": "gpt-5-6",
+            "parent_id": "ebfd1d1b-be24-4e71-be55-e6efb6751551",
+            "search_result_groups": [
+              {
+                "domain": "energy-agency.example",
+                "entries": [
+                  {
+                    "attribution": "energy-agency.example",
+                    "snippet": "The basic subsidy for a heat pump is 30 % of the eligible cost.",
+                    "title": "Heat pump subsidies this year",
+                    "url": "https://energy-agency.example/heat-pump-subsidy"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "parent": "ebfd1d1b-be24-4e71-be55-e6efb6751551"
+      },
+      "6b8b696a-2f3c-42b1-8d75-36fe6170deae": {
+        "id": "6b8b696a-2f3c-42b1-8d75-36fe6170deae",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "The quote is within the usual range. Three things to check:\n\n1. Is the hydraulic balancing included?\n2. Which buffer tank size is planned?\n3. Does the price include removing the old boiler?"
+            ]
+          },
+          "create_time": 1788081348.3,
+          "id": "6b8b696a-2f3c-42b1-8d75-36fe6170deae",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-5-thinking",
+            "parent_id": "937fc30d-c774-4f1b-a61a-e729ec4bbce9"
+          }
+        },
+        "parent": "937fc30d-c774-4f1b-a61a-e729ec4bbce9"
+      },
+      "937fc30d-c774-4f1b-a61a-e729ec4bbce9": {
+        "id": "937fc30d-c774-4f1b-a61a-e729ec4bbce9",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content": "Thought for 14s",
+            "content_type": "reasoning_recap"
+          },
+          "create_time": 1788081347.9,
+          "id": "937fc30d-c774-4f1b-a61a-e729ec4bbce9",
+          "metadata": {
+            "model_slug": "gpt-5-5-thinking",
+            "parent_id": "462a1ccc-1929-4771-99b1-300106866057"
+          }
+        },
+        "parent": "462a1ccc-1929-4771-99b1-300106866057"
+      },
+      "b436802d-88b8-410e-b770-1a65d2d3cbd2": {
+        "id": "b436802d-88b8-410e-b770-1a65d2d3cbd2",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here is the quote from the installer. Is 14,800 euros fair for a 9 kW air-to-water heat pump?"
+            ]
+          },
+          "create_time": 1788081330.105,
+          "id": "b436802d-88b8-410e-b770-1a65d2d3cbd2",
+          "metadata": {
+            "attachments": [
+              {
+                "file_token_size": 2310,
+                "id": "file_f93d634c9fe4774f084acbc7ad1f49e5",
+                "is_big_paste": false,
+                "library_file_id": "libfile_1d67ea4c800b6470b2232cb2b18adae6",
+                "mime_type": "application/pdf",
+                "name": "heat-pump-quote.pdf",
+                "size": 184322,
+                "source": "local"
+              }
+            ],
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "02c19f67-96d6-4f95-8514-c7e67cb1927e"
+      },
+      "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5": {
+        "id": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "What subsidy can I get for it this year?"
+            ]
+          },
+          "create_time": 1789927265.25,
+          "id": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5",
+          "metadata": {
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "6b8b696a-2f3c-42b1-8d75-36fe6170deae"
+      },
+      "c106c708-bbad-4e03-aa2f-aa2f93ccf578": {
+        "id": "c106c708-bbad-4e03-aa2f-aa2f93ccf578",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "multimodal_text",
+            "parts": [
+              {
+                "asset_pointer": "sediment://file_e2870c85e687d6a1bda345f5cda25d55",
+                "content_type": "image_asset_pointer",
+                "fovea": null,
+                "height": 1536,
+                "metadata": {
+                  "asset_pointer_link": null,
+                  "container_pixel_height": null,
+                  "container_pixel_width": null,
+                  "dalle": null,
+                  "emu_omit_glimpse_image": null,
+                  "emu_patches_override": null,
+                  "generation": null,
+                  "gizmo": null,
+                  "is_no_auth_placeholder": null,
+                  "lpe_delta_encoding_channel": null,
+                  "lpe_keep_patch_ijhw": null,
+                  "sanitized": true,
+                  "watermarked_asset_pointer": null
+                },
+                "size_bytes": 412877,
+                "width": 2048
+              },
+              "This is the type plate of the old boiler. Does it count as an old fossil boiler?"
+            ]
+          },
+          "create_time": 1790927050.9,
+          "id": "c106c708-bbad-4e03-aa2f-aa2f93ccf578",
+          "metadata": {
+            "attachments": [
+              {
+                "height": 1536,
+                "id": "file_e2870c85e687d6a1bda345f5cda25d55",
+                "mime_type": "image/jpeg",
+                "name": "type-plate.jpg",
+                "size": 412877,
+                "source": "local",
+                "width": 2048
+              }
+            ],
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "67f13e7a-453d-4b9c-953f-9d8567a0544f"
+      },
+      "ebfd1d1b-be24-4e71-be55-e6efb6751551": {
+        "id": "ebfd1d1b-be24-4e71-be55-e6efb6751551",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content": "Worked for 2m 9s",
+            "content_type": "reasoning_recap"
+          },
+          "create_time": 1789927408.0,
+          "id": "ebfd1d1b-be24-4e71-be55-e6efb6751551",
+          "metadata": {
+            "model_slug": "gpt-5-6",
+            "parent_id": "ddc0c6bf-0715-43c5-a684-23a2dd55fe3e"
+          }
+        },
+        "parent": "b64aa68a-b9f0-4d51-ad52-dcf3d6493ca5"
+      }
+    },
+    "memory_scope": "global_enabled",
+    "pinned_time": null,
+    "plugin_ids": null,
+    "title": "Heat pump quote check",
+    "update_time": 1790927063.53,
+    "voice": null
+  },
+  {
+    "conversation_id": "f5871820-a54e-4ea9-9976-079db1e23652",
+    "conversation_template_id": null,
+    "create_time": 1784054402.43,
+    "current_node": "e53802e3-1192-4ef1-bdfb-fe18bb9071f6",
+    "default_model_slug": "gpt-5-5",
+    "id": "f5871820-a54e-4ea9-9976-079db1e23652",
+    "is_archived": true,
+    "is_do_not_remember": false,
+    "is_read_only": null,
+    "is_starred": null,
+    "is_study_mode": false,
+    "mapping": {
+      "3293ffb7-c28b-4a24-8dfb-6d3168882f52": {
+        "id": "3293ffb7-c28b-4a24-8dfb-6d3168882f52",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Add things for a day at the beach."
+            ]
+          },
+          "create_time": 1784054571.0,
+          "id": "3293ffb7-c28b-4a24-8dfb-6d3168882f52",
+          "metadata": {
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "f46db30f-83c8-4620-a291-e2f6a9d07d72"
+      },
+      "3726f2be-d227-467b-b8dc-fd171cd6f913": {
+        "id": "3726f2be-d227-467b-b8dc-fd171cd6f913",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Make me a packing list for four days in Lisbon in July."
+            ]
+          },
+          "create_time": 1784054402.73,
+          "id": "3726f2be-d227-467b-b8dc-fd171cd6f913",
+          "metadata": {
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "8bad837e-23c2-460b-8c02-77f2bedadf06"
+      },
+      "87f57998-a2b4-416a-bbf0-a807bf62d511": {
+        "id": "87f57998-a2b4-416a-bbf0-a807bf62d511",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "user"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Add things for a day at the beach, please."
+            ]
+          },
+          "create_time": 1784054610.5,
+          "id": "87f57998-a2b4-416a-bbf0-a807bf62d511",
+          "metadata": {
+            "serialization_metadata": {
+              "custom_symbol_offsets": []
+            }
+          }
+        },
+        "parent": "b19bca63-bd28-44df-81b6-e9e138ba7d87"
+      },
+      "8bad837e-23c2-460b-8c02-77f2bedadf06": {
+        "id": "8bad837e-23c2-460b-8c02-77f2bedadf06",
+        "message": null,
+        "parent": null
+      },
+      "b19bca63-bd28-44df-81b6-e9e138ba7d87": {
+        "id": "b19bca63-bd28-44df-81b6-e9e138ba7d87",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              ""
+            ]
+          },
+          "create_time": 1784054572.8,
+          "id": "b19bca63-bd28-44df-81b6-e9e138ba7d87",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-5",
+            "parent_id": "3293ffb7-c28b-4a24-8dfb-6d3168882f52"
+          }
+        },
+        "parent": "3293ffb7-c28b-4a24-8dfb-6d3168882f52"
+      },
+      "e53802e3-1192-4ef1-bdfb-fe18bb9071f6": {
+        "id": "e53802e3-1192-4ef1-bdfb-fe18bb9071f6",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "For the beach day add:\n\n- Swimwear and a towel\n- Flip-flops\n- A dry bag for your phone"
+            ]
+          },
+          "create_time": 1784054621.9,
+          "id": "e53802e3-1192-4ef1-bdfb-fe18bb9071f6",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-5",
+            "parent_id": "87f57998-a2b4-416a-bbf0-a807bf62d511"
+          }
+        },
+        "parent": "87f57998-a2b4-416a-bbf0-a807bf62d511"
+      },
+      "f46db30f-83c8-4620-a291-e2f6a9d07d72": {
+        "id": "f46db30f-83c8-4620-a291-e2f6a9d07d72",
+        "message": {
+          "author": {
+            "name": null,
+            "role": "assistant"
+          },
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here is a short list:\n\n- 4 T-shirts, 2 shorts, 1 light jacket\n- Comfortable walking shoes\n- Sun cream and a hat\n- Plug adapter (not needed from the EU)"
+            ]
+          },
+          "create_time": 1784054409.2,
+          "id": "f46db30f-83c8-4620-a291-e2f6a9d07d72",
+          "metadata": {
+            "content_references": [],
+            "model_slug": "gpt-5-5",
+            "parent_id": "3726f2be-d227-467b-b8dc-fd171cd6f913"
+          }
+        },
+        "parent": "3726f2be-d227-467b-b8dc-fd171cd6f913"
+      }
+    },
+    "memory_scope": "global_enabled",
+    "pinned_time": null,
+    "plugin_ids": null,
+    "title": "Packing list for Lisbon",
+    "update_time": 1784054623.0,
+    "voice": null
+  }
+]
